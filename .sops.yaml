@@ -1,0 +1,8 @@
+keys:
+  age:
+    - &marisa age1sfnct03u4cvfj98x4yjrcrrnu5gg8qgxrwk4uqq8w4e6wveeaedq97rn44
+creation_rules:
+  - path_regex: nixos/marisa.*
+    key_groups:
+      - age:
+          - *marisa
