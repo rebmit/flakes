@@ -4,8 +4,11 @@
     package = pkgs.firefox;
     policies = {
       PasswordManagerEnabled = false;
-      DisableFirefoxAccounts = true;
+      DisableTelemetry = true;
       DisablePocket = true;
+      DisableAccounts = true;
+      DisableFirefoxAccounts = true;
+      DisableFirefoxStudies = true;
       EnableTrackingProtection = {
         Value = true;
         Locked = true;
