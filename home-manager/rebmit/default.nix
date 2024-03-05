@@ -14,6 +14,7 @@
     pavucontrol
     mpv
     htop
+    swww
   ];
 
   home.username = "rebmit";

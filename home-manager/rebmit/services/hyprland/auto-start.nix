@@ -5,6 +5,7 @@
       "systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service"
 
       "hyprctl setcursor capitaine-cursors 36"
+      "swww init"
       "systemd-run-app ags"
     ];
   };
