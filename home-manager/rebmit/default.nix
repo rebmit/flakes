@@ -15,6 +15,8 @@
     mpv
     htop
     swww
+    evince
+    gnome.eog
   ];
 
   home.username = "rebmit";

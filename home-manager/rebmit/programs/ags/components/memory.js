@@ -11,7 +11,8 @@ const parseMemoryUsage = (meminfo) => {
     else if (k == "MemFree")      now.free  = Math.floor(v / 1024 + 0.5);
     else if (k == "Buffers")      now.buf   = Math.floor(v / 1024 + 0.5);
     else if (k == "Cached")       now.cache = Math.floor(v / 1024 + 0.5);
-    else if (k == "SwapTotal")    now.swap  = Math.floor(v / 1024 + 0.5); else if (k == "SwapFree")     now.swapf = Math.floor(v / 1024 + 0.5);
+    else if (k == "SwapTotal")    now.swap  = Math.floor(v / 1024 + 0.5);
+    else if (k == "SwapFree")     now.swapf = Math.floor(v / 1024 + 0.5);
     else if (k == "SReclaimable") now.srec  = Math.floor(v / 1024 + 0.5);
   });
 
