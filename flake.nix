@@ -66,6 +66,7 @@
           mkShell {
             nativeBuildInputs = [
               colmena
+              nvfetcher
             ];
           };
       }

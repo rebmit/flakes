@@ -1,0 +1,8 @@
+[dnsmasq-china-list]
+src.git = "https://github.com/felixonmars/dnsmasq-china-list"
+fetch.github = "felixonmars/dnsmasq-china-list"
+
+[archlinuxcn]
+src.git = "https://github.com/archlinuxcn/repo"
+fetch.github = "archlinuxcn/repo"
+
