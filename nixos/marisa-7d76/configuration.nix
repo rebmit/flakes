@@ -25,7 +25,9 @@
     };
     age = {
       keyFile = "/persist/_data/sops.key";
+      sshKeyPaths = [];
     };
+    gnupg.sshKeyPaths = [];
   };
 
   home-manager = {
