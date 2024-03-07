@@ -23,7 +23,7 @@
       passwd.neededForUsers = true;
     };
     age = {
-      keyFile = "/var/lib/sops.key";
+      keyFile = "/persist/_data/sops.key";
     };
   };
 
@@ -42,7 +42,6 @@
 
   networking = {
     hostName = "marisa-7d76";
-    useDHCP = true;
     wireless.iwd.enable = true;
   };
 

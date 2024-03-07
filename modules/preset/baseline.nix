@@ -57,7 +57,11 @@ in
           ];
       };
 
-      networking.firewall.enable = lib.mkDefault false;
+      networking = {
+        firewall.enable = lib.mkDefault false;
+        useDHCP = false;
+        useNetworkd = false;
+      };
 
       services = {
         dbus.implementation = "broker";
