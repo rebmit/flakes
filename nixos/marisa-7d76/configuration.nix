@@ -42,9 +42,26 @@
 
   networking = {
     hostName = "marisa-7d76";
-    useNetworkd = true;
     useDHCP = true;
     wireless.iwd.enable = true;
+  };
+
+  systemd.network = {
+    enable = true;
+    wait-online = {
+      enable = true;
+      anyInterface = true;
+    };
+    networks = {
+      "20-wired" = {
+        name = "en*";
+        DHCP = "yes";
+      };
+      "20-wireless" = {
+        name = "wlan0";
+        DHCP = "yes";
+      };
+    };
   };
 
   boot = {
