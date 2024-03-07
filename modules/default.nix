@@ -1,7 +1,7 @@
 {
   default = {...}: {
     imports = [
-      ./baseline.nix
+      ./preset/baseline.nix
     ];
   };
 }
