@@ -27,6 +27,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
+    colmena = {
+      url = "github:zhaofengli/colmena";
+      inputs.stable.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
 
     nix-colors.url = "github:misterio77/nix-colors";
     ags = {
@@ -59,6 +65,7 @@
         devShells.default = with pkgs;
           mkShell {
             nativeBuildInputs = [
+              colmena
             ];
           };
       }
@@ -66,10 +73,29 @@
     // {
       nixosModules = import ./modules;
       overlays.default = mypkgs.overlay;
-      nixosConfigurations = {
-        "marisa-7d76" = import ./nixos/marisa-7d76 {
-          system = "x86_64-linux";
-          inherit self nixpkgs inputs mylib;
+      nixosConfigurations =
+        {
+          "marisa-7d76" = import ./nixos/marisa-7d76 {
+            system = "x86_64-linux";
+            inherit self nixpkgs inputs mylib;
+          };
+        }
+        // self.colmenaHive.nodes;
+      colmenaHive = inputs.colmena.lib.makeHive {
+        meta = {
+          specialArgs = {
+            inherit self inputs mylib;
+            data.keys = [
+              "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII4h3+0cpr7XGAAEzoXrvA+Oap+eyeugCHMX/BVIbPYS rebmit@marisa-7d76"
+            ];
+          };
+          nixpkgs = import inputs.nixpkgs {
+            system = "x86_64-linux";
+          };
+        };
+        "flandre-eq59" = {...}: {
+          deployment.targetHost = "10.224.0.1";
+          imports = [./nixos/flandre-eq59];
         };
       };
     };
