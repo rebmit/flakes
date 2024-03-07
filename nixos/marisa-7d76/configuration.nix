@@ -15,6 +15,7 @@
 
   preset = {
     baseline.enable = true;
+    secureboot.enable = true;
   };
 
   sops = {
@@ -59,15 +60,6 @@
         name = "wlan0";
         DHCP = "yes";
       };
-    };
-  };
-
-  boot = {
-    tmp.useTmpfs = true;
-    initrd.systemd.enable = true;
-    loader = {
-      efi.canTouchEfiVariables = true;
-      systemd-boot.enable = lib.mkDefault true;
     };
   };
 

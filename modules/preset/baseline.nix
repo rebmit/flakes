@@ -14,6 +14,12 @@ in
 
     config = mkIf cfg.enable {
       boot = {
+        tmp.useTmpfs = true;
+        initrd.systemd.enable = true;
+        loader = {
+          efi.canTouchEfiVariables = true;
+          systemd-boot.enable = lib.mkDefault true;
+        };
         kernelPackages = pkgs.linuxPackages_latest;
         kernelParams = [
           "ia32_emulation=0"
