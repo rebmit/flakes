@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  self,
   ...
 }: let
   cfg = config.preset.baseline;
@@ -44,6 +45,8 @@ in
           use-cgroups = true;
         };
       };
+
+      nixpkgs.overlays = [self.overlays.default];
 
       nixpkgs.config = {
         allowNonSource = false;

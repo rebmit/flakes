@@ -35,7 +35,6 @@
   };
 
   nix.settings.trusted-users = ["root" "rebmit"];
-  nixpkgs.overlays = [self.overlays.default];
 
   i18n.defaultLocale = "en_SG.UTF-8";
   time.timeZone = "Asia/Shanghai";
