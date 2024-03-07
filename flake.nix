@@ -75,9 +75,12 @@
       overlays.default = mypkgs.overlay;
       nixosConfigurations =
         {
-          "marisa-7d76" = import ./nixos/marisa-7d76 {
+          "marisa-7d76" = lib.nixosSystem {
             system = "x86_64-linux";
-            inherit self nixpkgs inputs mylib;
+            modules = [./nixos/marisa-7d76];
+            specialArgs = {
+              inherit inputs mylib self;
+            };
           };
         }
         // self.colmenaHive.nodes;
