@@ -104,7 +104,7 @@
         };
         "misaka-lax02" = {...}: {
           deployment = {
-            targetHost = "38.175.109.149";
+            targetHost = "misaka-lax02.link.rebmit.moe";
             targetPort = 2222;
           };
           imports = [./nixos/marisa-7d76];

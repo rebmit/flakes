@@ -2,7 +2,8 @@
   default = {...}: {
     imports = [
       ./preset/baseline.nix
-      ./preset/secureboot.nix
     ];
   };
+
+  secureboot = import ./preset/secureboot.nix;
 }
