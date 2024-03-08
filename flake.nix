@@ -102,6 +102,13 @@
           deployment.targetHost = "10.224.0.1";
           imports = [./nixos/flandre-eq59];
         };
+        "misaka-lax02" = {...}: {
+          deployment = {
+            targetHost = "38.175.109.149";
+            targetPort = 2222;
+          };
+          imports = [./nixos/marisa-7d76];
+        };
       };
     };
 }

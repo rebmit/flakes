@@ -18,8 +18,6 @@
     baseline.enable = true;
   };
 
-  nix.settings.trusted-users = ["root"];
-
   i18n.defaultLocale = "en_SG.UTF-8";
   time.timeZone = "Asia/Shanghai";
 
