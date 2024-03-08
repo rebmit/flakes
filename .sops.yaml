@@ -2,6 +2,7 @@ keys:
   age:
     - &marisa age1sfnct03u4cvfj98x4yjrcrrnu5gg8qgxrwk4uqq8w4e6wveeaedq97rn44
     - &flandre age15fqerwsfnwsdqdwr4egw2ng73e8qqzrqh23qrhtleauuvvryzvvquvzzrw
+    - &misaka age1xj8xkcmazh3l4llv20xdrve5fh64guw929wtmyn9nv63x787dpcs858ttz
 creation_rules:
   - path_regex: nixos/marisa.*
     key_groups:
@@ -12,3 +13,8 @@ creation_rules:
       - age:
           - *marisa
           - *flandre
+  - path_regex: nixos/misaka.*
+    key_groups:
+      - age:
+          - *marisa
+          - *misaka
