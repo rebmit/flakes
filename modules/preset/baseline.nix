@@ -10,13 +10,16 @@ in
   with lib; {
     options.preset.baseline = {
       enable = mkEnableOption "baseline configuration";
+      uefi = mkEnableOption "uefi support";
     };
 
     config = mkIf cfg.enable {
+      preset.baseline.uefi = mkDefault true;
+
       boot = {
         tmp.useTmpfs = true;
         initrd.systemd.enable = true;
-        loader = {
+        loader = mkIf cfg.uefi {
           efi.canTouchEfiVariables = true;
           systemd-boot.enable = lib.mkDefault true;
         };
