@@ -103,11 +103,8 @@
           imports = [./nixos/flandre-eq59];
         };
         "misaka-lax02" = {...}: {
-          deployment = {
-            targetHost = "misaka-lax02.link.rebmit.moe";
-            targetPort = 2222;
-          };
-          imports = [./nixos/marisa-7d76];
+          deployment.targetHost = "misaka-lax02";
+          imports = [./nixos/misaka-lax02];
         };
       };
     };
