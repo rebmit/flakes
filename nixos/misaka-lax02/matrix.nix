@@ -15,7 +15,7 @@
 in {
   sops = {
     secrets = {
-      matrix-synapse = { owner = config.systemd.services.matrix-synapse.serviceConfig.User; };
+      matrix-synapse = {owner = config.systemd.services.matrix-synapse.serviceConfig.User;};
     };
   };
 
@@ -30,17 +30,21 @@ in {
       enable_registration = true;
       registration_requires_token = true;
 
-      listeners = [{
-        bind_addresses = ["127.0.0.1"];
-        port = 8196;
-        tls = false;
-        type = "http";
-        x_forwarded = true;
-        resources = [{
-          compress = true;
-          names = [ "client" "federation" ];
-        }];
-      }];
+      listeners = [
+        {
+          bind_addresses = ["127.0.0.1"];
+          port = 8196;
+          tls = false;
+          type = "http";
+          x_forwarded = true;
+          resources = [
+            {
+              compress = true;
+              names = ["client" "federation"];
+            }
+          ];
+        }
+      ];
 
       media_retention = {
         remote_media_lifetime = "14d";
@@ -74,7 +78,7 @@ in {
       }
 
       file_server
-      root * "${pkgs.element-web.override { inherit conf; }}"
+      root * "${pkgs.element-web.override {inherit conf;}}"
     '';
   };
 }

@@ -31,7 +31,6 @@
     gnupg.sshKeyPaths = [];
   };
 
-
   networking.hostName = "misaka-lax02";
 
   systemd.network = {
