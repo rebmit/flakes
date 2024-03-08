@@ -15,7 +15,10 @@
     ++ (mylib.getItemPaths ./. "default.nix");
 
   preset = {
-    baseline.enable = true;
+    baseline = {
+      enable = true;
+      uefi = false;
+    };
   };
 
   networking.hostName = "misaka-lax02";
