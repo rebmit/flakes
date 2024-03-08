@@ -38,18 +38,36 @@
           Name = "brlan";
         };
       };
+      "20-brwan" = {
+        netdevConfig = {
+          Kind = "bridge";
+          Name = "brwan";
+        };
+      };
     };
     networks = {
       "20-enp2s0" = {
-        matchConfig.Name = "enp2s0";
-        networkConfig.Bridge = "brlan";
+        name = "enp2s0";
+        bridge = ["brlan"];
       };
       "20-enp3s0" = {
-        matchConfig.Name = "enp3s0";
+        name = "enp3s0";
+        bridge = ["brwan"];
       };
       "20-brlan" = {
-        matchConfig.Name = "brlan";
+        name = "brlan";
         address = ["10.224.0.1/20"];
+      };
+      "20-brwan" = {
+        name = "brwan";
+        networkConfig = {
+          LinkLocalAddressing = "no";
+          IPv6AcceptRA = "no";
+        };
+      };
+      "30-wlan0" = {
+        name = "wlan0";
+        DHCP = "yes";
       };
     };
   };

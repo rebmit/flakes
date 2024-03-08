@@ -67,6 +67,7 @@
             nativeBuildInputs = [
               colmena
               nvfetcher
+              sops
             ];
           };
       }

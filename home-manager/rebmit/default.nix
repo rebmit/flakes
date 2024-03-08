@@ -10,7 +10,6 @@
 
   home.packages = with pkgs; [
     systemd-run-app
-    sops
     pavucontrol
     mpv
     htop

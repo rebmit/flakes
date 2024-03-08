@@ -58,7 +58,7 @@
     networks = {
       "20-wired" = {
         name = "en*";
-        DHCP = "yes";
+        address = ["10.224.14.1/20"];
       };
       "20-wireless" = {
         name = "wlan0";
