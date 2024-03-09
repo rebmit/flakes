@@ -14,7 +14,7 @@
         min-height: 18pt;
       }
 
-      .bar, .battery, .cpu, .clock, .darkman, .hyprland-submap, .memory, .mpris, .network, .pulseaudio, .systray {
+      .bar, .battery, .cpu, .clock, .colorscheme, .hyprland-submap, .memory, .mpris, .network, .pulseaudio, .systray {
         opacity: 0.95;
         background: #${config.colorScheme.palette.base00};
         border-bottom: 2pt solid #${config.colorScheme.palette.base02};

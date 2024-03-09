@@ -1,7 +1,7 @@
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import { Clock } from './clock.js';
 import { Cpu } from './cpu.js';
-import { Darkman } from './darkman.js';
+import { ColorScheme } from './colorscheme.js';
 import { HyprlandWorkspaces } from './hyprland-workspaces.js';
 import { HyprlandSubmap } from './hyprland-submap.js';
 import { Memory } from './memory.js';
@@ -37,6 +37,8 @@ const Right = () => Widget.Box({
     PulseAudio(),
     Spacer(),
     Clock(),
+    Spacer(),
+    ColorScheme(),
   ],
 });
 
