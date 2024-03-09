@@ -16,8 +16,13 @@ in {
   sops = {
     secrets = {
       matrix-synapse = {owner = config.systemd.services.matrix-synapse.serviceConfig.User;};
+      mautrix-telegram = { };
     };
   };
+
+  systemd.services.matrix-synapse.serviceConfig.LoadCredential = [
+    "telegram:/var/lib/mautrix-telegram/telegram-registration.yaml"
+  ];
 
   services.matrix-synapse = {
     enable = true;
@@ -26,6 +31,8 @@ in {
       server_name = "rebmit.moe";
       public_baseurl = "https://matrix.rebmit.moe";
       signing_key_path = config.sops.secrets.matrix-synapse.path;
+
+      app_service_config_files = [ "/run/credentials/matrix-synapse.service/telegram" ];
 
       enable_registration = true;
       registration_requires_token = true;
@@ -61,6 +68,62 @@ in {
         msc3881_enabled = true;
         # Remotely silence local notifications
         msc3890_enabled = true;
+      };
+    };
+  };
+
+  systemd.services.mautrix-telegram.serviceConfig.RuntimeMaxSec = 86400;
+
+  services.mautrix-telegram = {
+    enable = true;
+    environmentFile = config.sops.secrets.mautrix-telegram.path;
+    serviceDependencies = ["matrix-synapse.service"];
+    settings = {
+      homeserver = {
+        address = "http://127.0.0.1:8196";
+        domain = config.services.matrix-synapse.settings.server_name;
+      };
+      appservice = {
+        address = "http://127.0.0.1:29317";
+        database = "postgres:///mautrix-telegram?host=/run/postgresql";
+        hostname = "127.0.0.1";
+        port = 29317;
+        provisioning.enabled = false;
+      };
+      bridge = {
+        displayname_template = "{displayname}";
+        delivery_error_reports = true;
+        incoming_bridge_error_reports = true;
+        bridge_matrix_leave = false;
+        relay_user_distinguishers = [];
+        create_group_on_invite = false;
+        animated_sticker = {
+          target = "webp";
+          convert_from_webm = true;
+        };
+        state_event_formats = {
+          join = "";
+          leave = "";
+          name_change = "";
+        };
+        permissions = {
+          "*" = "relaybot";
+          "@i:rebmit.moe" = "admin";
+        };
+        relaybot = {
+          authless_portals = false;
+        };
+      };
+      telegram = {
+        device_info = {
+          app_version = "3.5.2";
+        };
+      };
+      logging = {
+        loggers = {
+          mau.level = "WARNING";
+          telethon.level = "WARNING";
+        };
       };
     };
   };
