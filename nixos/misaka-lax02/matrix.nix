@@ -22,6 +22,7 @@ in {
 
   systemd.services.matrix-synapse.serviceConfig.LoadCredential = [
     "telegram:/var/lib/mautrix-telegram/telegram-registration.yaml"
+    "irc:/var/lib/heisenbridge/registration.yml"
   ];
 
   services.matrix-synapse = {
@@ -32,7 +33,10 @@ in {
       public_baseurl = "https://matrix.rebmit.moe";
       signing_key_path = config.sops.secrets.matrix-synapse.path;
 
-      app_service_config_files = ["/run/credentials/matrix-synapse.service/telegram"];
+      app_service_config_files = [
+        "/run/credentials/matrix-synapse.service/telegram"
+        "/run/credentials/matrix-synapse.service/irc"
+      ];
 
       enable_registration = true;
       registration_requires_token = true;
@@ -131,6 +135,14 @@ in {
         };
       };
     };
+  };
+
+  services.heisenbridge = {
+    enable = true;
+    homeserver = "http://127.0.0.1:8196";
+    address = "127.0.0.1";
+    port = 9898;
+    owner = "@i:rebmit.moe";
   };
 
   services.caddy = {
