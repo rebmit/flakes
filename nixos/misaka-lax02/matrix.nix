@@ -16,7 +16,7 @@ in {
   sops = {
     secrets = {
       matrix-synapse = {owner = config.systemd.services.matrix-synapse.serviceConfig.User;};
-      mautrix-telegram = { };
+      mautrix-telegram = {};
     };
   };
 
@@ -32,7 +32,7 @@ in {
       public_baseurl = "https://matrix.rebmit.moe";
       signing_key_path = config.sops.secrets.matrix-synapse.path;
 
-      app_service_config_files = [ "/run/credentials/matrix-synapse.service/telegram" ];
+      app_service_config_files = ["/run/credentials/matrix-synapse.service/telegram"];
 
       enable_registration = true;
       registration_requires_token = true;
@@ -92,11 +92,16 @@ in {
       };
       bridge = {
         displayname_template = "{displayname}";
+        public_portals = true;
         delivery_error_reports = true;
         incoming_bridge_error_reports = true;
         bridge_matrix_leave = false;
         relay_user_distinguishers = [];
         create_group_on_invite = false;
+        encryption = {
+          allow = true;
+          default = true;
+        };
         animated_sticker = {
           target = "webp";
           convert_from_webm = true;
@@ -121,8 +126,8 @@ in {
       };
       logging = {
         loggers = {
-          mau.level = "WARNING";
-          telethon.level = "WARNING";
+          mau.level = "INFO";
+          telethon.level = "INFO";
         };
       };
     };
