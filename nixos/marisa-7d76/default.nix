@@ -117,6 +117,7 @@
     };
   };
 
+  services.gnome.gnome-keyring.enable = true;
   security.polkit.enable = true;
 
   system.stateVersion = "23.11";
