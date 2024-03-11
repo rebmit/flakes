@@ -22,4 +22,11 @@
       max_wal_size = "4GB";
     };
   };
+
+  services.postgresqlBackup = {
+    enable = true;
+    location = "/var/lib/backup/postgresql";
+    compression = "zstd";
+    startAt = "weekly";
+  };
 }
