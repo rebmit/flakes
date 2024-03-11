@@ -14,8 +14,10 @@
     mpv
     htop
     swww
+
     evince
     gnome.eog
+    thunderbird
   ];
 
   home.username = "rebmit";

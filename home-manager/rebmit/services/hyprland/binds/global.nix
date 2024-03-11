@@ -37,8 +37,8 @@
       "SUPER SHIFT, Q, killactive"
       "SUPER SHIFT, F, fakefullscreen"
       # apps launcher
-      "SUPER, RETURN, exec, ${pkgs.kitty}/bin/kitty"
-      "SUPER, W, exec, firefox"
+      "SUPER, RETURN, exec, systemd-run-app ${pkgs.kitty}/bin/kitty"
+      "SUPER, W, exec, systemd-run-app firefox"
       "SUPER, D, exec, ${pkgs.fuzzel}/bin/fuzzel"
       # fuzzel utils
       "SUPER, V, exec, ${pkgs.cliphist}/bin/cliphist list | ${pkgs.fuzzel}/bin/fuzzel -d | ${pkgs.cliphist}/bin/cliphist decode | ${pkgs.wl-clipboard}/bin/wl-copy"
