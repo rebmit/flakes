@@ -1,12 +1,6 @@
 {pkgs, ...}: {
   wayland.windowManager.hyprland.extraConfig = ''
-    # hyprland settings
-    bind = SUPER ALT, Q, exit
-
-    # hyprland submap
-    bind = SUPER, R, submap, resize
-    bind = SUPER, C, submap, config
-    bind = SUPER, S, submap, scratchpad
+    submap = scratchpad
 
     # window management
     bind = SUPER, Q, togglesplit
@@ -15,12 +9,7 @@
     bind = SUPER SHIFT, Q, killactive
     bind = SUPER SHIFT, F, fakefullscreen
 
-    # app
-    bind = SUPER, RETURN, exec, systemd-run-app kitty
-    bind = SUPER, W, exec, systemd-run-app firefox
-
     # fuzzel
-    bind = SUPER, D, exec, fuzzel
     bind = SUPER, V, exec, fuzzel-cliphist
 
     # play status control
@@ -55,28 +44,16 @@
     bind = SUPER SHIFT, K, movewindow, u
     bind = SUPER SHIFT, L, movewindow, r
 
-    # switch workspaces
-    bind = SUPER, TAB, exec, hyprctl dispatch workspace e+1
-    bind = SUPER SHIFT, TAB, exec, hyprctl dispatch workspace e-1
-    bind = SUPER, 1, workspace, 1
-    bind = SUPER, 2, workspace, 2
-    bind = SUPER, 3, workspace, 3
-    bind = SUPER, 4, workspace, 4
-    bind = SUPER, 5, workspace, 5
-    bind = SUPER, 6, workspace, 6
-    bind = SUPER, 7, workspace, 7
-    bind = SUPER, 8, workspace, 8
-    bind = SUPER, 9, workspace, 9
+    # submap settings
+    bind = SUPER, S, togglespecialworkspace
+    bind = SUPER, S, togglespecialworkspace
+    bind = SUPER, S, submap, reset
 
-    # move active window to a workspace
-    bind = SUPER SHIFT, 1, movetoworkspace, 1
-    bind = SUPER SHIFT, 2, movetoworkspace, 2
-    bind = SUPER SHIFT, 3, movetoworkspace, 3
-    bind = SUPER SHIFT, 4, movetoworkspace, 4
-    bind = SUPER SHIFT, 5, movetoworkspace, 5
-    bind = SUPER SHIFT, 6, movetoworkspace, 6
-    bind = SUPER SHIFT, 7, movetoworkspace, 7
-    bind = SUPER SHIFT, 8, movetoworkspace, 8
-    bind = SUPER SHIFT, 9, movetoworkspace, 9
+    # scratchpads
+    bind = SUPER, 1, togglespecialworkspace, nheko
+    bind = SUPER, 2, togglespecialworkspace, telegram
+    bind = SUPER, 3, togglespecialworkspace, thunderbird
+
+    submap = reset
   '';
 }

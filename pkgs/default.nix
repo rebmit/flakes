@@ -5,6 +5,8 @@
   in {
     fuzzel-cliphist = final.callPackage (import ./fuzzel-cliphist) {};
 
+    hyprland-scratchpad-helper = final.callPackage (import ./hyprland-scratchpad-helper) {};
+
     smartdns-china-list = final.callPackage (import ./smartdns-china-list) {
       dnsmasq-china-list = sources.dnsmasq-china-list;
     };

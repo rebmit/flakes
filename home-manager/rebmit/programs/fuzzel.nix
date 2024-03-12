@@ -9,8 +9,9 @@
     settings = {
       main = {
         font = "monospace";
-        terminal = "${pkgs.kitty}/bin/kitty -e";
+        terminal = "kitty -e";
         layer = "overlay";
+        launch-prefix = "systemd-run-app";
       };
       colors = {
         background = "${config.colorScheme.palette.base00}ee";

@@ -1,9 +1,15 @@
 {
   config,
+  pkgs,
   mylib,
   ...
 }: {
   imports = mylib.getItemPaths ./. "default.nix";
+
+  home.packages = with pkgs; [
+    hyprland-scratchpad-helper
+    fuzzel-cliphist
+  ];
 
   wayland.windowManager.hyprland = {
     enable = true;

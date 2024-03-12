@@ -14,6 +14,8 @@
     mpv
     htop
     swww
+    pulsemixer
+    playerctl
 
     evince
     gnome.eog
