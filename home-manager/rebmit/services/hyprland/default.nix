@@ -8,6 +8,7 @@
 
   home.packages = with pkgs; [
     hyprland-scratchpad-helper
+    hyprland-screenshot-helper
     fuzzel-cliphist
   ];
 

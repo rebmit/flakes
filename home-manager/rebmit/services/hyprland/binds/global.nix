@@ -23,6 +23,9 @@
     bind = SUPER, D, exec, fuzzel
     bind = SUPER, V, exec, fuzzel-cliphist
 
+    # screenshot
+    bind = SUPER SHIFT, S, exec, hyprland-screenshot-helper
+
     # play status control
     bindl = , XF86AudioPlay, exec, playerctl play-pause
     bindl = , XF86AudioPrev, exec, playerctl previous
