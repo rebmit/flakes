@@ -3,6 +3,8 @@
   overlay = final: prev: let
     sources = final.callPackage ./_sources/generated.nix {};
   in {
+    fuzzel-cliphist = final.callPackage (import ./fuzzel-cliphist) {};
+
     smartdns-china-list = final.callPackage (import ./smartdns-china-list) {
       dnsmasq-china-list = sources.dnsmasq-china-list;
     };
