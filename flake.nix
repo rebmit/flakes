@@ -85,6 +85,13 @@
               inherit inputs mylib self;
             };
           };
+          "kurumi-a7s" = lib.nixosSystem {
+            system = "x86_64-linux";
+            modules = [./nixos/kurumi-a7s];
+            specialArgs = {
+              inherit inputs mylib self;
+            };
+          };
         }
         // self.colmenaHive.nodes;
       colmenaHive = inputs.colmena.lib.makeHive {
@@ -93,6 +100,7 @@
             inherit self inputs mylib;
             data.keys = [
               "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII4h3+0cpr7XGAAEzoXrvA+Oap+eyeugCHMX/BVIbPYS rebmit@marisa-7d76"
+              "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOisxuhUSP41Ws1J42WAoaKtaSXKH85y1ki+xUL/Fi+c rebmit@kurumi-a7s"
             ];
           };
           nixpkgs = import inputs.nixpkgs {
