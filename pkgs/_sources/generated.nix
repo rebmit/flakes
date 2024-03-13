@@ -7,26 +7,26 @@
 }: {
   archlinuxcn = {
     pname = "archlinuxcn";
-    version = "6b2cd6f546a6b801d592762ee8f4021531ed9146";
+    version = "b22de8751bb933a9bfbef771356b7b1e4bb7f9ad";
     src = fetchFromGitHub {
       owner = "archlinuxcn";
       repo = "repo";
-      rev = "6b2cd6f546a6b801d592762ee8f4021531ed9146";
+      rev = "b22de8751bb933a9bfbef771356b7b1e4bb7f9ad";
       fetchSubmodules = false;
-      sha256 = "sha256-bs2Uuzz0o5GxcsUfG3+cqvewPG/AL5cYUqCUjj13GME=";
+      sha256 = "sha256-qztUikMF00sqWG8MjCJubpq1Jt95bITADs+AWAe+nys=";
     };
-    date = "2024-03-08";
+    date = "2024-03-13";
   };
   dnsmasq-china-list = {
     pname = "dnsmasq-china-list";
-    version = "c3b8146d71f1d74c235fa4c34b15eb8e5b8125e2";
+    version = "ebfbdb1d6894a79fe1a248e43b3619768168615d";
     src = fetchFromGitHub {
       owner = "felixonmars";
       repo = "dnsmasq-china-list";
-      rev = "c3b8146d71f1d74c235fa4c34b15eb8e5b8125e2";
+      rev = "ebfbdb1d6894a79fe1a248e43b3619768168615d";
       fetchSubmodules = false;
-      sha256 = "sha256-Q4zS9+hTT+mCIIHXKpL1eQI+/6NGZ2W32wmpaZqAkXk=";
+      sha256 = "sha256-N+p9qAbu6ZwV5lFm6qNTioQ837pFGibYoMdPVmI21nw=";
     };
-    date = "2024-03-07";
+    date = "2024-03-13";
   };
 }

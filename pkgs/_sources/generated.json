@@ -1,7 +1,7 @@
 {
     "archlinuxcn": {
         "cargoLocks": null,
-        "date": "2024-03-08",
+        "date": "2024-03-13",
         "extract": null,
         "name": "archlinuxcn",
         "passthru": null,
@@ -13,15 +13,15 @@
             "name": null,
             "owner": "archlinuxcn",
             "repo": "repo",
-            "rev": "6b2cd6f546a6b801d592762ee8f4021531ed9146",
-            "sha256": "sha256-bs2Uuzz0o5GxcsUfG3+cqvewPG/AL5cYUqCUjj13GME=",
+            "rev": "b22de8751bb933a9bfbef771356b7b1e4bb7f9ad",
+            "sha256": "sha256-qztUikMF00sqWG8MjCJubpq1Jt95bITADs+AWAe+nys=",
             "type": "github"
         },
-        "version": "6b2cd6f546a6b801d592762ee8f4021531ed9146"
+        "version": "b22de8751bb933a9bfbef771356b7b1e4bb7f9ad"
     },
     "dnsmasq-china-list": {
         "cargoLocks": null,
-        "date": "2024-03-07",
+        "date": "2024-03-13",
         "extract": null,
         "name": "dnsmasq-china-list",
         "passthru": null,
@@ -33,10 +33,10 @@
             "name": null,
             "owner": "felixonmars",
             "repo": "dnsmasq-china-list",
-            "rev": "c3b8146d71f1d74c235fa4c34b15eb8e5b8125e2",
-            "sha256": "sha256-Q4zS9+hTT+mCIIHXKpL1eQI+/6NGZ2W32wmpaZqAkXk=",
+            "rev": "ebfbdb1d6894a79fe1a248e43b3619768168615d",
+            "sha256": "sha256-N+p9qAbu6ZwV5lFm6qNTioQ837pFGibYoMdPVmI21nw=",
             "type": "github"
         },
-        "version": "c3b8146d71f1d74c235fa4c34b15eb8e5b8125e2"
+        "version": "ebfbdb1d6894a79fe1a248e43b3619768168615d"
     }
 }
