@@ -40,6 +40,11 @@
     users.rebmit = import (self.outPath + "/home-manager/rebmit@kurumi-a7s");
   };
 
+  boot.kernelParams = [
+    "nouveau.config=NvGspRm=1"
+    "nouveau.debug=info,VBIOS=info,gsp=debug"
+  ];
+
   nix.settings.trusted-users = ["root" "rebmit"];
 
   i18n.defaultLocale = "en_SG.UTF-8";
@@ -98,6 +103,8 @@
             while read -r l; do
               eval export $l
             done < <(/run/current-system/systemd/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)
+
+            export NOUVEAU_USE_ZINK=1
 
             exec systemd-cat --identifier=hyprland Hyprland
           ''}";
