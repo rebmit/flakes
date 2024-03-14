@@ -8,10 +8,11 @@ writeShellApplication {
     function handle {
       case "$1" in
         "activespecial>>"*)
+          echo "$1"
           workspace=$(echo "$1" | sed 's/activespecial>>//g' | cut -d "," -f 1)
           if [[ -z "$workspace" ]]; then
             hyprctl dispatch submap reset
-          else
+          elif [[ "$workspace" != "special" ]]; then
             hyprctl dispatch submap scratchpad
           fi
         ;;
