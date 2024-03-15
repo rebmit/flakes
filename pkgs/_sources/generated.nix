@@ -19,9 +19,9 @@
   };
   telegram-desktop-megumifox = {
     pname = "telegram-desktop-megumifox";
-    version = "6d1b3cf74f7d4cd92a3577d73456b0b7b7443953";
+    version = "755604290e3a533dced5d6f7449bea218099d38b";
     src = fetchurl {
-      url = "https://raw.githubusercontent.com/archlinuxcn/repo/6d1b3cf74f7d4cd92a3577d73456b0b7b7443953/archlinuxcn/telegram-desktop-megumifox/0001-Use-font-from-environment-variables.patch";
+      url = "https://raw.githubusercontent.com/archlinuxcn/repo/755604290e3a533dced5d6f7449bea218099d38b/archlinuxcn/telegram-desktop-megumifox/0001-Use-font-from-environment-variables.patch";
       sha256 = "sha256-IQiyJPbFZ0XSSZbcMYS0J1dej5G5LRx4qB/frW7QtnA=";
     };
     date = "2024-03-15";
