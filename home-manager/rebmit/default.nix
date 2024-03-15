@@ -18,6 +18,7 @@
     playerctl
 
     evince
+    foliate
     gnome.eog
     thunderbird
   ];

@@ -9,13 +9,13 @@
     hyprland-screenshot-helper = final.callPackage (import ./hyprland-screenshot-helper) {};
 
     smartdns-china-list = final.callPackage (import ./smartdns-china-list) {
-      dnsmasq-china-list = sources.dnsmasq-china-list;
+      source = sources.dnsmasq-china-list;
     };
 
     systemd-run-app = final.callPackage (import ./systemd-run-app) {};
 
     telegram-desktop-megumifox = final.callPackage (import ./telegram-desktop-megumifox) {
-      archlinuxcn = sources.archlinuxcn;
+      source = sources.telegram-desktop-megumifox;
     };
   };
 }

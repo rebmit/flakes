@@ -2,7 +2,6 @@
 src.git = "https://github.com/felixonmars/dnsmasq-china-list"
 fetch.github = "felixonmars/dnsmasq-china-list"
 
-[archlinuxcn]
+[telegram-desktop-megumifox]
 src.git = "https://github.com/archlinuxcn/repo"
-fetch.github = "archlinuxcn/repo"
-
+fetch.url = "https://raw.githubusercontent.com/archlinuxcn/repo/$ver/archlinuxcn/telegram-desktop-megumifox/0001-Use-font-from-environment-variables.patch"

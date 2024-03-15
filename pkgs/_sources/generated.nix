@@ -5,18 +5,6 @@
   fetchFromGitHub,
   dockerTools,
 }: {
-  archlinuxcn = {
-    pname = "archlinuxcn";
-    version = "b22de8751bb933a9bfbef771356b7b1e4bb7f9ad";
-    src = fetchFromGitHub {
-      owner = "archlinuxcn";
-      repo = "repo";
-      rev = "b22de8751bb933a9bfbef771356b7b1e4bb7f9ad";
-      fetchSubmodules = false;
-      sha256 = "sha256-qztUikMF00sqWG8MjCJubpq1Jt95bITADs+AWAe+nys=";
-    };
-    date = "2024-03-13";
-  };
   dnsmasq-china-list = {
     pname = "dnsmasq-china-list";
     version = "ebfbdb1d6894a79fe1a248e43b3619768168615d";
@@ -28,5 +16,14 @@
       sha256 = "sha256-N+p9qAbu6ZwV5lFm6qNTioQ837pFGibYoMdPVmI21nw=";
     };
     date = "2024-03-13";
+  };
+  telegram-desktop-megumifox = {
+    pname = "telegram-desktop-megumifox";
+    version = "6d1b3cf74f7d4cd92a3577d73456b0b7b7443953";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/archlinuxcn/repo/6d1b3cf74f7d4cd92a3577d73456b0b7b7443953/archlinuxcn/telegram-desktop-megumifox/0001-Use-font-from-environment-variables.patch";
+      sha256 = "sha256-IQiyJPbFZ0XSSZbcMYS0J1dej5G5LRx4qB/frW7QtnA=";
+    };
+    date = "2024-03-15";
   };
 }

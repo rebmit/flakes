@@ -1,12 +1,12 @@
 {
-  dnsmasq-china-list,
+  source,
   stdenv,
   lib,
 }:
 stdenv.mkDerivation rec {
   pname = "smartdns-china-list";
 
-  inherit (dnsmasq-china-list) version src;
+  inherit (source) version src;
 
   buildPhase = ''
     make SERVER=domestic SMARTDNS_SPEEDTEST_MODE=tcp:80 smartdns-domain-rules
