@@ -51,6 +51,7 @@
 
   services.openssh.enable = true;
   services.openssh.ports = [2222];
+  services.openssh.settings.PasswordAuthentication = false;
   users.users.root.openssh.authorizedKeys.keys = data.keys;
 
   environment.systemPackages = with pkgs; [
