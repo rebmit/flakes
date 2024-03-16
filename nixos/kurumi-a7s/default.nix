@@ -131,6 +131,7 @@
             done < <(/run/current-system/systemd/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)
 
             export NOUVEAU_USE_ZINK=1
+            export WLR_NO_HARDWARE_CURSORS=1
 
             exec systemd-cat --identifier=hyprland Hyprland
           ''}";
