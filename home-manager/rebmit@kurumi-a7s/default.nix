@@ -6,6 +6,7 @@
   imports = [
     ../rebmit
 
+    ./programs
     ./services
   ];
 }
