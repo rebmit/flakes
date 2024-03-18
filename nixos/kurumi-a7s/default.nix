@@ -66,11 +66,12 @@
 
   nix.settings.trusted-users = ["root" "rebmit"];
   nixpkgs.config = {
-    allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
-      "nvidia-x11"
-      "nvidia-settings"
-      "nvidia-persistenced"
-    ];
+    allowUnfreePredicate = pkg:
+      builtins.elem (pkgs.lib.getName pkg) [
+        "nvidia-x11"
+        "nvidia-settings"
+        "nvidia-persistenced"
+      ];
   };
 
   i18n.defaultLocale = "en_SG.UTF-8";
@@ -155,6 +156,7 @@
   powerManagement.powertop.enable = true;
 
   services.gnome.gnome-keyring.enable = true;
+  security.pam.services.swaylock = {};
   security.polkit.enable = true;
 
   system.stateVersion = "23.11";

@@ -18,6 +18,7 @@
     # app
     bind = SUPER, RETURN, exec, systemd-run-app kitty
     bind = SUPER, W, exec, systemd-run-app firefox
+    bind = SUPER, M, exec, swaylock
 
     # fuzzel
     bind = SUPER, D, exec, fuzzel

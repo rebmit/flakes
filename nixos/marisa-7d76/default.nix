@@ -118,6 +118,7 @@
   };
 
   services.gnome.gnome-keyring.enable = true;
+  security.pam.services.swaylock = {};
   security.polkit.enable = true;
 
   system.stateVersion = "23.11";
