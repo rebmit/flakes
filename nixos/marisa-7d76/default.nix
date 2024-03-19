@@ -82,6 +82,7 @@
 
   programs = {
     dconf.enable = true;
+    adb.enable = true;
     ssh = {
       startAgent = true;
       enableAskPassword = true;
