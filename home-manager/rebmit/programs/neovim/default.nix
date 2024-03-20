@@ -19,6 +19,9 @@
       luasnip
       which-key-nvim
       leap-nvim
+      nvim-autopairs
+      nvim-treesitter
+      nvim-tree-lua
     ];
 
     extraConfig = ''

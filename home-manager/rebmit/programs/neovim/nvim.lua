@@ -62,3 +62,7 @@ require('which-key').setup {
 }
 
 require('leap').add_default_mappings()
+
+require('nvim-autopairs').setup()
+
+require("nvim-tree").setup()
