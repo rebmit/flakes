@@ -6,8 +6,6 @@ vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 vim.opt.smarttab = true
 
-vim.cmd.colorscheme('catppuccin-frappe')
-
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 local servers = { 'nil_ls' }
 

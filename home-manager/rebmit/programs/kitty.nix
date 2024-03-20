@@ -12,7 +12,7 @@
     };
     settings = {
       shell = "${pkgs.tmux}/bin/tmux new-session -t main";
-      window_padding_width = "3";
+      window_padding_width = "0";
       window_border_width = "0";
       background_opacity = "0.9";
       hide_window_decorations = "yes";

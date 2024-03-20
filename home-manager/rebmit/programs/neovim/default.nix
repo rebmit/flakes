@@ -1,4 +1,5 @@
 {
+  config,
   mylib,
   pkgs,
   ...
@@ -25,6 +26,8 @@
     ];
 
     extraConfig = ''
+      :colorscheme ${config.colorScheme.slug}
+
       :source ${./nvim.lua}
     '';
   };
