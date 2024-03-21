@@ -1,9 +1,4 @@
-{
-  source,
-  lib,
-  telegram-desktop,
-  fetchpatch,
-}:
+{ source, telegram-desktop }:
 telegram-desktop.overrideAttrs (o: {
   pname = "telegram-desktop-megumifox";
   postPatch = ''

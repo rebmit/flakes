@@ -1,4 +1,4 @@
-{...}: {
+{ ... }: {
   wayland.windowManager.hyprland.settings = {
     windowrulev2 = [
       "workspace special:nheko, class: ^(nheko)$"

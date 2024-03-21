@@ -1,4 +1,4 @@
-{inputs, ...}: {
+{ inputs, ... }: {
   imports = [
     inputs.disko.nixosModules.disko
   ];
@@ -21,19 +21,19 @@
             end = "-0";
             content = {
               type = "btrfs";
-              extraArgs = ["-f"];
+              extraArgs = [ "-f" ];
               subvolumes = {
                 "boot" = {
                   mountpoint = "/boot";
-                  mountOptions = ["compress=zstd"];
+                  mountOptions = [ "compress=zstd" ];
                 };
                 "nix" = {
                   mountpoint = "/nix";
-                  mountOptions = ["compress=zstd"];
+                  mountOptions = [ "compress=zstd" ];
                 };
                 "persist" = {
                   mountpoint = "/persist";
-                  mountOptions = ["compress=zstd"];
+                  mountOptions = [ "compress=zstd" ];
                 };
               };
             };

@@ -1,13 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  inputs,
-  self,
-  mylib,
-  data,
-  ...
-}: {
+{ self, mylib, data, ... }: {
   imports =
     [
       self.nixosModules.default
@@ -46,15 +37,15 @@
     networks = {
       "20-enp2s0" = {
         name = "enp2s0";
-        bridge = ["brlan"];
+        bridge = [ "brlan" ];
       };
       "20-enp3s0" = {
         name = "enp3s0";
-        bridge = ["brwan"];
+        bridge = [ "brwan" ];
       };
       "20-brlan" = {
         name = "brlan";
-        address = ["10.224.0.1/20"];
+        address = [ "10.224.0.1/20" ];
       };
       "20-brwan" = {
         name = "brwan";

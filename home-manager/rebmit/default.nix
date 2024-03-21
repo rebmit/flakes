@@ -1,11 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  inputs,
-  mylib,
-  ...
-}: {
+{ pkgs, mylib, ... }: {
   imports = mylib.getItemPaths ./. "default.nix";
 
   home.packages = with pkgs; [

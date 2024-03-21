@@ -1,9 +1,4 @@
-{
-  writeShellApplication,
-  cliphist,
-  fuzzel,
-  wl-clipboard,
-}:
+{ writeShellApplication, cliphist, fuzzel, wl-clipboard }:
 writeShellApplication {
   name = "fuzzel-cliphist";
   text = ''

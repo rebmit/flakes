@@ -41,37 +41,35 @@
     };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    flake-utils,
-    ...
-  } @ inputs: let
-    lib = nixpkgs.lib;
-    mylib = import ./lib {inherit lib;};
-    mypkgs = import ./pkgs {inherit mylib;};
-  in
-    flake-utils.lib.eachSystem ["x86_64-linux" "aarch64-linux"]
-    (
-      system: let
-        pkgs = import nixpkgs {
-          inherit system;
-          overlays = [self.overlays.default];
-        };
-      in {
-        formatter = pkgs.alejandra;
-        packages = mypkgs.packages pkgs;
-        legacyPackages = pkgs;
-        devShells.default = with pkgs;
-          mkShell {
-            nativeBuildInputs = [
-              colmena
-              nvfetcher
-              sops
-            ];
+  outputs = { self, nixpkgs, flake-utils, ... } @ inputs:
+    let
+      lib = nixpkgs.lib;
+      mylib = import ./lib { inherit lib; };
+      mypkgs = import ./pkgs { inherit mylib; };
+    in
+    flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ]
+      (
+        system:
+        let
+          pkgs = import nixpkgs {
+            inherit system;
+            overlays = [ self.overlays.default ];
           };
-      }
-    )
+        in
+        {
+          formatter = pkgs.nixpkgs-fmt;
+          packages = mypkgs.packages pkgs;
+          legacyPackages = pkgs;
+          devShells.default = with pkgs;
+            mkShell {
+              nativeBuildInputs = [
+                colmena
+                nvfetcher
+                sops
+              ];
+            };
+        }
+      )
     // {
       nixosModules = import ./modules/nixos;
       homeManagerModules = import ./modules/home-manager;
@@ -80,14 +78,14 @@
         {
           "marisa-7d76" = lib.nixosSystem {
             system = "x86_64-linux";
-            modules = [./nixos/marisa-7d76];
+            modules = [ ./nixos/marisa-7d76 ];
             specialArgs = {
               inherit inputs mylib self;
             };
           };
           "kurumi-a7s" = lib.nixosSystem {
             system = "x86_64-linux";
-            modules = [./nixos/kurumi-a7s];
+            modules = [ ./nixos/kurumi-a7s ];
             specialArgs = {
               inherit inputs mylib self;
             };
@@ -107,13 +105,13 @@
             system = "x86_64-linux";
           };
         };
-        "flandre-eq59" = {...}: {
+        "flandre-eq59" = { ... }: {
           deployment.targetHost = "10.224.0.1";
-          imports = [./nixos/flandre-eq59];
+          imports = [ ./nixos/flandre-eq59 ];
         };
-        "misaka-lax02" = {...}: {
+        "misaka-lax02" = { ... }: {
           deployment.targetHost = "misaka-lax02";
-          imports = [./nixos/misaka-lax02];
+          imports = [ ./nixos/misaka-lax02 ];
         };
       };
     };

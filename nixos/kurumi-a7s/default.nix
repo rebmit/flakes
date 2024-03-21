@@ -1,12 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  inputs,
-  self,
-  mylib,
-  ...
-}: {
+{ config, lib, pkgs, inputs, self, mylib, ... }: {
   imports =
     [
       self.nixosModules.default
@@ -28,15 +20,15 @@
     };
     age = {
       keyFile = "/persist/_data/sops.key";
-      sshKeyPaths = [];
+      sshKeyPaths = [ ];
     };
-    gnupg.sshKeyPaths = [];
+    gnupg.sshKeyPaths = [ ];
   };
 
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = false;
-    extraSpecialArgs = {inherit inputs mylib;};
+    extraSpecialArgs = { inherit inputs mylib; };
     users.rebmit = import (self.outPath + "/home-manager/rebmit@kurumi-a7s");
   };
 
@@ -45,7 +37,7 @@
     "nouveau.debug=info,VBIOS=info,gsp=debug"
   ];
 
-  services.xserver.videoDrivers = ["nvidia"];
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
     package = config.boot.kernelPackages.nvidiaPackages.stable;
@@ -64,7 +56,7 @@
     };
   };
 
-  nix.settings.trusted-users = ["root" "rebmit"];
+  nix.settings.trusted-users = [ "root" "rebmit" ];
   nixpkgs.config = {
     allowUnfreePredicate = pkg:
       builtins.elem (pkgs.lib.getName pkg) [
@@ -102,7 +94,7 @@
 
   users.users.rebmit = {
     isNormalUser = true;
-    extraGroups = ["wheel"];
+    extraGroups = [ "wheel" ];
     hashedPasswordFile = config.sops.secrets.passwd.path;
   };
 
@@ -156,7 +148,7 @@
   powerManagement.powertop.enable = true;
 
   services.gnome.gnome-keyring.enable = true;
-  security.pam.services.swaylock = {};
+  security.pam.services.swaylock = { };
   security.polkit.enable = true;
 
   system.stateVersion = "23.11";

@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ ... }: {
   wayland.windowManager.hyprland.extraConfig = ''
     # hyprland settings
     bind = SUPER ALT, Q, exit

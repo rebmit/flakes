@@ -1,4 +1,4 @@
-{lib, ...}: {
+{ lib, ... }: {
   containers."router" = {
     autoStart = true;
     privateNetwork = true;
@@ -59,7 +59,7 @@
           };
           "20-lan" = {
             name = "lan";
-            address = ["10.224.0.2/20"];
+            address = [ "10.224.0.2/20" ];
           };
         };
       };

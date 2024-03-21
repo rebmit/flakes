@@ -1,9 +1,5 @@
-{
-  source,
-  stdenv,
-  lib,
-}:
-stdenv.mkDerivation rec {
+{ source, stdenv, lib }:
+stdenv.mkDerivation {
   pname = "smartdns-china-list";
 
   inherit (source) version src;

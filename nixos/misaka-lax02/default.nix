@@ -1,13 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  inputs,
-  self,
-  mylib,
-  data,
-  ...
-}: {
+{ pkgs, inputs, self, mylib, data, ... }: {
   imports =
     [
       self.nixosModules.default
@@ -26,9 +17,9 @@
     defaultSopsFile = ./secrets.yml;
     age = {
       keyFile = "/persist/_data/sops.key";
-      sshKeyPaths = [];
+      sshKeyPaths = [ ];
     };
-    gnupg.sshKeyPaths = [];
+    gnupg.sshKeyPaths = [ ];
   };
 
   networking.hostName = "misaka-lax02";
@@ -38,7 +29,7 @@
     wait-online.enable = false;
     networks = {
       "20-wired" = {
-        matchConfig.Name = ["en*" "eth*"];
+        matchConfig.Name = [ "en*" "eth*" ];
         DHCP = "yes";
         networkConfig = {
           KeepConfiguration = "yes";
@@ -50,7 +41,7 @@
   };
 
   services.openssh.enable = true;
-  services.openssh.ports = [2222];
+  services.openssh.ports = [ 2222 ];
   services.openssh.settings.PasswordAuthentication = false;
   users.users.root.openssh.authorizedKeys.keys = data.keys;
 

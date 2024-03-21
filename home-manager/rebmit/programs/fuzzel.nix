@@ -1,8 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
+{ config, pkgs, ... }: {
   programs.fuzzel = {
     enable = true;
     package = pkgs.fuzzel;

@@ -1,8 +1,4 @@
-{
-  pkgs,
-  inputs,
-  ...
-}: {
+{ ... }: {
   wayland.windowManager.hyprland.extraConfig = ''
     # https://discourse.nixos.org/t/clicked-links-in-desktop-apps-not-opening-browers/29114/4
     exec-once = systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service

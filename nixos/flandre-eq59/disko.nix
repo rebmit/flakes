@@ -1,4 +1,4 @@
-{inputs, ...}: {
+{ inputs, ... }: {
   imports = [
     inputs.disko.nixosModules.disko
   ];
@@ -19,7 +19,7 @@
                 type = "filesystem";
                 format = "vfat";
                 mountpoint = "/boot";
-                mountOptions = ["umask=0077"];
+                mountOptions = [ "umask=0077" ];
               };
             };
             root = {
@@ -27,15 +27,15 @@
               size = "100%";
               content = {
                 type = "btrfs";
-                extraArgs = ["-f"];
+                extraArgs = [ "-f" ];
                 subvolumes = {
                   "/persist" = {
                     mountpoint = "/persist";
-                    mountOptions = ["compress=zstd"];
+                    mountOptions = [ "compress=zstd" ];
                   };
                   "/nix" = {
                     mountpoint = "/nix";
-                    mountOptions = ["compress=zstd"];
+                    mountOptions = [ "compress=zstd" ];
                   };
                 };
               };

@@ -1,8 +1,4 @@
-{
-  pkgs,
-  mylib,
-  ...
-}: {
+{ ... }: {
   imports = [
     ../rebmit
 

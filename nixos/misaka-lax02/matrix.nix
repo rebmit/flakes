@@ -1,8 +1,5 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
+{ config, pkgs, ... }:
+let
   conf = {
     default_server_config = {
       "m.homeserver" = {
@@ -12,11 +9,12 @@
     };
     show_labs_settings = true;
   };
-in {
+in
+{
   sops = {
     secrets = {
-      matrix-synapse = {owner = config.systemd.services.matrix-synapse.serviceConfig.User;};
-      mautrix-telegram = {};
+      matrix-synapse = { owner = config.systemd.services.matrix-synapse.serviceConfig.User; };
+      mautrix-telegram = { };
     };
   };
 
@@ -43,7 +41,7 @@ in {
 
       listeners = [
         {
-          bind_addresses = ["127.0.0.1"];
+          bind_addresses = [ "127.0.0.1" ];
           port = 8196;
           tls = false;
           type = "http";
@@ -51,7 +49,7 @@ in {
           resources = [
             {
               compress = true;
-              names = ["client" "federation"];
+              names = [ "client" "federation" ];
             }
           ];
         }
@@ -81,7 +79,7 @@ in {
   services.mautrix-telegram = {
     enable = true;
     environmentFile = config.sops.secrets.mautrix-telegram.path;
-    serviceDependencies = ["matrix-synapse.service"];
+    serviceDependencies = [ "matrix-synapse.service" ];
     settings = {
       homeserver = {
         address = "http://127.0.0.1:8196";
@@ -100,7 +98,7 @@ in {
         delivery_error_reports = true;
         incoming_bridge_error_reports = true;
         bridge_matrix_leave = false;
-        relay_user_distinguishers = [];
+        relay_user_distinguishers = [ ];
         create_group_on_invite = false;
         encryption = {
           allow = true;

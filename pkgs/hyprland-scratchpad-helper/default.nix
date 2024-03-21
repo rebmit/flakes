@@ -1,7 +1,4 @@
-{
-  writeShellApplication,
-  socat,
-}:
+{ writeShellApplication, socat }:
 writeShellApplication {
   name = "hyprland-scratchpad-helper";
   text = ''

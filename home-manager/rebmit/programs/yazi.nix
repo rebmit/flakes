@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   programs.fish.interactiveShellInit = ''
     function yazi
       set tmp (mktemp -t "yazi-cwd.XXXXX")
@@ -17,7 +17,7 @@
     package = pkgs.yazi;
     settings = {
       manager = {
-        ratio = [1 4 3];
+        ratio = [ 1 4 3 ];
         sort_by = "natural";
         sort_sensitive = false;
         sort_reverse = false;
@@ -32,11 +32,11 @@
         max_height = 1000;
       };
       opener = {
-        audio_default = [];
-        image_default = [];
-        video_default = [];
-        text_default = [];
-        reader_default = [];
+        audio_default = [ ];
+        image_default = [ ];
+        video_default = [ ];
+        text_default = [ ];
+        reader_default = [ ];
       };
     };
   };

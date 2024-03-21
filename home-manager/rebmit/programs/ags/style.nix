@@ -1,4 +1,4 @@
-{config, ...}: {
+{ config, ... }: {
   xdg.configFile."ags/style.css" = {
     text = ''
       * {

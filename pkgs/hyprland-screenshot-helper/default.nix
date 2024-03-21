@@ -1,10 +1,4 @@
-{
-  writeShellApplication,
-  wl-clipboard,
-  satty,
-  grim,
-  slurp,
-}:
+{ writeShellApplication, wl-clipboard, satty, grim, slurp }:
 writeShellApplication {
   name = "hyprland-screenshot-helper";
   text = ''

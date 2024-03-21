@@ -9,7 +9,7 @@
         "sd_mod"
       ];
     };
-    kernelModules = ["kvm-intel"];
+    kernelModules = [ "kvm-intel" ];
   };
 
   hardware.enableRedistributableFirmware = true;

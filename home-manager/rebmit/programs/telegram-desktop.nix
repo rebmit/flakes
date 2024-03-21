@@ -1,5 +1,5 @@
-{pkgs, ...}: {
-  home.packages = with pkgs; [telegram-desktop-megumifox];
+{ pkgs, ... }: {
+  home.packages = with pkgs; [ telegram-desktop-megumifox ];
 
   # fix auto-night mode
   xdg.desktopEntries."org.telegram.desktop" = {

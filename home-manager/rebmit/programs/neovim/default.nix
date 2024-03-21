@@ -1,9 +1,4 @@
-{
-  config,
-  mylib,
-  pkgs,
-  ...
-}: {
+{ config, mylib, pkgs, ... }: {
   imports = mylib.getItemPaths ./. "default.nix";
 
   programs.neovim = {
