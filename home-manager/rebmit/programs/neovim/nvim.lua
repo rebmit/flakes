@@ -1,12 +1,60 @@
-vim.opt.number = true
-vim.opt.termguicolors = true
+--
+-- general
+-- 
 
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.cursorline = true
+
+vim.opt.expandtab = true
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
-vim.opt.expandtab = true
+vim.opt.softtabstop = 2
 vim.opt.smarttab = true
 
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
+vim.opt.timeoutlen = 500
+vim.opt.scrolloff = 5
+
+--
+-- mappings
+--
+
+--- set <leader> as space, ; as :
+vim.g.mapleader = ' '
+vim.api.nvim_set_keymap('', ';', ':', { noremap = true })
+
+--- save and quit
+vim.api.nvim_set_keymap('', 'S', ':w<CR>', { noremap = true })
+vim.api.nvim_set_keymap('', 'Q', ':q<CR>', { noremap = true })
+
+--- cursor movement
+vim.api.nvim_set_keymap('', 'J', '5j', { noremap = true })
+vim.api.nvim_set_keymap('', 'K', '5k', { noremap = true })
+vim.api.nvim_set_keymap('', 'H', '5h', { noremap = true })
+vim.api.nvim_set_keymap('', 'L', '5l', { noremap = true })
+
+vim.api.nvim_set_keymap('', '<C-j>', '5<C-e>', { noremap = true })
+vim.api.nvim_set_keymap('', '<C-k>', '5<C-y>', { noremap = true })
+vim.api.nvim_set_keymap('', '<C-h>', '0', { noremap = true })
+vim.api.nvim_set_keymap('', '<C-l>', '$', { noremap = true })
+
+--- window management
+vim.api.nvim_set_keymap('', '<leader>h', '<C-w>h', { noremap = true })
+vim.api.nvim_set_keymap('', '<leader>j', '<C-w>j', { noremap = true })
+vim.api.nvim_set_keymap('', '<leader>k', '<C-w>k', { noremap = true })
+vim.api.nvim_set_keymap('', '<leader>l', '<C-w>l', { noremap = true })
+
+vim.api.nvim_set_keymap('', 'sh', ':set nosplitright<CR>:vsplit<CR>', { noremap = true })
+vim.api.nvim_set_keymap('', 'sj', ':set splitbelow<CR>:split<CR>', { noremap = true })
+vim.api.nvim_set_keymap('', 'sk', ':set nosplitbelow<CR>:split<CR>', { noremap = true })
+vim.api.nvim_set_keymap('', 'sl', ':set splitright<CR>:vsplit<CR>', { noremap = true })
+
+vim.api.nvim_set_keymap('', '<up>', ':res +5<CR>', { noremap = true })
+vim.api.nvim_set_keymap('', '<down>', ':res -5<CR>', { noremap = true })
+vim.api.nvim_set_keymap('', '<left>', ':vertical resize -5<CR>', { noremap = true })
+vim.api.nvim_set_keymap('', '<right>', ':vertical resize +5<CR>', { noremap = true })
+
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 local servers = { 'nil_ls' }
 
 for _, lsp in pairs(servers) do
@@ -63,4 +111,4 @@ require('leap').add_default_mappings()
 
 require('nvim-autopairs').setup()
 
-require("nvim-tree").setup()
+require('nvim-tree').setup()
