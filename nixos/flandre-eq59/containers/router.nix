@@ -27,8 +27,7 @@
               SendHostname = false;
               UseDNS = false;
               UseRoutes = false;
-              # wait for https://github.com/NixOS/nixpkgs/pull/290925
-              # UseGateway = false;
+              UseGateway = false;
               RouteTable = 200;
               RouteMetric = 2048;
             };
@@ -59,7 +58,34 @@
           };
           "20-lan" = {
             name = "lan";
-            address = [ "10.224.0.2/20" ];
+            addresses = [
+              {
+                addressConfig = {
+                  Address = "10.224.0.2/20";
+                  AddPrefixRoute = false;
+                };
+              }
+            ];
+            networkConfig = {
+              DHCP = "no";
+              IPv6AcceptRA = "no";
+            };
+            routes = [
+              {
+                routeConfig = {
+                  Table = 150;
+                  Destination = "10.224.0.2/20";
+                };
+              }
+            ];
+            routingPolicyRules = [
+              {
+                routingPolicyRuleConfig = {
+                  Table = 150;
+                  Priority = 15000;
+                };
+              }
+            ];
           };
         };
       };
