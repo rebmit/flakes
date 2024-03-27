@@ -1,4 +1,4 @@
-{ self, mylib, data, ... }: {
+{ self, mylib, data, pkgs, ... }: {
   imports =
     [
       self.nixosModules.default
@@ -46,6 +46,7 @@
       "20-brlan" = {
         name = "brlan";
         address = [ "10.224.0.1/20" ];
+        gateway = [ "10.224.0.254" ];
       };
       "20-brwan" = {
         name = "brwan";
@@ -60,6 +61,11 @@
       };
     };
   };
+
+  environment.systemPackages = with pkgs; [
+    dnsutils
+    mtr
+  ];
 
   services.openssh.enable = true;
   users.users.root.openssh.authorizedKeys.keys = data.keys;
