@@ -4,6 +4,7 @@
     privateNetwork = true;
     ephemeral = true;
     extraVeths."lan".hostBridge = "brlan";
+    extraFlags = [ "-U" ];
     config = {
       networking = {
         firewall.enable = false;
