@@ -40,11 +40,6 @@
   services.openssh.settings.PasswordAuthentication = false;
   users.users.root.openssh.authorizedKeys.keys = data.keys;
 
-  environment.systemPackages = with pkgs; [
-    htop
-    neofetch
-  ];
-
   services.caddy = {
     enable = true;
     virtualHosts."rebmit.moe".extraConfig = ''

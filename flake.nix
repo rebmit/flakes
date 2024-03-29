@@ -71,7 +71,7 @@
         }
       )
     // {
-      nixosModules = import ./modules;
+      nixosModules = import ./modules/nixos;
       overlays.default = mypkgs.overlay;
       nixosConfigurations =
         {

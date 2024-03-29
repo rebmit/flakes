@@ -2,6 +2,7 @@
   imports =
     [
       self.nixosModules.default
+      self.nixosModules.base
       self.nixosModules.secureboot
       inputs.sops-nix.nixosModules.sops
       inputs.home-manager.nixosModules.home-manager

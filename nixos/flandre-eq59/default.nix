@@ -62,11 +62,6 @@
     };
   };
 
-  environment.systemPackages = with pkgs; [
-    dnsutils
-    mtr
-  ];
-
   services.openssh.enable = true;
   users.users.root.openssh.authorizedKeys.keys = data.keys;
 
