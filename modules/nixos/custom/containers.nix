@@ -52,7 +52,7 @@ let
 
       exec ${config.systemd.package}/bin/systemd-nspawn \
         --keep-unit \
-        -M "$INSTANCE" -D "$root" -U $extraFlags \
+        -M "$INSTANCE" -D "$root" $extraFlags \
         $EXTRA_NSPAWN_FLAGS \
         --notify-ready=yes \
         --kill-signal=SIGRTMIN+3 \
@@ -61,6 +61,7 @@ let
         --bind-ro=/nix/var/nix/daemon-socket \
         --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles:rootidmap" \
         --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots:rootidmap" \
+        ${optionalString (!cfg.privileged) "-U"} \
         ${optionalString (!cfg.ephemeral) "--link-journal=try-guest"} \
         --setenv PATH="$PATH" \
         ${optionalString cfg.ephemeral "--ephemeral"} \
@@ -135,6 +136,10 @@ let
         default = true;
         type = types.bool;
       };
+      useRootIdMap = mkOption {
+        default = true;
+        type = types.bool;
+      };
     };
 
     config = {
@@ -166,9 +171,10 @@ let
   mkBindFlag = d:
     let
       flagPrefix = if d.isReadOnly then " --bind-ro=" else " --bind=";
-      mountstr = if d.hostPath != null then "${d.hostPath}:${d.mountPoint}:rootidmap" else "${d.mountPoint}:${d.mountPoint}:rootidmap";
+      flagSuffix = if d.useRootIdMap then ":rootidmap" else "";
+      mountstr = if d.hostPath != null then "${d.hostPath}:${d.mountPoint}" else "${d.mountPoint}:${d.mountPoint}";
     in
-    flagPrefix + mountstr;
+    flagPrefix + mountstr + flagSuffix;
 
   mkBindFlags = bs: concatMapStrings mkBindFlag (lib.attrValues bs);
 
@@ -178,6 +184,7 @@ let
     ephemeral = false;
     timeoutStartSec = "1min";
     allowedDevices = [ ];
+    privileged = false;
   };
 in
 {
@@ -238,12 +245,12 @@ in
               default = false;
             };
 
-            enableTun = mkOption {
+            privateNetwork = mkOption {
               type = types.bool;
               default = false;
             };
 
-            privateNetwork = mkOption {
+            privileged = mkOption {
               type = types.bool;
               default = false;
             };
@@ -320,36 +327,25 @@ in
         [{ name = "custom-container@"; value = unit; }]
         ++ (mapAttrsToList
           (name: cfg: nameValuePair "custom-container@${name}" (
-            let
-              containerConfig = cfg // (
-                optionalAttrs cfg.enableTun
-                  {
-                    allowedDevices = cfg.allowedDevices
-                    ++ [{ node = "/dev/net/tun"; modifier = "rw"; }];
-                    additionalCapabilities = cfg.additionalCapabilities
-                    ++ [ "CAP_NET_ADMIN" ];
-                  }
-              );
-            in
             recursiveUpdate unit
               {
-                preStart = preStartScript containerConfig;
-                script = startScript containerConfig;
-                postStart = postStartScript containerConfig;
-                serviceConfig = serviceDirectives containerConfig;
-                unitConfig.RequiresMountsFor = lib.optional (!containerConfig.ephemeral) "${stateDirectory}/%i";
-                environment.root = if containerConfig.ephemeral then "/run/custom-containers/%i" else "${stateDirectory}/%i";
+                preStart = preStartScript cfg;
+                script = startScript cfg;
+                postStart = postStartScript cfg;
+                serviceConfig = serviceDirectives cfg;
+                unitConfig.RequiresMountsFor = lib.optional (!cfg.ephemeral) "${stateDirectory}/%i";
+                environment.root = if cfg.ephemeral then "/run/custom-containers/%i" else "${stateDirectory}/%i";
               } // (
-              optionalAttrs containerConfig.autoStart
+              optionalAttrs cfg.autoStart
                 {
                   wantedBy = [ "machines.target" ];
                   wants = [ "network.target" ];
                   after = [ "network.target" ];
                   restartTriggers = [
-                    containerConfig.path
+                    cfg.path
                     config.environment.etc."${configurationDirectoryName}/${name}.conf".source
                   ];
-                  restartIfChanged = containerConfig.restartIfChanged;
+                  restartIfChanged = cfg.restartIfChanged;
                 }
             )
           ))

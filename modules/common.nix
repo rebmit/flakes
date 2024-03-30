@@ -26,6 +26,5 @@
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
     substituters = [ ];
-    builders-use-substitutes = true;
   };
 }
