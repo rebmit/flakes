@@ -39,6 +39,11 @@
       url = "github:Aylur/ags";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    mysecrets = {
+      url = "git+ssh://git@github.com/rebmit/secrets.git";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, flake-utils, ... } @ inputs:
