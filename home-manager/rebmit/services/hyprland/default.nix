@@ -56,6 +56,12 @@
         "col.inactive_border" = "rgb(${config.colorScheme.palette.base00})";
       };
 
+      input = {
+        touchpad = {
+          scroll_factor = 0.2;
+        };
+      };
+
       xwayland = {
         use_nearest_neighbor = "false";
       };
