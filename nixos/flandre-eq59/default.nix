@@ -1,7 +1,8 @@
-{ self, mylib, data, pkgs, ... }: {
+{ self, mylib, data, pkgs, inputs, ... }: {
   imports =
     [
       self.nixosModules.default
+      inputs.mysecrets.nixosModules.secrets.flandre
     ]
     ++ (mylib.getItemPaths ./. "default.nix");
 

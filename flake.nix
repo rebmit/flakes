@@ -38,6 +38,7 @@
     mysecrets = {
       url = "git+ssh://git@github.com/rebmit/secrets.git";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
     };
   };
 
