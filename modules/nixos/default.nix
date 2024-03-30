@@ -2,6 +2,7 @@
   default = { ... }: {
     imports = [
       ./preset/baseline.nix
+      ./custom/containers.nix
       ../common.nix
     ];
   };
