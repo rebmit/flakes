@@ -3,7 +3,7 @@
     [
       self.nixosModules.default
       self.nixosModules.secureboot
-      inputs.sops-nix.nixosModules.sops
+      inputs.mysecrets.nixosModules.secrets.kurumi
       inputs.home-manager.nixosModules.home-manager
     ]
     ++ (mylib.getItemPaths ./. "default.nix");
@@ -11,18 +11,6 @@
   preset = {
     baseline.enable = true;
     secureboot.enable = false;
-  };
-
-  sops = {
-    defaultSopsFile = ./secrets.yml;
-    secrets = {
-      passwd.neededForUsers = true;
-    };
-    age = {
-      keyFile = "/persist/_data/sops.key";
-      sshKeyPaths = [ ];
-    };
-    gnupg.sshKeyPaths = [ ];
   };
 
   home-manager = {
