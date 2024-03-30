@@ -22,7 +22,7 @@
           "20-lan" = {
             name = "smartdns-lan";
             address = [ "10.224.0.3/20" ];
-            gateway = [ "10.224.0.254" ];
+            gateway = [ "10.224.0.2" ];
           };
         };
       };

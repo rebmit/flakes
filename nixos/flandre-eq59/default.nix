@@ -47,7 +47,8 @@
       "20-brlan" = {
         name = "brlan";
         address = [ "10.224.0.1/20" ];
-        gateway = [ "10.224.0.254" ];
+        gateway = [ "10.224.0.2" ];
+        dns = [ "10.224.0.3" ];
       };
       "20-brwan" = {
         name = "brwan";

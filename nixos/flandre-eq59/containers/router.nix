@@ -19,7 +19,56 @@
       }
     ];
     config = {
-      networking.useHostResolvConf = lib.mkForce false;
+      networking = {
+        useHostResolvConf = lib.mkForce false;
+        firewall.enable = false;
+      };
+
+      boot.kernel.sysctl = {
+        "net.ipv6.conf.default.forwarding" = 1;
+        "net.ipv4.conf.default.forwarding" = 1;
+        "net.ipv6.conf.all.forwarding" = 1;
+        "net.ipv4.conf.all.forwarding" = 1;
+      };
+
+      networking.nftables = {
+        enable = true;
+        tables = {
+          global = {
+            family = "ip";
+            content = ''
+              chain input_ppp0 {
+              }
+
+              chain input_wan {
+              }
+
+              chain input_lan {
+                icmp type echo-request limit rate 5/second accept
+              }
+
+              chain input {
+                type filter hook input priority mangle; policy drop;
+                ct state vmap { established : accept, related : accept, invalid : drop }
+                iifname vmap { lo : accept, ppp0 : jump input_ppp0, router-wan : jump input_wan, router-lan : jump input_lan }
+              }
+
+              chain forward {
+                type filter hook forward priority mangle; policy drop;
+                ct state vmap { established : accept, related : accept, invalid : drop }
+                iifname router-lan accept
+              }
+
+              chain postrouting {
+                type nat hook postrouting priority srcnat; policy accept;
+
+                ip saddr 10.224.0.0/20 oifname router-wan masquerade
+                ip saddr 10.224.0.0/20 oifname ppp0 masquerade
+              }
+            '';
+          };
+        };
+      };
 
       systemd.network = {
         enable = true;
