@@ -2,7 +2,7 @@
   imports =
     [
       self.nixosModules.default
-      inputs.sops-nix.nixosModules.sops
+      inputs.mysecrets.nixosModules.secrets.misaka
     ]
     ++ (mylib.getItemPaths ./. "default.nix");
 
@@ -11,15 +11,6 @@
       enable = true;
       uefi = false;
     };
-  };
-
-  sops = {
-    defaultSopsFile = ./secrets.yml;
-    age = {
-      keyFile = "/persist/_data/sops.key";
-      sshKeyPaths = [ ];
-    };
-    gnupg.sshKeyPaths = [ ];
   };
 
   networking.hostName = "misaka-lax02";

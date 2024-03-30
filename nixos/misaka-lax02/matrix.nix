@@ -14,7 +14,6 @@ in
   sops = {
     secrets = {
       matrix-synapse = { owner = config.systemd.services.matrix-synapse.serviceConfig.User; };
-      mautrix-telegram = { };
     };
   };
 
