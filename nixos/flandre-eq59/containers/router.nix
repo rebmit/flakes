@@ -1,13 +1,12 @@
-{ lib, ... }: {
-  containers."router" = {
+{ lib, config, ... }: {
+  custom.containers."router" = {
     autoStart = true;
     privateNetwork = true;
     ephemeral = true;
-    extraFlags = [ "-U" ];
-    extraVeths = {
-      lan.hostBridge = "brlan";
-      wan.hostBridge = "brwan";
-    };
+    extraVeths."router-lan".hostBridge = "brlan";
+    extraVeths."router-wan".hostBridge = "brwan";
+    bindMounts."${config.sops.templates.router-xl2tpd.path}".isReadOnly = true;
+    bindMounts."${config.sops.templates.router-pppoptions.path}".isReadOnly = true;
     config = {
       networking.useHostResolvConf = lib.mkForce false;
 
@@ -16,7 +15,7 @@
         wait-online.enable = false;
         networks = {
           "20-wan" = {
-            name = "wan";
+            name = "router-wan";
             networkConfig = {
               DHCP = "ipv4";
               IPv6AcceptRA = "no";
@@ -55,7 +54,7 @@
             ];
           };
           "20-lan" = {
-            name = "lan";
+            name = "router-lan";
             addresses = [
               {
                 addressConfig = {

@@ -1,10 +1,9 @@
 { lib, pkgs, ... }: {
-  containers."smartdns" = {
+  custom.containers."smartdns" = {
     autoStart = true;
     privateNetwork = true;
     ephemeral = true;
-    extraVeths."lan".hostBridge = "brlan";
-    extraFlags = [ "-U" ];
+    extraVeths."smartdns-lan".hostBridge = "brlan";
     config = {
       networking = {
         firewall.enable = false;
@@ -21,8 +20,8 @@
         wait-online.enable = false;
         networks = {
           "20-lan" = {
-            name = "lan";
-            address = [ "10.224.0.2/20" ];
+            name = "smartdns-lan";
+            address = [ "10.224.0.3/20" ];
             gateway = [ "10.224.0.254" ];
           };
         };
