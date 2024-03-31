@@ -37,33 +37,29 @@
           global = {
             family = "ip";
             content = ''
-              chain input_ppp0 {
-              }
-
-              chain input_wan {
-              }
-
               chain input_lan {
-                icmp type echo-request limit rate 5/second accept
+                icmp type echo-request limit rate 5/second counter accept
               }
 
               chain input {
                 type filter hook input priority mangle; policy drop;
-                ct state vmap { established : accept, related : accept, invalid : drop }
-                iifname vmap { lo : accept, ppp0 : jump input_ppp0, router-wan : jump input_wan, router-lan : jump input_lan }
+                iifname ppp0 ct state related,established counter accept
+                iifname router-wan ct state related,established counter accept
+                iifname lo counter accept
+                iifname router-lan counter jump input_lan
               }
 
               chain forward {
                 type filter hook forward priority mangle; policy drop;
-                ct state vmap { established : accept, related : accept, invalid : drop }
-                iifname router-lan accept
+                iifname ppp0 ct state related,established counter accept
+                iifname router-wan ct state related,established counter accept
+                iifname router-lan counter accept
               }
 
               chain postrouting {
                 type nat hook postrouting priority srcnat; policy accept;
-
-                ip saddr 10.224.0.0/20 oifname router-wan masquerade
-                ip saddr 10.224.0.0/20 oifname ppp0 masquerade
+                iifname router-lan oifname router-wan counter masquerade
+                iifname router-lan oifname ppp0 counter masquerade
               }
             '';
           };

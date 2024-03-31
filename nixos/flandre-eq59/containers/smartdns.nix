@@ -6,6 +6,7 @@
     extraVeths."smartdns-lan".hostBridge = "brlan";
     config = {
       networking = {
+        useHostResolvConf = lib.mkForce false;
         firewall.enable = false;
         resolvconf = {
           enable = true;
