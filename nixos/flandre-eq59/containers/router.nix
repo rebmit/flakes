@@ -51,6 +51,11 @@
 
               chain forward {
                 type filter hook forward priority mangle; policy drop;
+
+                # mss clamping is necessary for pppol2tp
+                iifname ppp0 tcp flags syn tcp option maxseg size set rt mtu
+                oifname ppp0 tcp flags syn tcp option maxseg size set rt mtu
+
                 iifname ppp0 ct state related,established counter accept
                 iifname router-wan ct state related,established counter accept
                 iifname router-lan counter accept

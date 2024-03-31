@@ -30,8 +30,9 @@
 
       services.smartdns = {
         enable = true;
-        bindPort = 53;
         settings = {
+          bind = "[::]:53";
+
           server-name = "smartdns";
           conf-file = "${pkgs.smartdns-china-list}/accelerated-domains.china.domain.smartdns.conf";
 
