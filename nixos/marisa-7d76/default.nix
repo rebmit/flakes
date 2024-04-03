@@ -17,7 +17,7 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = false;
-    extraSpecialArgs = { inherit inputs mylib; };
+    extraSpecialArgs = { inherit inputs mylib self; };
     users.rebmit = import (self.outPath + "/home-manager/rebmit@marisa-7d76");
   };
 
