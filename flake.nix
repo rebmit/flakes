@@ -97,7 +97,7 @@
             inherit self inputs mylib;
             data.keys = [
               "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII4h3+0cpr7XGAAEzoXrvA+Oap+eyeugCHMX/BVIbPYS rebmit@marisa-7d76"
-              "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOisxuhUSP41Ws1J42WAoaKtaSXKH85y1ki+xUL/Fi+c rebmit@kurumi-a7s"
+              "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAs/vNhm4QV8tuks1k/W4dlpvjERwGJwX1d/YqhZ7zGc rebmit@kurumi-a7s"
             ];
           };
           nixpkgs = import inputs.nixpkgs {
