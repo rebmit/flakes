@@ -1,8 +1,18 @@
-{ self, ... }: {
+{ pkgs, self, ... }: {
   imports = [
     ../rebmit
     self.homeManagerModules.default
   ];
+
+  custom.i18n.fcitx5 = {
+    enable = true;
+    kittySupport = true;
+    waylandFrontend = false;
+    plasma6Support = true;
+    addons = with pkgs; [
+      qt6Packages.fcitx5-chinese-addons
+    ];
+  };
 
   custom.services.desktopEnvironment.hyprland = {
     enable = true;
