@@ -77,6 +77,7 @@ in
       {
         home.packages = with pkgs; [
           systemd-run-app
+          swww
         ];
 
         custom.services.wayland = {
@@ -90,6 +91,7 @@ in
             terminal = cfg.terminal.launchPrefix;
           };
           swaylock.enable = true;
+          ags.enable = true;
         };
 
         wayland.windowManager.hyprland = {

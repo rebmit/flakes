@@ -14,6 +14,31 @@
     ];
   };
 
+  custom.programs.firefox.enable = true;
+  custom.programs.telegram.enable = true;
+  custom.programs.fish.enable = true;
+  custom.programs.kitty = {
+    enable = true;
+    shell = "tmux new-session -t main";
+  };
+  custom.programs.tmux.enable = true;
+  custom.programs.yazi = {
+    enable = true;
+    enableFishIntegration = true;
+  };
+  custom.programs.neovim.enable = true;
+
+  home.packages = with pkgs; [
+    nheko
+    evince
+    foliate
+    gnome.eog
+    thunderbird
+    mpv
+    pavucontrol
+    systemd-run-app
+  ];
+
   custom.services.desktopEnvironment.hyprland = {
     enable = true;
     browser = {
