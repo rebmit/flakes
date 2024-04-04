@@ -1,8 +1,5 @@
 { pkgs, self, ... }: {
-  imports = [
-    ../rebmit
-    self.homeManagerModules.default
-  ];
+  imports = [ self.homeManagerModules.default ];
 
   custom.i18n.fcitx5 = {
     enable = true;
@@ -14,19 +11,23 @@
     ];
   };
 
-  custom.programs.firefox.enable = true;
-  custom.programs.telegram.enable = true;
-  custom.programs.fish.enable = true;
-  custom.programs.kitty = {
-    enable = true;
-    shell = "tmux new-session -t main";
+  custom.programs = {
+    firefox.enable = true;
+    telegram.enable = true;
+    fish.enable = true;
+    kitty = {
+      enable = true;
+      shell = "${pkgs.tmux}/bin/tmux new-session -t main";
+    };
+    tmux = {
+      enable = true;
+    };
+    yazi = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+    neovim.enable = true;
   };
-  custom.programs.tmux.enable = true;
-  custom.programs.yazi = {
-    enable = true;
-    enableFishIntegration = true;
-  };
-  custom.programs.neovim.enable = true;
 
   home.packages = with pkgs; [
     nheko

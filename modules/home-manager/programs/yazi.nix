@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ pkgs, config, lib, ... }:
 with lib; let
   cfg = config.custom.programs.yazi;
 in
@@ -15,7 +15,7 @@ in
     programs.fish.interactiveShellInit = mkIf cfg.enableFishIntegration ''
       function yazi
         set tmp (mktemp -t "yazi-cwd.XXXXX")
-        yazi $argv --cwd-file="$tmp"
+        ${pkgs.yazi}/bin/yazi $argv --cwd-file="$tmp"
         if set cwd (cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
           echo "switching working directory to $cwd"
           cd -- "$cwd"

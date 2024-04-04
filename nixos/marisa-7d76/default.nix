@@ -7,7 +7,7 @@
       inputs.mysecrets.nixosModules.secrets.marisa
       inputs.home-manager.nixosModules.home-manager
     ]
-    ++ (mylib.getItemPaths ./. "default.nix");
+    ++ (mylib.getItemPaths ./. [ "default.nix" "home.nix" ]);
 
   preset = {
     baseline.enable = true;
@@ -18,7 +18,7 @@
     useGlobalPkgs = true;
     useUserPackages = false;
     extraSpecialArgs = { inherit inputs mylib self; };
-    users.rebmit = import (self.outPath + "/home-manager/rebmit@marisa-7d76");
+    users.rebmit = import ./home.nix;
   };
 
   nix.settings.trusted-users = [ "root" "rebmit" ];

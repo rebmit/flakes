@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ pkgs, config, lib, ... }:
 with lib; let
   cfg = config.custom.programs.tmux;
 in
@@ -7,7 +7,7 @@ in
     enable = mkEnableOption "terminal multiplexer";
     shell = mkOption {
       type = types.str;
-      default = "fish";
+      default = "${pkgs.fish}/bin/fish";
     };
   };
 
