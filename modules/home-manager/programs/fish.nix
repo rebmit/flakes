@@ -5,6 +5,8 @@ in
 {
   options.custom.programs.fish = {
     enable = mkEnableOption "friendly interactive shell";
+    shellAliases = mkOption { default = { }; };
+    shellAbbrs = mkOption { default = { }; };
   };
 
   config = mkIf cfg.enable {
@@ -58,10 +60,10 @@ in
       '';
       shellAliases = {
         s = "${pkgs.neofetch}/bin/neofetch";
-      };
+      } // cfg.shellAliases;
       shellAbbrs = {
         rebuild = "nixos-rebuild --use-remote-sudo -v -L --flake ~/Projects/flakes";
-      };
+      } // cfg.shellAbbrs;
     };
   };
 }

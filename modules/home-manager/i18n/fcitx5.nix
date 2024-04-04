@@ -68,5 +68,7 @@ in
       Service.ExecStart = "${fcitx5Package}/bin/fcitx5";
       Install.WantedBy = [ "graphical-session.target" ];
     };
+
+    i18n.inputMethod.enabled = null;
   };
 }
