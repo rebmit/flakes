@@ -5,11 +5,6 @@
       sources = final.callPackage ./_sources/generated.nix { };
     in
     {
-      fuzzel-cliphist = final.callPackage (import ./fuzzel-cliphist) { };
-
-      hyprland-scratchpad-helper = final.callPackage (import ./hyprland-scratchpad-helper) { };
-      hyprland-screenshot-helper = final.callPackage (import ./hyprland-screenshot-helper) { };
-
       smartdns-china-list = final.callPackage (import ./smartdns-china-list) {
         source = sources.dnsmasq-china-list;
       };

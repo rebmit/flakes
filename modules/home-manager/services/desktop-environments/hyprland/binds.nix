@@ -1,6 +1,18 @@
 { pkgs, config, lib, ... }:
 with lib; let
   cfg = config.custom.services.desktopEnvironment.hyprland;
+  screenshotHelper = pkgs.writeShellApplication {
+    name = "hyprland-screenshot-helper";
+    text = ''
+      ${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp -o -r -c '#ff0000ff')" - | ${pkgs.satty}/bin/satty --filename - --fullscreen --copy-command ${pkgs.wl-clipboard}/bin/wl-copy
+    '';
+  };
+  cliphistHelper = pkgs.writeShellApplication {
+    name = "fuzzel-cliphist";
+    text = ''
+      ${pkgs.cliphist}/bin/cliphist list | ${pkgs.fuzzel}/bin/fuzzel -d | ${pkgs.cliphist}/bin/cliphist decode | ${pkgs.wl-clipboard}/bin/wl-copy
+    '';
+  };
   renderScratchpad = name: cfg: ''
     bind = ${cfg.keyBind}, togglespecialworkspace, ${name}
   '';
@@ -33,8 +45,8 @@ with lib; let
     bind = SUPER SHIFT, K, movewindow, u
     bind = SUPER SHIFT, L, movewindow, r
     bind = SUPER, D, exec, fuzzel
-    bind = SUPER, V, exec, ${pkgs.fuzzel-cliphist}/bin/fuzzel-cliphist
-    bind = SUPER SHIFT, S, exec, ${pkgs.hyprland-screenshot-helper}/bin/hyprland-screenshot-helper
+    bind = SUPER, V, exec, ${cliphistHelper}/bin/fuzzel-cliphist
+    bind = SUPER SHIFT, S, exec, ${screenshotHelper}/bin/hyprland-screenshot-helper
   '';
 in
 {
