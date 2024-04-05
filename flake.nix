@@ -34,6 +34,10 @@
       url = "github:Aylur/ags";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hyprland = {
+      url = "github:rebmit/hyprland/fix-xcursor-scaling";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     mysecrets = {
       url = "git+ssh://git@github.com/rebmit/secrets.git";

@@ -48,6 +48,7 @@
       focus_on_activate = "true";
       disable_hyprland_logo = "true";
       close_special_on_empty = "true";
+      enable_hyprcursor = "false";
     };
   };
 }

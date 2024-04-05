@@ -19,4 +19,9 @@ in
       "dark" = cfg.gtkThemeDark;
     }.${cfg.variant};
   };
+
+  home.pointerCursor = {
+    "light" = cfg.cursorThemeLight;
+    "dark" = cfg.cursorThemeDark;
+  }.${cfg.variant};
 }

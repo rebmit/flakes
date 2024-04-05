@@ -1,4 +1,4 @@
-{ pkgs, config, lib, mylib, ... } @ args:
+{ pkgs, config, lib, mylib, inputs, ... } @ args:
 with lib; let
   cfg = config.custom.services.desktopEnvironment.hyprland;
   startupCommand = mkOption {
@@ -36,6 +36,9 @@ in
 {
   options.custom.services.desktopEnvironment.hyprland = {
     enable = mkEnableOption "desktop environment based on hyprland";
+    package = mkOption {
+      default = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+    };
     settings = mkOption {
       type = with types; let
         valueType =
@@ -73,6 +76,7 @@ in
       {
         wayland.windowManager.hyprland.settings = cfg.settings;
         wayland.windowManager.hyprland.extraConfig = cfg.extraConfig;
+        wayland.windowManager.hyprland.package = cfg.package;
       }
       {
         home.packages = with pkgs; [
