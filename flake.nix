@@ -35,7 +35,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hyprland = {
-      url = "github:rebmit/hyprland/fix-xcursor-scaling";
+      url = "github:hyprwm/Hyprland/v0.38.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
