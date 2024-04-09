@@ -24,6 +24,11 @@
       ];
     };
 
+    misc.ssh-desktop = {
+      enable = true;
+      terminal = "kitty";
+    };
+
     programs = {
       firefox.enable = true;
       fish.enable = true;
