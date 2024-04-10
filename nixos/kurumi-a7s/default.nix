@@ -6,7 +6,7 @@
       inputs.mysecrets.nixosModules.secrets.kurumi
       inputs.home-manager.nixosModules.home-manager
     ]
-    ++ (mylib.getItemPaths ./. "default.nix");
+    ++ (mylib.getItemPaths ./. [ "default.nix" "home.nix" ]);
 
   preset = {
     baseline.enable = true;
@@ -16,8 +16,8 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = false;
-    extraSpecialArgs = { inherit inputs mylib; };
-    users.rebmit = import (self.outPath + "/home-manager/rebmit@kurumi-a7s");
+    extraSpecialArgs = { inherit inputs mylib self; };
+    users.rebmit = import ./home.nix;
   };
 
   boot.kernelParams = [
