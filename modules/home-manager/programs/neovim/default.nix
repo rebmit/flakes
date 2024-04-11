@@ -9,7 +9,12 @@ in
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
+      # language server
       nil
+      pyright
+
+      # formatter
+      nixpkgs-fmt
     ];
 
     programs.neovim = {
@@ -29,6 +34,8 @@ in
         nvim-autopairs
         nvim-treesitter
         nvim-tree-lua
+        lualine-nvim
+        lualine-lsp-progress
       ];
 
       extraConfig = ''

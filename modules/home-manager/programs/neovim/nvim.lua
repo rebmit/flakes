@@ -54,14 +54,57 @@ vim.api.nvim_set_keymap('', '<down>', ':res -5<CR>', { noremap = true })
 vim.api.nvim_set_keymap('', '<left>', ':vertical resize -5<CR>', { noremap = true })
 vim.api.nvim_set_keymap('', '<right>', ':vertical resize +5<CR>', { noremap = true })
 
+--
+-- plugins
+--
+
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
-local servers = { 'nil_ls' }
+local lspconfig = require('lspconfig')
+local servers = { 'nil_ls', 'pyright' }
 
 for _, lsp in pairs(servers) do
-  require('lspconfig')[lsp].setup {
+  lspconfig[lsp].setup {
     capabilities = capabilities,
+    settings = {
+      ['nil'] = {
+        formatting = {
+          command = { 'nixpkgs-fmt' }
+        }
+      },
+    },
   }
 end
+
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+  callback = function(ev)
+    vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+
+    local opts = { buffer = ev.buf }
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+    vim.keymap.set('n', 'gh', vim.lsp.buf.hover, opts)
+    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
+    vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts)
+    vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, opts)
+    vim.keymap.set('n', '<leader>wl', function()
+      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end, opts)
+    vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, opts)
+    vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+    vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
+    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+    vim.keymap.set('n', '<leader>f', function()
+      vim.lsp.buf.format { async = true }
+    end, opts)
+  end,
+})
 
 local luasnip = require 'luasnip'
 local cmp = require 'cmp'
@@ -111,4 +154,23 @@ require('leap').add_default_mappings()
 
 require('nvim-autopairs').setup()
 
-require('nvim-tree').setup()
+local nvim_tree = require('nvim-tree')
+local nvim_tree_api = require('nvim-tree.api')
+nvim_tree.setup({
+  on_attach = function (bufnr)
+    local function opts(desc)
+      return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+    end
+
+    nvim_tree_api.config.mappings.default_on_attach(bufnr)
+    vim.keymap.set('n', '<C-t>', nvim_tree_api.tree.change_root_to_parent, opts('Up'))
+  end
+})
+
+vim.keymap.set('n', '<leader>tt', nvim_tree_api.tree.toggle, { noremap = true, desc = "toggle nvim-tree" })
+
+require('lualine').setup {
+  sections = {
+    lualine_x = { 'lsp_progress', 'encoding' },
+  },
+}
