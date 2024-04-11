@@ -7,6 +7,7 @@
     extraVeths."router-wan".hostBridge = "brwan";
     bindMounts."${config.sops.templates.router-xl2tpd.path}" = { };
     bindMounts."${config.sops.templates.router-pppoptions.path}" = { };
+    bindMounts."${config.sops.templates.router-weblogin.path}" = { };
     bindMounts."/dev/ppp" = {
       isReadOnly = false;
       useRootIdMap = false;
@@ -187,6 +188,27 @@
             PIDFile = "/run/xl2tpd/pid";
           };
         };
+
+      systemd.timers."router-weblogin" = {
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          Unit = "router-weblogin.service";
+          OnCalendar = "*-*-* 6:10:00 Asia/Shanghai";
+        };
+      };
+
+      systemd.services."router-weblogin" = {
+        serviceConfig = {
+          ExecStart = "${pkgs.bash}/bin/bash /run/credentials/router-weblogin.service/script";
+          Type = "oneshot";
+          User = "router-weblogin";
+          Group = "router-weblogin";
+          LoadCredential = "script:${config.sops.templates.router-weblogin.path}";
+        };
+      };
+
+      users.groups.router-weblogin = { };
+      users.users.router-weblogin = { isSystemUser = true; group = "router-weblogin"; };
 
       services.resolved.enable = true;
 

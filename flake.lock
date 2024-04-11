@@ -397,11 +397,11 @@
         "sops-nix": "sops-nix"
       },
       "locked": {
-        "lastModified": 1712677452,
-        "narHash": "sha256-k33kUJk+wtPRfICtZZEtr+BOWFUo1JEmK+dyauvhaTQ=",
+        "lastModified": 1712839005,
+        "narHash": "sha256-W+ICM0Zs7JEMEcPkmp2CZLRXcoO1DrCgSbHwA9tfqAM=",
         "ref": "refs/heads/master",
-        "rev": "412de03b45633954a7ff9bfaf27ae5e4a8fc6e5a",
-        "revCount": 12,
+        "rev": "411ec140b898ce862f9df7a09652e4ebcc6f167f",
+        "revCount": 15,
         "type": "git",
         "url": "ssh://git@github.com/rebmit/secrets.git"
       },
