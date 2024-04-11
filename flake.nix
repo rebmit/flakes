@@ -72,6 +72,7 @@
                 nvfetcher
               ];
             };
+          inherit mylib;
         }
       )
     // {
