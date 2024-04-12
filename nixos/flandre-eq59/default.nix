@@ -6,9 +6,7 @@
     ]
     ++ (mylib.getItemPaths ./. "default.nix");
 
-  preset = {
-    baseline.enable = true;
-  };
+  custom.baseline.enable = true;
 
   i18n.defaultLocale = "en_SG.UTF-8";
   time.timeZone = "Asia/Shanghai";

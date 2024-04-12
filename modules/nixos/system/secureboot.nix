@@ -1,13 +1,13 @@
 { config, pkgs, lib, inputs, ... }:
 let
-  cfg = config.preset.secureboot;
+  cfg = config.custom.system.secureboot;
 in
 with lib; {
   imports = [
     inputs.lanzaboote.nixosModules.lanzaboote
   ];
 
-  options.preset.secureboot = {
+  options.custom.system.secureboot = {
     enable = mkEnableOption "lanzaboote secureboot";
   };
 

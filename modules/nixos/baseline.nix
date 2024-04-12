@@ -1,16 +1,17 @@
 { config, pkgs, lib, self, ... }:
 let
-  cfg = config.preset.baseline;
+  cfg = config.custom.baseline;
 in
 with lib; {
-  options.preset.baseline = {
+  options.custom.baseline = {
     enable = mkEnableOption "baseline configuration";
-    uefi = mkEnableOption "uefi support";
+    uefi = mkOption {
+      type = types.bool;
+      default = true;
+    };
   };
 
   config = mkIf cfg.enable {
-    preset.baseline.uefi = mkDefault true;
-
     boot = {
       tmp.useTmpfs = true;
       initrd.systemd.enable = true;
@@ -34,36 +35,6 @@ with lib; {
       };
     };
 
-    nix = {
-      channel.enable = false;
-      gc = {
-        automatic = true;
-        options = "--delete-older-than 14d";
-        dates = "weekly";
-      };
-      settings = {
-        auto-optimise-store = true;
-        flake-registry = "/etc/nix/registry.json";
-        experimental-features = [ "nix-command" "flakes" "auto-allocate-uids" "cgroups" ];
-        auto-allocate-uids = true;
-        use-cgroups = true;
-      };
-    };
-
-    nixpkgs.overlays = [ self.overlays.default ];
-
-    nixpkgs.config = {
-      allowNonSource = false;
-      allowNonSourcePredicate = pkg:
-        builtins.elem (lib.getName pkg) [
-          "sof-firmware"
-          "temurin-bin"
-          "cargo-bootstrap"
-          "rustc-bootstrap"
-          "rustc-bootstrap-wrapper"
-        ];
-    };
-
     networking = {
       firewall.enable = lib.mkDefault false;
       useDHCP = false;
@@ -71,7 +42,6 @@ with lib; {
     };
 
     services = {
-      dbus.implementation = "broker";
       fstrim.enable = true;
       journald = {
         extraConfig = ''
@@ -93,13 +63,5 @@ with lib; {
         };
       };
     };
-
-    users.mutableUsers = false;
-
-    programs.command-not-found.enable = false;
-
-    environment.stub-ld.enable = false;
-
-    documentation.nixos.enable = mkForce false;
   };
 }

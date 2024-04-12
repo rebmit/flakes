@@ -2,17 +2,13 @@
   imports =
     [
       self.nixosModules.default
-      self.nixosModules.base
-      self.nixosModules.secureboot
       inputs.mysecrets.nixosModules.secrets.marisa
       inputs.home-manager.nixosModules.home-manager
     ]
     ++ (mylib.getItemPaths ./. [ "default.nix" "home.nix" ]);
 
-  preset = {
-    baseline.enable = true;
-    secureboot.enable = true;
-  };
+  custom.baseline.enable = true;
+  custom.system.secureboot.enable = true;
 
   home-manager = {
     useGlobalPkgs = true;
