@@ -189,6 +189,22 @@
           };
         };
 
+      systemd.timers."router-restart" = {
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          Unit = "router-restart.service";
+          OnCalendar = "*-*-* 6:05:00 Asia/Shanghai";
+        };
+      };
+
+      systemd.timers."router-restart" = {
+        serviceConfig = {
+          ExecStart = "systemctl reboot";
+          Type = "oneshot";
+          User = "root";
+        };
+      };
+
       systemd.timers."router-weblogin" = {
         wantedBy = [ "timers.target" ];
         timerConfig = {
