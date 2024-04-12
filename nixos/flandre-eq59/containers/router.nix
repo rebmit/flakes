@@ -197,7 +197,7 @@
         };
       };
 
-      systemd.timers."router-restart" = {
+      systemd.services."router-restart" = {
         serviceConfig = {
           ExecStart = "systemctl reboot";
           Type = "oneshot";
