@@ -226,6 +226,41 @@
       users.groups.router-weblogin = { };
       users.users.router-weblogin = { isSystemUser = true; group = "router-weblogin"; };
 
+      services.kea.dhcp4 = {
+        enable = true;
+        settings = {
+          interfaces-config.interfaces = [ "router-lan" ];
+          lease-database = {
+            name = "/var/lib/kea/dhcp4.leases";
+            persist = true;
+            type = "memfile";
+          };
+          rebind-timer = 2000;
+          renew-timer = 1000;
+          subnet4 = [
+            {
+              pools = [
+                {
+                  pool = "10.224.15.1 - 10.224.15.254";
+                }
+              ];
+              subnet = "10.224.0.0/20";
+              option-data = [
+                {
+                  name = "routers";
+                  data = "10.224.0.2";
+                }
+                {
+                  name = "domain-name-servers";
+                  data = "10.224.0.3";
+                }
+              ];
+            }
+          ];
+          valid-lifetime = 4000;
+        };
+      };
+
       services.resolved.enable = true;
 
       system.stateVersion = "23.11";
