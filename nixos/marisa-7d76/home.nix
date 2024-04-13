@@ -1,4 +1,4 @@
-{ pkgs, self, ... }: {
+{ pkgs, self, config, ... }: {
   imports = [ self.homeManagerModules.default ];
 
   home.packages = with pkgs; [
@@ -6,7 +6,6 @@
     evince
     foliate
     gnome.eog
-    thunderbird
     mpv
     pavucontrol
     systemd-run-app
@@ -39,6 +38,7 @@
       tmux = {
         enable = true;
       };
+      thunderbird.enable = true;
       yazi = {
         enable = true;
         enableFishIntegration = true;
@@ -75,5 +75,12 @@
         };
       };
     };
+  };
+
+  home.persistence."/persist/home/${config.home.username}" = {
+    directories = [
+      ".config/fcitx5"
+      ".config/nheko"
+    ];
   };
 }

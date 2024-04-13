@@ -1,5 +1,3 @@
-{ mylib, inputs, ... }: {
-  imports = [
-    inputs.disko.nixosModules.disko
-  ] ++ (mylib.getItemPaths ./. "default.nix");
+{ mylib, ... }: {
+  imports = mylib.getItemPaths ./. "default.nix";
 }

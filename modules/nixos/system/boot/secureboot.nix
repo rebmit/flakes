@@ -3,10 +3,6 @@ let
   cfg = config.custom.system.boot.secureboot;
 in
 with lib; {
-  imports = [
-    inputs.lanzaboote.nixosModules.lanzaboote
-  ];
-
   options.custom.system.boot.secureboot = {
     enable = mkEnableOption "lanzaboote secureboot";
   };
@@ -21,6 +17,12 @@ with lib; {
     boot.lanzaboote = {
       enable = true;
       pkiBundle = "/etc/secureboot";
+    };
+
+    environment.persistence."/persist" = {
+      directories = [
+        "/etc/secureboot"
+      ];
     };
   };
 }

@@ -1,7 +1,10 @@
 {
-  default = { mylib, lib, pkgs, self, ... }: {
+  default = { mylib, lib, pkgs, self, inputs, ... }: {
     imports = [
       ../common.nix
+      inputs.impermanence.nixosModules.impermanence
+      inputs.disko.nixosModules.disko
+      inputs.lanzaboote.nixosModules.lanzaboote
     ] ++ (mylib.getItemPaths ./. [ "default.nix" ]);
 
     nix = {
@@ -42,7 +45,17 @@
       variables = {
         EDITOR = "nvim";
       };
+      persistence."/persist" = {
+        directories = [
+          "/var"
+        ];
+        files = [
+          "/etc/machine-id"
+        ];
+      };
     };
+
+    programs.fuse.userAllowOther = true;
 
     services.dbus.implementation = "broker";
 

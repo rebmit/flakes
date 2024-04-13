@@ -3,10 +3,6 @@ with lib; let
   cfg = config.custom.programs.wayland.ags;
 in
 {
-  imports = [
-    inputs.ags.homeManagerModules.default
-  ];
-
   options.custom.programs.wayland.ags = {
     enable = mkEnableOption "aylur's gtk shell";
   };

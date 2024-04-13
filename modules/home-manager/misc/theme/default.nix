@@ -40,8 +40,6 @@ with lib; let
   };
 in
 {
-  imports = [ inputs.nix-colors.homeManagerModules.default ];
-
   options.custom.misc.theme = {
     enable = mkOption {
       type = types.bool;

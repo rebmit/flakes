@@ -8,6 +8,12 @@ in
   };
 
   config = mkIf cfg.enable {
+    home.persistence."/persist/home/${config.home.username}" = {
+      directories = [
+        ".mozilla"
+      ];
+    };
+
     programs.firefox = {
       enable = true;
       policies = {
