@@ -1,6 +1,8 @@
 {
   default = { mylib, lib, pkgs, self, ... }: {
-    imports = mylib.getItemPaths ./. [ "default.nix" ];
+    imports = [
+      ../common.nix
+    ] ++ (mylib.getItemPaths ./. [ "default.nix" ]);
 
     nix = {
       channel.enable = false;

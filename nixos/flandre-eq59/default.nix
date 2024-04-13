@@ -6,7 +6,13 @@
     ]
     ++ (mylib.getItemPaths ./. "default.nix");
 
-  custom.baseline.enable = true;
+  custom = {
+    baseline.enable = true;
+    system.disko.btrfs-uefi-common = {
+      enable = true;
+      device = "/dev/disk/by-path/pci-0000:00:17.0-ata-1";
+    };
+  };
 
   i18n.defaultLocale = "en_SG.UTF-8";
   time.timeZone = "Asia/Shanghai";

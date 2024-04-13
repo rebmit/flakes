@@ -6,9 +6,15 @@
     ]
     ++ (mylib.getItemPaths ./. "default.nix");
 
-  custom.baseline = {
-    enable = true;
-    uefi = false;
+  custom = {
+    baseline = {
+      enable = true;
+      uefi = false;
+    };
+    system.disko.btrfs-bios-common = {
+      enable = true;
+      device = "/dev/vda";
+    };
   };
 
   networking.hostName = "misaka-lax02";

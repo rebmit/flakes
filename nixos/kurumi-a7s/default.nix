@@ -7,8 +7,17 @@
     ]
     ++ (mylib.getItemPaths ./. [ "default.nix" "home.nix" ]);
 
-  custom.baseline.enable = true;
-  custom.system.secureboot.enable = false;
+  custom = {
+    baseline.enable = true;
+    system = {
+      boot.secureboot.enable = false;
+      disko.btrfs-luks-uefi-common = {
+        enable = true;
+        device = "/dev/disk/by-path/pci-0000:04:00.0-nvme-1";
+      };
+    };
+  };
+
 
   home-manager = {
     useGlobalPkgs = true;

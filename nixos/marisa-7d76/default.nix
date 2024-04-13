@@ -7,8 +7,16 @@
     ]
     ++ (mylib.getItemPaths ./. [ "default.nix" "home.nix" ]);
 
-  custom.baseline.enable = true;
-  custom.system.secureboot.enable = true;
+  custom = {
+    baseline.enable = true;
+    system = {
+      boot.secureboot.enable = true;
+      disko.btrfs-luks-uefi-common = {
+        enable = true;
+        device = "/dev/disk/by-path/pci-0000:04:00.0-nvme-1";
+      };
+    };
+  };
 
   home-manager = {
     useGlobalPkgs = true;
@@ -50,6 +58,12 @@
     extraGroups = [ "wheel" ];
     hashedPasswordFile = config.sops.secrets.passwd.path;
   };
+
+  services.zram-generator.enable = lib.mkForce false;
+  swapDevices = [{
+    device = "/var/lib/swapfile";
+    size = 64 * 1024;
+  }];
 
   hardware = {
     pulseaudio.enable = false;
