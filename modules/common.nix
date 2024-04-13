@@ -17,7 +17,7 @@
     ipcalc
 
     # misc
-    neofetch
+    fastfetch
     htop
     ncdu
     tree

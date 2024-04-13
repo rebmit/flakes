@@ -70,6 +70,7 @@
               nativeBuildInputs = [
                 colmena
                 nvfetcher
+                just
               ];
             };
           inherit mylib;

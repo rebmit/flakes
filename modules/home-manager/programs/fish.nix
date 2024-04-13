@@ -59,11 +59,9 @@ in
         set fish_pager_color_selected_background --reverse
       '';
       shellAliases = {
-        s = "${pkgs.neofetch}/bin/neofetch";
+        s = "${pkgs.fastfetch}/bin/fastfetch";
       } // cfg.shellAliases;
-      shellAbbrs = {
-        rebuild = "nixos-rebuild --use-remote-sudo -v -L --flake ~/Projects/flakes";
-      } // cfg.shellAbbrs;
+      shellAbbrs = cfg.shellAbbrs;
     };
   };
 }
