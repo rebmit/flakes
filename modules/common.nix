@@ -1,4 +1,8 @@
-{ pkgs, ... }: {
+{ pkgs, inputs, ... }: {
+  security.pki.certificateFiles = [
+    inputs.mysecrets.certificates.ca
+  ];
+
   environment.systemPackages = with pkgs; [
     # vcs
     git
