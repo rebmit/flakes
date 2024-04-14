@@ -45,6 +45,8 @@
       "20-wired" = {
         name = "en*";
         address = [ "10.224.14.1/20" ];
+        gateway = [ "10.224.0.4" ];
+        dns = [ "10.224.0.3" ];
       };
       "20-wireless" = {
         name = "wlan0";

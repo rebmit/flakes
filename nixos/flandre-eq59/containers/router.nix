@@ -38,16 +38,12 @@
           global = {
             family = "ip";
             content = ''
-              chain input_lan {
-                icmp type echo-request limit rate 5/second counter accept
-              }
-
               chain input {
                 type filter hook input priority mangle; policy drop;
                 iifname ppp0 ct state related,established counter accept
                 iifname router-wan ct state related,established counter accept
                 iifname lo counter accept
-                iifname router-lan counter jump input_lan
+                iifname router-lan accept
               }
 
               chain forward {
