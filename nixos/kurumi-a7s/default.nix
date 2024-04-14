@@ -18,7 +18,6 @@
     };
   };
 
-
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = false;

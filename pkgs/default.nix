@@ -5,6 +5,10 @@
       sources = final.callPackage ./_sources/generated.nix { };
     in
     {
+      chnroutes2 = final.callPackage (import ./chnroutes2) {
+        source = sources.chnroutes2;
+      };
+
       smartdns-china-list = final.callPackage (import ./smartdns-china-list) {
         source = sources.dnsmasq-china-list;
       };
