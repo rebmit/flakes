@@ -25,6 +25,14 @@
     };
     date = "2024-04-12";
   };
+  metacubexd = {
+    pname = "metacubexd";
+    version = "v1.138.0";
+    src = fetchurl {
+      url = "https://github.com/MetaCubeX/metacubexd/releases/download/v1.138.0/compressed-dist.tgz";
+      sha256 = "sha256-0cy+HSZzVY4vVNbFu/MRUQtKjCo2Ebg4bq2H9kHjFG4=";
+    };
+  };
   telegram-desktop-megumifox = {
     pname = "telegram-desktop-megumifox";
     version = "e190e4f3d6f49ad8cbe87ed091256a43228cf3d4";

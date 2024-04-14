@@ -39,6 +39,21 @@
         },
         "version": "23e2f9dc6a82ff36432097ed478960f1c6bd4263"
     },
+    "metacubexd": {
+        "cargoLocks": null,
+        "date": null,
+        "extract": null,
+        "name": "metacubexd",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "name": null,
+            "sha256": "sha256-0cy+HSZzVY4vVNbFu/MRUQtKjCo2Ebg4bq2H9kHjFG4=",
+            "type": "url",
+            "url": "https://github.com/MetaCubeX/metacubexd/releases/download/v1.138.0/compressed-dist.tgz"
+        },
+        "version": "v1.138.0"
+    },
     "telegram-desktop-megumifox": {
         "cargoLocks": null,
         "date": "2024-04-14",

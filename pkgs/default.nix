@@ -9,6 +9,10 @@
         source = sources.chnroutes2;
       };
 
+      metacubexd = final.callPackage (import ./metacubexd) {
+        source = sources.metacubexd;
+      };
+
       smartdns-china-list = final.callPackage (import ./smartdns-china-list) {
         source = sources.dnsmasq-china-list;
       };

@@ -9,3 +9,7 @@ fetch.url = "https://raw.githubusercontent.com/archlinuxcn/repo/$ver/archlinuxcn
 [chnroutes2]
 src.git = "https://github.com/misakaio/chnroutes2"
 fetch.github = "misakaio/chnroutes2"
+
+[metacubexd]
+src.github_tag = "MetaCubeX/metacubexd"
+fetch.url = "https://github.com/MetaCubeX/metacubexd/releases/download/$ver/compressed-dist.tgz"
