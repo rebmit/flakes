@@ -17,6 +17,7 @@
         "Downloads"
         "Pictures"
         "Projects"
+        "Workspaces"
         ".ssh"
         ".cache"
         ".local"
