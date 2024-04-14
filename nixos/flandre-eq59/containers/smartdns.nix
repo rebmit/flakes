@@ -52,6 +52,15 @@
             "120.53.53.53:853 -group domestic -exclude-default-group"
           ];
 
+          address = [
+            "/flandre-eq59.link.rebmit.internal/10.224.0.1"
+            "/marisa-7d76.link.rebmit.internal/10.224.14.1"
+          ];
+
+          cname = [
+            "/gitea.rebmit.internal/flandre-eq59.link.rebmit.internal"
+          ];
+
           audit-enable = "yes";
         };
       };

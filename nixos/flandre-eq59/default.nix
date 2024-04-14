@@ -71,5 +71,7 @@
   services.openssh.enable = true;
   users.users.root.openssh.authorizedKeys.keys = data.keys;
 
+  services.caddy.enable = true;
+
   system.stateVersion = "23.11";
 }
