@@ -30,6 +30,7 @@
 
     programs = {
       firefox.enable = true;
+      telegram.enable = true;
       fish.enable = true;
       kitty = {
         enable = true;
@@ -67,6 +68,11 @@
           startupCommand = "nheko";
           windowRegex = "class: ^(nheko)$";
           keyBind = "SUPER, 1";
+        };
+        telegram = {
+          startupCommand = "env QT_QPA_PLATFORMTHEME=gtk3 telegram-desktop";
+          windowRegex = "class: ^(org.telegram.desktop|telegramdesktop)$";
+          keyBind = "SUPER, 2";
         };
         thunderbird = {
           startupCommand = "thunderbird";
