@@ -1,4 +1,10 @@
-{ lib, config, pkgs, ... }: {
+{ lib, config, pkgs, myvars, mylib, ... }:
+let
+  homeNetwork = myvars.networks.homeNetwork;
+  localNode = homeNetwork.nodes."flandre-eq59-mihomo";
+  routerNode = homeNetwork.nodes."flandre-eq59-router";
+in
+{
   custom.containers."mihomo" = {
     autoStart = true;
     privateNetwork = true;
@@ -12,7 +18,7 @@
         resolvconf = {
           enable = true;
           extraConfig = ''
-            name_servers='10.224.0.3'
+            name_servers='${mylib.networking.ipv4.cidrToIpAddress homeNetwork.nameserver.ipv4}'
           '';
         };
       };
@@ -30,7 +36,9 @@
           global4 = {
             family = "ip";
             content = ''
-              define internal_addr = { 10.224.0.0/20 }
+              define internal_addr = {
+                ${lib.concatStringsSep ",\n" homeNetwork.advertiseRoutes.ipv4}
+              }
 
               define private_addr = {
                 10.0.0.0/8,
@@ -44,12 +52,10 @@
                 255.255.255.255/32
               }
 
-              include "${pkgs.chnroutes2}/chnroutes.nft"
-
               chain mangle_proxy {
                 ip daddr $private_addr counter accept
-                ip daddr $chnroutes2 counter accept
                 ip protocol { tcp, udp } tproxy to 127.0.0.1:7893 meta mark set 114514 counter accept
+                ip protocol icmp counter reject with icmp type admin-prohibited
               }
 
               chain mangle_prerouting {
@@ -69,8 +75,8 @@
         networks = {
           "20-lan" = {
             name = "mihomo-lan";
-            address = [ "10.224.0.4/20" ];
-            gateway = [ "10.224.0.2" ];
+            address = [ localNode.ipv4 ];
+            gateway = [ (mylib.networking.ipv4.cidrToIpAddress routerNode.ipv4) ];
           };
           "20-lo" = {
             name = "lo";
@@ -109,4 +115,3 @@
     };
   };
 }
-

@@ -1,4 +1,4 @@
-{ lib, config, pkgs, myvars, mylib, ... }:
+{ lib, pkgs, myvars, mylib, ... }:
 let
   homeNetwork = myvars.networks.homeNetwork;
   localNode = homeNetwork.nodes."flandre-eq59-gateway";
@@ -56,7 +56,7 @@ in
 
               chain mangle_filter {
                 ip daddr { $private_addr, $chnroutes2 } meta mark set 114 counter accept
-                ip protocol { tcp, udp } meta mark set 514 counter accept
+                ip protocol { tcp, udp, icmp } meta mark set 514 counter accept
               }
 
               chain mangle_prerouting {
