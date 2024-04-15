@@ -1,4 +1,10 @@
-{ config, lib, pkgs, inputs, self, mylib, ... }: {
+{ config, lib, pkgs, inputs, self, mylib, myvars, ... }:
+let
+  hostName = "marisa-7d76";
+  homeNetwork = myvars.networks.homeNetwork;
+  localNode = homeNetwork.nodes.${hostName};
+in
+{
   imports =
     [
       self.nixosModules.default
@@ -31,7 +37,7 @@
   time.timeZone = "Asia/Shanghai";
 
   networking = {
-    hostName = "marisa-7d76";
+    inherit hostName;
     wireless.iwd.enable = true;
   };
 
@@ -44,9 +50,9 @@
     networks = {
       "20-wired" = {
         name = "en*";
-        address = [ "10.224.14.1/20" ];
-        gateway = [ "10.224.0.5" ];
-        dns = [ "10.224.0.3" ];
+        address = [ localNode.ipv4 ];
+        gateway = [ (mylib.networking.ipv4.cidrToIpAddress homeNetwork.gateway.ipv4) ];
+        dns = [ (mylib.networking.ipv4.cidrToIpAddress homeNetwork.nameserver.ipv4) ];
       };
       "20-wireless" = {
         name = "wlan0";

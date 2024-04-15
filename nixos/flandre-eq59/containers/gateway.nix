@@ -4,6 +4,20 @@ let
   localNode = homeNetwork.nodes."flandre-eq59-gateway";
   routerNode = homeNetwork.nodes."flandre-eq59-router";
   mihomoNode = homeNetwork.nodes."flandre-eq59-mihomo";
+  routerRoute = {
+    Table = 101;
+    FirewallMark = 114;
+    Priority = 10100;
+    Destination = "0.0.0.0/0";
+    Gateway = (mylib.networking.ipv4.cidrToIpAddress routerNode.ipv4);
+  };
+  mihomoRoute = {
+    Table = 102;
+    FirewallMark = 514;
+    Priority = 10200;
+    Destination = "0.0.0.0/0";
+    Gateway = (mylib.networking.ipv4.cidrToIpAddress mihomoNode.ipv4);
+  };
 in
 {
   custom.containers."gateway" = {
@@ -14,7 +28,6 @@ in
     config = {
       networking = {
         useHostResolvConf = lib.mkForce false;
-        firewall.enable = false;
         resolvconf = {
           enable = true;
           extraConfig = ''
@@ -36,27 +49,13 @@ in
           global4 = {
             family = "ip";
             content = ''
-              define internal_addr = {
-                ${lib.concatStringsSep ",\n" homeNetwork.advertiseRoutes.ipv4}
-              }
-
-              define private_addr = {
-                10.0.0.0/8,
-                100.64.0.0/10,
-                127.0.0.0/8,
-                169.254.0.0/16,
-                172.16.0.0/12,
-                192.168.0.0/16,
-                224.0.0.0/4,
-                240.0.0.0/4,
-                255.255.255.255/32
-              }
-
+              define internal_addr = {${lib.concatStringsSep "," homeNetwork.advertiseRoutes.ipv4}}
+              define private_addr = {${lib.concatStringsSep "," myvars.networks.constants.privateAddresses.ipv4}}
               include "${pkgs.chnroutes2}/chnroutes.nft"
 
               chain mangle_filter {
-                ip daddr { $private_addr, $chnroutes2 } meta mark set 114 counter accept
-                ip protocol { tcp, udp, icmp } meta mark set 514 counter accept
+                ip daddr { $private_addr, $chnroutes2 } meta mark set ${toString routerRoute.FirewallMark} counter accept
+                ip protocol { tcp, udp, icmp } meta mark set ${toString mihomoRoute.FirewallMark} counter accept
               }
 
               chain mangle_prerouting {
@@ -76,67 +75,54 @@ in
         networks = {
           "20-lan" = {
             name = "gateway-lan";
-            addresses = [
-              {
-                addressConfig = {
-                  Address = localNode.ipv4;
-                  AddPrefixRoute = false;
-                };
-              }
-            ];
+            address = [ localNode.ipv4 ];
             routes = (map
-              (cidr: {
-                routeConfig = {
-                  Table = 100;
-                  Destination = cidr;
-                };
+              (route: {
+                routeConfig = { inherit (route) Table Destination Gateway; };
               })
-              homeNetwork.advertiseRoutes.ipv4) ++ [
-              {
-                routeConfig = {
-                  Table = 101;
-                  Destination = "0.0.0.0/0";
-                  Gateway = (mylib.networking.ipv4.cidrToIpAddress routerNode.ipv4);
-                };
-              }
-              {
-                routeConfig = {
-                  Table = 102;
-                  Destination = "0.0.0.0/0";
-                  Gateway = (mylib.networking.ipv4.cidrToIpAddress mihomoNode.ipv4);
-                };
-              }
-            ];
-            routingPolicyRules = [
-              {
-                routingPolicyRuleConfig = {
-                  Table = 100;
-                  Priority = 10000;
-                };
-              }
-              {
-                routingPolicyRuleConfig = {
-                  Table = 101;
-                  FirewallMark = 114;
-                  Priority = 10100;
-                };
-              }
-              {
-                routingPolicyRuleConfig = {
-                  Table = 102;
-                  FirewallMark = 514;
-                  Priority = 10200;
-                };
-              }
-            ];
+              [ routerRoute mihomoRoute ]
+            );
+            routingPolicyRules = (map
+              (route: {
+                routingPolicyRuleConfig = { inherit (route) Table FirewallMark Priority; };
+              })
+              [ routerRoute mihomoRoute ]
+            );
           };
         };
       };
 
-      services.resolved.enable = lib.mkForce false;
+      services.kea.dhcp4 = {
+        enable = true;
+        settings = {
+          interfaces-config.interfaces = [ "router-lan" ];
+          lease-database = {
+            name = "/var/lib/kea/dhcp4.leases";
+            persist = true;
+            type = "memfile";
+          };
+          rebind-timer = 2000;
+          renew-timer = 1000;
+          subnet4 = [
+            {
+              inherit (homeNetwork.dhcp4) subnet pools;
+              option-data = [
+                {
+                  name = "routers";
+                  data = (mylib.networking.ipv4.cidrToIpAddress homeNetwork.gateway.ipv4);
+                }
+                {
+                  name = "domain-name-servers";
+                  data = (mylib.networking.ipv4.cidrToIpAddress homeNetwork.nameserver.ipv4);
+                }
+              ];
+            }
+          ];
+          valid-lifetime = 4000;
+        };
+      };
 
       system.stateVersion = "23.11";
     };
   };
 }
-

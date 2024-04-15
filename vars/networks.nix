@@ -33,5 +33,30 @@
 
     nameserver = homeNetwork.nodes.flandre-eq59-smartdns;
     gateway = homeNetwork.nodes.flandre-eq59-gateway;
+
+    dhcp4 = {
+      subnet = "10.224.0.0/20";
+      pools = [
+        {
+          pool = "10.224.15.1 - 10.224.15.254";
+        }
+      ];
+    };
+  };
+
+  constants = {
+    privateAddresses = {
+      ipv4 = [
+        "10.0.0.0/8"
+        "100.64.0.0/10"
+        "127.0.0.0/8"
+        "169.254.0.0/16"
+        "172.16.0.0/12"
+        "192.168.0.0/16"
+        "224.0.0.0/4"
+        "240.0.0.0/4"
+        "255.255.255.255/32"
+      ];
+    };
   };
 }

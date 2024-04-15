@@ -210,6 +210,8 @@ in
                           boot.isContainer = true;
                           networking.hostName = mkDefault name;
                           networking.useDHCP = false;
+                          networking.firewall.enable = lib.mkDefault false;
+                          services.resolved.enable = false;
                         };
                       };
                     in

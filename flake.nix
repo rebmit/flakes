@@ -113,7 +113,7 @@
           };
         };
         "flandre-eq59" = { ... }: {
-          deployment.targetHost = "10.224.0.1";
+          deployment.targetHost = "flandre-eq59.link.rebmit.internal";
           imports = [ ./nixos/flandre-eq59 ];
         };
         "misaka-lax02" = { ... }: {

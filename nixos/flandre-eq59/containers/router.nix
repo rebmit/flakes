@@ -1,4 +1,18 @@
-{ lib, pkgs, config, ... }: {
+{ lib, pkgs, config, mylib, myvars, ... }:
+let
+  homeNetwork = myvars.networks.homeNetwork;
+  localNode = homeNetwork.nodes."flandre-eq59-router";
+  lanRoute = {
+    Table = 150;
+    Priority = 15000;
+  };
+  wanRoute = {
+    Table = 200;
+    Priority = 20000;
+  };
+  wanDestinations = [ "172.16.0.0/12" "192.168.0.0/16" ];
+in
+{
   custom.containers."router" = {
     autoStart = true;
     privateNetwork = true;
@@ -22,7 +36,12 @@
     config = {
       networking = {
         useHostResolvConf = lib.mkForce false;
-        firewall.enable = false;
+        resolvconf = {
+          enable = true;
+          extraConfig = ''
+            name_servers='${mylib.networking.ipv4.cidrToIpAddress homeNetwork.nameserver.ipv4}'
+          '';
+        };
       };
 
       boot.kernel.sysctl = {
@@ -86,28 +105,19 @@
               RouteTable = 200;
               RouteMetric = 2048;
             };
-            routes = [
-              {
+            routes = (map
+              (cidr: {
                 routeConfig = {
-                  Table = 200;
+                  inherit (wanRoute) Table;
+                  Destination = cidr;
                   Gateway = "_dhcp4";
-                  Destination = "172.16.0.0/12";
                 };
-              }
-              {
-                routeConfig = {
-                  Table = 200;
-                  Gateway = "_dhcp4";
-                  Destination = "192.168.0.0/16";
-                };
-              }
-            ];
+              })
+              wanDestinations
+            );
             routingPolicyRules = [
               {
-                routingPolicyRuleConfig = {
-                  Table = 200;
-                  Priority = 20000;
-                };
+                routingPolicyRuleConfig = { inherit (wanRoute) Table Priority; };
               }
             ];
           };
@@ -116,29 +126,23 @@
             addresses = [
               {
                 addressConfig = {
-                  Address = "10.224.0.2/20";
+                  Address = localNode.ipv4;
                   AddPrefixRoute = false;
                 };
               }
             ];
-            networkConfig = {
-              DHCP = "no";
-              IPv6AcceptRA = "no";
-            };
-            routes = [
-              {
+            routes = (map
+              (cidr: {
                 routeConfig = {
-                  Table = 150;
-                  Destination = "10.224.0.2/20";
+                  inherit (lanRoute) Table;
+                  Destination = cidr;
                 };
-              }
-            ];
+              })
+              homeNetwork.advertiseRoutes.ipv4
+            );
             routingPolicyRules = [
               {
-                routingPolicyRuleConfig = {
-                  Table = 150;
-                  Priority = 15000;
-                };
+                routingPolicyRuleConfig = { inherit (lanRoute) Table Priority; };
               }
             ];
           };
@@ -221,43 +225,6 @@
 
       users.groups.router-weblogin = { };
       users.users.router-weblogin = { isSystemUser = true; group = "router-weblogin"; };
-
-      services.kea.dhcp4 = {
-        enable = true;
-        settings = {
-          interfaces-config.interfaces = [ "router-lan" ];
-          lease-database = {
-            name = "/var/lib/kea/dhcp4.leases";
-            persist = true;
-            type = "memfile";
-          };
-          rebind-timer = 2000;
-          renew-timer = 1000;
-          subnet4 = [
-            {
-              pools = [
-                {
-                  pool = "10.224.15.1 - 10.224.15.254";
-                }
-              ];
-              subnet = "10.224.0.0/20";
-              option-data = [
-                {
-                  name = "routers";
-                  data = "10.224.0.2";
-                }
-                {
-                  name = "domain-name-servers";
-                  data = "10.224.0.3";
-                }
-              ];
-            }
-          ];
-          valid-lifetime = 4000;
-        };
-      };
-
-      services.resolved.enable = true;
 
       system.stateVersion = "23.11";
     };

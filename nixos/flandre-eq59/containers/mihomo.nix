@@ -3,6 +3,14 @@ let
   homeNetwork = myvars.networks.homeNetwork;
   localNode = homeNetwork.nodes."flandre-eq59-mihomo";
   routerNode = homeNetwork.nodes."flandre-eq59-router";
+  localRoute = {
+    Table = 100;
+    FirewallMark = 114514;
+    Priority = 10000;
+    Destination = "0.0.0.0/0";
+    Type = "local";
+    Scope = "host";
+  };
 in
 {
   custom.containers."mihomo" = {
@@ -14,7 +22,6 @@ in
     config = {
       networking = {
         useHostResolvConf = lib.mkForce false;
-        firewall.enable = false;
         resolvconf = {
           enable = true;
           extraConfig = ''
@@ -36,21 +43,8 @@ in
           global4 = {
             family = "ip";
             content = ''
-              define internal_addr = {
-                ${lib.concatStringsSep ",\n" homeNetwork.advertiseRoutes.ipv4}
-              }
-
-              define private_addr = {
-                10.0.0.0/8,
-                100.64.0.0/10,
-                127.0.0.0/8,
-                169.254.0.0/16,
-                172.16.0.0/12,
-                192.168.0.0/16,
-                224.0.0.0/4,
-                240.0.0.0/4,
-                255.255.255.255/32
-              }
+              define internal_addr = {${lib.concatStringsSep "," homeNetwork.advertiseRoutes.ipv4}}
+              define private_addr = {${lib.concatStringsSep "," myvars.networks.constants.privateAddresses.ipv4}}
 
               chain mangle_proxy {
                 ip daddr $private_addr counter accept
@@ -82,20 +76,12 @@ in
             name = "lo";
             routes = [
               {
-                routeConfig = {
-                  Table = 100;
-                  Destination = "0.0.0.0/0";
-                  Type = "local";
-                  Scope = "host";
-                };
+                routeConfig = { inherit (localRoute) Table Destination Type Scope; };
               }
             ];
             routingPolicyRules = [
               {
-                routingPolicyRuleConfig = {
-                  Table = 100;
-                  FirewallMark = 114514;
-                };
+                routingPolicyRuleConfig = { inherit (localRoute) Table FirewallMark Priority; };
               }
             ];
           };
@@ -108,8 +94,6 @@ in
         webui = "${pkgs.metacubexd}";
         tunMode = true;
       };
-
-      services.resolved.enable = lib.mkForce false;
 
       system.stateVersion = "23.11";
     };

@@ -1,6 +1,7 @@
-{ config, ... }:
+{ config, myvars, ... }:
 let
   serviceDomain = "gitea.rebmit.internal";
+  localNode = myvars.networks.homeNetwork.nodes.${config.networking.hostName};
 in
 {
   services.gitea = {
@@ -23,5 +24,11 @@ in
       tls /run/credentials/caddy.service/cert /run/credentials/caddy.service/key
       reverse_proxy ${config.services.gitea.settings.server.HTTP_ADDR}:${toString config.services.gitea.settings.server.HTTP_PORT}
     '';
+  };
+
+  custom.containers."smartdns".config = {
+    services.smartdns.settings = {
+      cname = "/${serviceDomain}/${localNode.fqdn}";
+    };
   };
 }

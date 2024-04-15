@@ -1,4 +1,10 @@
-{ lib, pkgs, ... }: {
+{ lib, pkgs, myvars, mylib, ... }:
+let
+  homeNetwork = myvars.networks.homeNetwork;
+  localNode = homeNetwork.nodes."flandre-eq59-smartdns";
+  routerNode = homeNetwork.nodes."flandre-eq59-router";
+in
+{
   custom.containers."smartdns" = {
     autoStart = true;
     privateNetwork = true;
@@ -7,14 +13,11 @@
     config = {
       networking = {
         useHostResolvConf = lib.mkForce false;
-        firewall.enable = false;
         resolvconf = {
           enable = true;
           useLocalResolver = true;
         };
       };
-
-      services.resolved.enable = lib.mkForce false;
 
       systemd.network = {
         enable = true;
@@ -22,8 +25,8 @@
         networks = {
           "20-lan" = {
             name = "smartdns-lan";
-            address = [ "10.224.0.3/20" ];
-            gateway = [ "10.224.0.2" ];
+            address = [ localNode.ipv4 ];
+            gateway = [ (mylib.networking.ipv4.cidrToIpAddress routerNode.ipv4) ];
           };
         };
       };
@@ -52,14 +55,10 @@
             "120.53.53.53:853 -group domestic -exclude-default-group"
           ];
 
-          address = [
-            "/flandre-eq59.link.rebmit.internal/10.224.0.1"
-            "/marisa-7d76.link.rebmit.internal/10.224.14.1"
-          ];
-
-          cname = [
-            "/gitea.rebmit.internal/flandre-eq59.link.rebmit.internal"
-          ];
+          address = (lib.mapAttrsToList
+            (name: node: "/${node.fqdn}/${mylib.networking.ipv4.cidrToIpAddress node.ipv4}")
+            homeNetwork.nodes
+          );
 
           audit-enable = "yes";
         };

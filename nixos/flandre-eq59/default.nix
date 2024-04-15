@@ -1,4 +1,10 @@
-{ self, mylib, data, config, inputs, ... }: {
+{ self, mylib, data, config, inputs, myvars, ... }:
+let
+  hostName = "flandre-eq59";
+  homeNetwork = myvars.networks.homeNetwork;
+  localNode = homeNetwork.nodes.${hostName};
+in
+{
   imports =
     [
       self.nixosModules.default
@@ -18,7 +24,7 @@
   time.timeZone = "Asia/Shanghai";
 
   networking = {
-    hostName = "flandre-eq59";
+    inherit hostName;
     wireless.iwd.enable = true;
   };
 
@@ -50,9 +56,9 @@
       };
       "20-brlan" = {
         name = "brlan";
-        address = [ "10.224.0.1/20" ];
-        gateway = [ "10.224.0.2" ];
-        dns = [ "10.224.0.3" ];
+        address = [ localNode.ipv4 ];
+        gateway = [ (mylib.networking.ipv4.cidrToIpAddress homeNetwork.gateway.ipv4) ];
+        dns = [ (mylib.networking.ipv4.cidrToIpAddress homeNetwork.nameserver.ipv4) ];
       };
       "20-brwan" = {
         name = "brwan";
