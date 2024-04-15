@@ -1,4 +1,4 @@
-{ self, mylib, data, pkgs, inputs, ... }: {
+{ self, mylib, data, config, inputs, ... }: {
   imports =
     [
       self.nixosModules.default
@@ -72,6 +72,10 @@
   users.users.root.openssh.authorizedKeys.keys = data.keys;
 
   services.caddy.enable = true;
+  systemd.services.caddy.serviceConfig.LoadCredential = [
+    "cert:${inputs.mysecrets.certificates.server}"
+    "key:${config.sops.secrets.certificate-server-key.path}"
+  ];
 
   system.stateVersion = "23.11";
 }

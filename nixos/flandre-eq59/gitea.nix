@@ -15,7 +15,8 @@
   };
 
   services.caddy = {
-    virtualHosts."gitea.rebmit.internal:80".extraConfig = ''
+    virtualHosts."gitea.rebmit.internal".extraConfig = ''
+      tls "/run/credentials/caddy.service/cert" "/run/credentials/caddy.service/key"
       reverse_proxy ${config.services.gitea.settings.server.HTTP_ADDR}:${toString config.services.gitea.settings.server.HTTP_PORT}
     '';
   };
