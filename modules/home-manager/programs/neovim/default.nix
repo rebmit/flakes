@@ -36,6 +36,8 @@ in
         nvim-tree-lua
         lualine-nvim
         lualine-lsp-progress
+        bufferline-nvim
+        telescope-nvim
       ];
 
       extraConfig = ''

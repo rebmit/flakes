@@ -14,6 +14,7 @@ vim.opt.smarttab = true
 
 vim.opt.timeoutlen = 500
 vim.opt.scrolloff = 5
+vim.opt.termguicolors = true
 
 --
 -- mappings
@@ -53,6 +54,9 @@ vim.api.nvim_set_keymap('', '<up>', ':res +5<CR>', { noremap = true })
 vim.api.nvim_set_keymap('', '<down>', ':res -5<CR>', { noremap = true })
 vim.api.nvim_set_keymap('', '<left>', ':vertical resize -5<CR>', { noremap = true })
 vim.api.nvim_set_keymap('', '<right>', ':vertical resize +5<CR>', { noremap = true })
+
+vim.api.nvim_set_keymap('', '<S-tab>', ':bprev<CR>', { noremap = true })
+vim.api.nvim_set_keymap('', '<tab>', ':bnext<CR>', { noremap = true })
 
 --
 -- plugins
@@ -157,6 +161,36 @@ require('nvim-autopairs').setup()
 local nvim_tree = require('nvim-tree')
 local nvim_tree_api = require('nvim-tree.api')
 nvim_tree.setup({
+  filters = {
+    dotfiles = false,
+  },
+  disable_netrw = true,
+  hijack_netrw = true,
+  hijack_cursor = true,
+  hijack_unnamed_buffer_when_opening = false,
+  sync_root_with_cwd = true,
+  update_focused_file = {
+    enable = true,
+    update_root = false,
+  },
+  view = {
+    adaptive_size = false,
+    side = "left",
+    width = 30,
+    preserve_window_proportions = true,
+  },
+  git = {
+    enable = true,
+    ignore = true,
+  },
+  filesystem_watchers = {
+    enable = true,
+  },
+  actions = {
+    open_file = {
+      resize_window = true,
+    },
+  },
   on_attach = function (bufnr)
     local function opts(desc)
       return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
@@ -174,3 +208,12 @@ require('lualine').setup {
     lualine_x = { 'lsp_progress', 'encoding' },
   },
 }
+
+require('bufferline').setup{}
+
+require('telescope').setup{}
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
+vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
+vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
