@@ -51,6 +51,7 @@
       lib = nixpkgs.lib;
       mylib = import ./lib { inherit lib; };
       mypkgs = import ./pkgs { inherit mylib; };
+      myvars = import ./vars { inherit lib mylib; };
     in
     flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ]
       (
@@ -86,14 +87,14 @@
             system = "x86_64-linux";
             modules = [ ./nixos/marisa-7d76 ];
             specialArgs = {
-              inherit inputs mylib self;
+              inherit inputs mylib self myvars;
             };
           };
           "kurumi-a7s" = lib.nixosSystem {
             system = "x86_64-linux";
             modules = [ ./nixos/kurumi-a7s ];
             specialArgs = {
-              inherit inputs mylib self;
+              inherit inputs mylib self myvars;
             };
           };
         }
@@ -101,7 +102,7 @@
       colmenaHive = inputs.colmena.lib.makeHive {
         meta = {
           specialArgs = {
-            inherit self inputs mylib;
+            inherit self inputs mylib myvars;
             data.keys = [
               "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII4h3+0cpr7XGAAEzoXrvA+Oap+eyeugCHMX/BVIbPYS rebmit@marisa-7d76"
               "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAs/vNhm4QV8tuks1k/W4dlpvjERwGJwX1d/YqhZ7zGc rebmit@kurumi-a7s"

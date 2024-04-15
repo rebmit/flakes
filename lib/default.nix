@@ -1,4 +1,6 @@
 { lib }: rec {
+  networking = import ./networking.nix { inherit lib; };
+
   getItemNames = path: keep:
     let
       inherit (lib) types;
