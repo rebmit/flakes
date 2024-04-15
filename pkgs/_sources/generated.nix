@@ -3,27 +3,27 @@
 {
   chnroutes2 = {
     pname = "chnroutes2";
-    version = "bcc5f62a5d0bdaf7f73b253d52426019dce6f397";
+    version = "ca84c3057acc9404e07e949c30d69ce16ee596a5";
     src = fetchFromGitHub {
       owner = "misakaio";
       repo = "chnroutes2";
-      rev = "bcc5f62a5d0bdaf7f73b253d52426019dce6f397";
+      rev = "ca84c3057acc9404e07e949c30d69ce16ee596a5";
       fetchSubmodules = false;
-      sha256 = "sha256-B3M1P1hIDqgO7xB6lLY2ElLWZJWkUmGcrGIQhUx41tM=";
+      sha256 = "sha256-y/CuwAhgtAKaZ3frUvhpUvnv80psubHkMJ1LsQEoiiY=";
     };
-    date = "2024-04-14";
+    date = "2024-04-15";
   };
   dnsmasq-china-list = {
     pname = "dnsmasq-china-list";
-    version = "23e2f9dc6a82ff36432097ed478960f1c6bd4263";
+    version = "f0c5854b46bfe2eda06000fb5d75038108c35d51";
     src = fetchFromGitHub {
       owner = "felixonmars";
       repo = "dnsmasq-china-list";
-      rev = "23e2f9dc6a82ff36432097ed478960f1c6bd4263";
+      rev = "f0c5854b46bfe2eda06000fb5d75038108c35d51";
       fetchSubmodules = false;
-      sha256 = "sha256-5Sp7PsliHqpPS9lngEnJ5P9lGWVD520hz9T0aaruC3U=";
+      sha256 = "sha256-aoka2JlwLp4i8L3FGVJmQlaI7j9ZWjCSfIqr/qVr+V4=";
     };
-    date = "2024-04-12";
+    date = "2024-04-15";
   };
   metacubexd = {
     pname = "metacubexd";
@@ -35,11 +35,11 @@
   };
   telegram-desktop-megumifox = {
     pname = "telegram-desktop-megumifox";
-    version = "e190e4f3d6f49ad8cbe87ed091256a43228cf3d4";
+    version = "a83809b8f39f64cb852606dbbf0717655cd274ed";
     src = fetchurl {
-      url = "https://raw.githubusercontent.com/archlinuxcn/repo/e190e4f3d6f49ad8cbe87ed091256a43228cf3d4/archlinuxcn/telegram-desktop-megumifox/0001-Use-font-from-environment-variables.patch";
+      url = "https://raw.githubusercontent.com/archlinuxcn/repo/a83809b8f39f64cb852606dbbf0717655cd274ed/archlinuxcn/telegram-desktop-megumifox/0001-Use-font-from-environment-variables.patch";
       sha256 = "sha256-IQiyJPbFZ0XSSZbcMYS0J1dej5G5LRx4qB/frW7QtnA=";
     };
-    date = "2024-04-14";
+    date = "2024-04-16";
   };
 }
