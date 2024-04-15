@@ -55,10 +55,10 @@ in
         ''}
 
         # pane
-        bind -r k select-pane -U
-        bind -r j select-pane -D
-        bind -r h select-pane -L
-        bind -r l select-pane -R
+        bind k select-pane -U
+        bind j select-pane -D
+        bind h select-pane -L
+        bind l select-pane -R
         bind -r C-k resize-pane -U 5
         bind -r C-j resize-pane -D 5
         bind -r C-h resize-pane -L 5
