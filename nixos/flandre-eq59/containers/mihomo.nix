@@ -1,5 +1,6 @@
 { lib, config, pkgs, myvars, mylib, ... }:
 let
+  serviceDomain = "mihomo.rebmit.internal";
   homeNetwork = myvars.networks.homeNetwork;
   localNode = homeNetwork.nodes."flandre-eq59-mihomo";
   routerNode = homeNetwork.nodes."flandre-eq59-router";
@@ -96,6 +97,19 @@ in
       };
 
       system.stateVersion = "23.11";
+    };
+  };
+
+  services.caddy = {
+    virtualHosts."${serviceDomain}".extraConfig = ''
+      tls /run/credentials/caddy.service/cert /run/credentials/caddy.service/key
+      reverse_proxy ${mylib.networking.ipv4.cidrToIpAddress localNode.ipv4}:9090
+    '';
+  };
+
+  custom.containers."smartdns".config = {
+    services.smartdns.settings = {
+      cname = "/${serviceDomain}/${homeNetwork.nodes.flandre-eq59.fqdn}";
     };
   };
 }

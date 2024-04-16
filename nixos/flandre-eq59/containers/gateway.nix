@@ -95,7 +95,7 @@ in
       services.kea.dhcp4 = {
         enable = true;
         settings = {
-          interfaces-config.interfaces = [ "router-lan" ];
+          interfaces-config.interfaces = [ "gateway-lan" ];
           lease-database = {
             name = "/var/lib/kea/dhcp4.leases";
             persist = true;

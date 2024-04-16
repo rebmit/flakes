@@ -25,6 +25,10 @@
         fqdn = "flandre-eq59-gateway.link.rebmit.internal";
         ipv4 = "10.224.0.5/20";
       };
+      flandre-eq59-wireguard = {
+        fqdn = "flandre-eq59-wireguard.link.rebmit.internal";
+        ipv4 = "10.224.0.6/20";
+      };
       marisa-7d76 = {
         fqdn = "marisa-7d76.link.rebmit.internal";
         ipv4 = "10.224.14.1/20";
@@ -42,6 +46,9 @@
         }
       ];
     };
+  };
+
+  overlayNetwork = {
   };
 
   constants = {
