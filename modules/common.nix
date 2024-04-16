@@ -25,6 +25,9 @@
     htop
     ncdu
     tree
+    just
+    rsync
+    sshfs
   ];
 
   nix.settings = {

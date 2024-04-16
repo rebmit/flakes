@@ -17,6 +17,7 @@ in
 
     programs.git = {
       enable = true;
+      lfs.enable = true;
       userEmail = "i@rebmit.moe";
       userName = "rebmit";
       signing.key = "~/.ssh/id_ed25519";

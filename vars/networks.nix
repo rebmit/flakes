@@ -48,9 +48,6 @@
     };
   };
 
-  overlayNetwork = {
-  };
-
   constants = {
     privateAddresses = {
       ipv4 = [
