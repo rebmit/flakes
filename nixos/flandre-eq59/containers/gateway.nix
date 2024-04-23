@@ -20,7 +20,7 @@ let
   };
 in
 {
-  custom.containers."gateway" = {
+  custom.virtualisation.containers."gateway" = {
     autoStart = true;
     privateNetwork = true;
     ephemeral = false;

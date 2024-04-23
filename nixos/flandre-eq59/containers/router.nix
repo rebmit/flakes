@@ -13,7 +13,7 @@ let
   wanDestinations = [ "172.16.0.0/12" "192.168.0.0/16" ];
 in
 {
-  custom.containers."router" = {
+  custom.virtualisation.containers."router" = {
     autoStart = true;
     privateNetwork = true;
     ephemeral = true;

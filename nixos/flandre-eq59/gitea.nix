@@ -26,7 +26,7 @@ in
     '';
   };
 
-  custom.containers."smartdns".config = {
+  custom.virtualisation.containers."smartdns".config = {
     services.smartdns.settings = {
       cname = "/${serviceDomain}/${localNode.fqdn}";
     };

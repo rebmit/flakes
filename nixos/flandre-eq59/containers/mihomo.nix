@@ -14,7 +14,7 @@ let
   };
 in
 {
-  custom.containers."mihomo" = {
+  custom.virtualisation.containers."mihomo" = {
     autoStart = true;
     privateNetwork = true;
     ephemeral = false;
@@ -107,7 +107,7 @@ in
     '';
   };
 
-  custom.containers."smartdns".config = {
+  custom.virtualisation.containers."smartdns".config = {
     services.smartdns.settings = {
       cname = "/${serviceDomain}/${homeNetwork.nodes.flandre-eq59.fqdn}";
     };

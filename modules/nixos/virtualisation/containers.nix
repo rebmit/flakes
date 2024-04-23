@@ -188,7 +188,7 @@ let
   };
 in
 {
-  options.custom = {
+  options.custom.virtualisation = {
     containers = mkOption {
       type = types.attrsOf (types.submodule (
         { config, options, name, ... }: {
@@ -351,7 +351,7 @@ in
                 }
             )
           ))
-          config.custom.containers)
+          config.custom.virtualisation.containers)
       ));
 
       environment.etc = mapAttrs'
@@ -371,7 +371,7 @@ in
                     (" " + concatStringsSep " " cfg.extraFlags)}"
               '';
           })
-        config.custom.containers;
+        config.custom.virtualisation.containers;
 
       networking.dhcpcd.denyInterfaces = [ "ve-*" "vb-*" ];
 

@@ -5,7 +5,7 @@ let
   routerNode = homeNetwork.nodes."flandre-eq59-router";
 in
 {
-  custom.containers."smartdns" = {
+  custom.virtualisation.containers."smartdns" = {
     autoStart = true;
     privateNetwork = true;
     ephemeral = true;
