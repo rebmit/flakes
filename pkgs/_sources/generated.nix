@@ -3,43 +3,43 @@
 {
   chnroutes2 = {
     pname = "chnroutes2";
-    version = "ca84c3057acc9404e07e949c30d69ce16ee596a5";
+    version = "59752fd7f9438a8305ece944e71ba45b9b57775e";
     src = fetchFromGitHub {
       owner = "misakaio";
       repo = "chnroutes2";
-      rev = "ca84c3057acc9404e07e949c30d69ce16ee596a5";
+      rev = "59752fd7f9438a8305ece944e71ba45b9b57775e";
       fetchSubmodules = false;
-      sha256 = "sha256-y/CuwAhgtAKaZ3frUvhpUvnv80psubHkMJ1LsQEoiiY=";
+      sha256 = "sha256-yZN7b7dhYu2qX9WHNWUY8xpSuilYdDJ4sp16aCV+XDY=";
     };
-    date = "2024-04-15";
+    date = "2024-04-25";
   };
   dnsmasq-china-list = {
     pname = "dnsmasq-china-list";
-    version = "f0c5854b46bfe2eda06000fb5d75038108c35d51";
+    version = "3713f09710000af0a78d0b467f6817365976058c";
     src = fetchFromGitHub {
       owner = "felixonmars";
       repo = "dnsmasq-china-list";
-      rev = "f0c5854b46bfe2eda06000fb5d75038108c35d51";
+      rev = "3713f09710000af0a78d0b467f6817365976058c";
       fetchSubmodules = false;
-      sha256 = "sha256-aoka2JlwLp4i8L3FGVJmQlaI7j9ZWjCSfIqr/qVr+V4=";
+      sha256 = "sha256-BrvNgnUIHPqHe4HK0SLy/1Ya9tqAc2RcfU9sGUjScbg=";
     };
-    date = "2024-04-15";
+    date = "2024-04-25";
   };
   metacubexd = {
     pname = "metacubexd";
-    version = "v1.138.0";
+    version = "v1.138.1";
     src = fetchurl {
-      url = "https://github.com/MetaCubeX/metacubexd/releases/download/v1.138.0/compressed-dist.tgz";
-      sha256 = "sha256-0cy+HSZzVY4vVNbFu/MRUQtKjCo2Ebg4bq2H9kHjFG4=";
+      url = "https://github.com/MetaCubeX/metacubexd/releases/download/v1.138.1/compressed-dist.tgz";
+      sha256 = "sha256-l2mcb2optvgtfzma/Ix63Y8BxXC6CsGoyIIMoOvD074=";
     };
   };
   telegram-desktop-megumifox = {
     pname = "telegram-desktop-megumifox";
-    version = "a83809b8f39f64cb852606dbbf0717655cd274ed";
+    version = "e5a6a3e1e0d837f86d7ffdd69dbcc00c217950ac";
     src = fetchurl {
-      url = "https://raw.githubusercontent.com/archlinuxcn/repo/a83809b8f39f64cb852606dbbf0717655cd274ed/archlinuxcn/telegram-desktop-megumifox/0001-Use-font-from-environment-variables.patch";
+      url = "https://raw.githubusercontent.com/archlinuxcn/repo/e5a6a3e1e0d837f86d7ffdd69dbcc00c217950ac/archlinuxcn/telegram-desktop-megumifox/0001-Use-font-from-environment-variables.patch";
       sha256 = "sha256-IQiyJPbFZ0XSSZbcMYS0J1dej5G5LRx4qB/frW7QtnA=";
     };
-    date = "2024-04-16";
+    date = "2024-04-25";
   };
 }
