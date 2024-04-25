@@ -85,14 +85,14 @@
         {
           "marisa-7d76" = lib.nixosSystem {
             system = "x86_64-linux";
-            modules = [ ./nixos/marisa-7d76 ];
+            modules = [ ./hosts/marisa-7d76 ];
             specialArgs = {
               inherit inputs mylib self myvars;
             };
           };
           "kurumi-a7s" = lib.nixosSystem {
             system = "x86_64-linux";
-            modules = [ ./nixos/kurumi-a7s ];
+            modules = [ ./hosts/kurumi-a7s ];
             specialArgs = {
               inherit inputs mylib self myvars;
             };
@@ -114,11 +114,11 @@
         };
         "flandre-eq59" = { ... }: {
           deployment.targetHost = "flandre-eq59.link.rebmit.internal";
-          imports = [ ./nixos/flandre-eq59 ];
+          imports = [ ./hosts/flandre-eq59 ];
         };
         "misaka-lax02" = { ... }: {
           deployment.targetHost = "misaka-lax02";
-          imports = [ ./nixos/misaka-lax02 ];
+          imports = [ ./hosts/misaka-lax02 ];
         };
       };
     };
