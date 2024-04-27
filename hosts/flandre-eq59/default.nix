@@ -1,4 +1,4 @@
-{ self, mylib, data, config, inputs, myvars, ... }:
+{ self, mylib, config, mysecrets, myvars, ... }:
 let
   hostName = "flandre-eq59";
   homeNetwork = myvars.networks.homeNetwork;
@@ -8,7 +8,7 @@ in
   imports =
     [
       self.nixosModules.default
-      inputs.mysecrets.nixosModules.secrets.flandre
+      mysecrets.nixosModules.secrets.flandre
     ]
     ++ (mylib.getItemPaths ./. "default.nix");
 
@@ -75,11 +75,11 @@ in
   };
 
   services.openssh.enable = true;
-  users.users.root.openssh.authorizedKeys.keys = data.keys;
+  users.users.root.openssh.authorizedKeys.keys = mysecrets.sshPublicKeys;
 
   services.caddy.enable = true;
   systemd.services.caddy.serviceConfig.LoadCredential = [
-    "cert:${inputs.mysecrets.certificates.server}"
+    "cert:${mysecrets.certificates.server}"
     "key:${config.sops.secrets.certificate-server-key.path}"
   ];
 

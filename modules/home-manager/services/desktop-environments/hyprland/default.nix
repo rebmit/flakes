@@ -1,4 +1,4 @@
-{ pkgs, config, lib, mylib, inputs, ... } @ args:
+{ pkgs, config, lib, mylib, hyprland, ... } @ args:
 with lib; let
   cfg = config.custom.services.desktopEnvironment.hyprland;
   startupCommand = mkOption {
@@ -9,7 +9,7 @@ with lib; let
     type = types.str;
     example = "class: ^(kitty)$";
   };
-  scratchpadOpts = { name, ... }: {
+  scratchpadOpts = { ... }: {
     options = {
       inherit startupCommand windowRegex;
       keyBind = mkOption {
@@ -37,7 +37,7 @@ in
   options.custom.services.desktopEnvironment.hyprland = {
     enable = mkEnableOption "desktop environment based on hyprland";
     package = mkOption {
-      default = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+      default = hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     };
     settings = mkOption {
       type = with types; let

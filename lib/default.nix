@@ -1,5 +1,9 @@
 { lib }: rec {
+  colmenaSystem = import ./colmenaSystem.nix;
+  nixosSystem = import ./nixosSystem.nix;
+
   networking = import ./networking.nix { inherit lib; };
+  relativeToRoot = lib.path.append ../.;
 
   getItemNames = path: keep:
     let
@@ -8,11 +12,11 @@
         if keep == null
         then (_: _: true)
         else if types.singleLineStr.check keep
-        then (name: type: !(name == keep))
+        then (name: _: !(name == keep))
         else if lib.isFunction keep
         then keep
         else if (types.listOf types.singleLineStr).check keep
-        then (name: type: !(builtins.elem name keep))
+        then (name: _: !(builtins.elem name keep))
         else throw "importDir predicate should be a string, function, or list of strings";
       isNix = name: type:
         (type == "regular" && lib.hasSuffix ".nix" name)

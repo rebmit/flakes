@@ -1,9 +1,8 @@
-{ config, lib, pkgs, inputs, self, mylib, ... }: {
+{ config, lib, pkgs, mysecrets, self, mylib, ... }: {
   imports =
     [
       self.nixosModules.default
-      inputs.mysecrets.nixosModules.secrets.kurumi
-      inputs.home-manager.nixosModules.home-manager
+      mysecrets.nixosModules.secrets.kurumi
     ]
     ++ (mylib.getItemPaths ./. [ "default.nix" "home.nix" ]);
 
@@ -16,13 +15,6 @@
         device = "/dev/disk/by-path/pci-0000:04:00.0-nvme-1";
       };
     };
-  };
-
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = false;
-    extraSpecialArgs = { inherit inputs mylib self; };
-    users.rebmit = import ./home.nix;
   };
 
   boot.kernelParams = [

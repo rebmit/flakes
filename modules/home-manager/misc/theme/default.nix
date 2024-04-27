@@ -1,4 +1,4 @@
-{ inputs, pkgs, config, lib, mylib, ... } @ args:
+{ nix-colors, pkgs, config, lib, mylib, ... } @ args:
 with lib; let
   cfg = config.custom.misc.theme;
   themeOpts = { ... }: {
@@ -46,10 +46,10 @@ in
       default = true;
     };
     colorSchemeLight = mkOption {
-      default = inputs.nix-colors.colorSchemes.catppuccin-latte;
+      default = nix-colors.colorSchemes.catppuccin-latte;
     };
     colorSchemeDark = mkOption {
-      default = inputs.nix-colors.colorSchemes.catppuccin-frappe;
+      default = nix-colors.colorSchemes.catppuccin-frappe;
     };
     gtkThemeLight = mkOption {
       type = types.submodule themeOpts;

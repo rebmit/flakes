@@ -1,6 +1,6 @@
-{ pkgs, inputs, ... }: {
+{ pkgs, mysecrets, ... }: {
   security.pki.certificateFiles = [
-    inputs.mysecrets.certificates.ca
+    mysecrets.certificates.ca
   ];
 
   environment.systemPackages = with pkgs; [
@@ -27,7 +27,6 @@
     tree
     just
     rsync
-    sshfs
   ];
 
   nix.settings = {

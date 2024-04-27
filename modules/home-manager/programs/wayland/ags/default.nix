@@ -1,4 +1,4 @@
-{ config, lib, inputs, mylib, ... } @ args:
+{ config, lib, mylib, ... } @ args:
 with lib; let
   cfg = config.custom.programs.wayland.ags;
 in

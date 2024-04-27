@@ -1,9 +1,9 @@
 {
-  default = { mylib, lib, inputs, config, ... }: {
+  default = { mylib, lib, impermanence, ags, nix-colors, config, ... }: {
     imports = [
-      inputs.impermanence.nixosModules.home-manager.impermanence
-      inputs.ags.homeManagerModules.default
-      inputs.nix-colors.homeManagerModules.default
+      impermanence.nixosModules.home-manager.impermanence
+      ags.homeManagerModules.default
+      nix-colors.homeManagerModules.default
     ] ++ (mylib.getItemPaths ./. "default.nix");
 
     custom.baseline.enable = lib.mkDefault true;

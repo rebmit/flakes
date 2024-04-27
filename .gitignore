@@ -2,3 +2,4 @@ result*
 .direnv
 .deploy-gc
 .gcroots
+.pre-commit-config.yaml

@@ -1,10 +1,10 @@
 {
-  default = { mylib, lib, pkgs, self, inputs, ... }: {
+  default = { mylib, lib, pkgs, impermanence, disko, lanzaboote, mypkgs, ... }: {
     imports = [
       ../common.nix
-      inputs.impermanence.nixosModules.impermanence
-      inputs.disko.nixosModules.disko
-      inputs.lanzaboote.nixosModules.lanzaboote
+      impermanence.nixosModules.impermanence
+      disko.nixosModules.disko
+      lanzaboote.nixosModules.lanzaboote
     ] ++ (mylib.getItemPaths ./. [ "default.nix" ]);
 
     nix = {
@@ -24,7 +24,7 @@
     };
 
     nixpkgs = {
-      overlays = [ self.overlays.default ];
+      overlays = [ mypkgs.overlay ];
       config = {
         allowNonSource = false;
         allowNonSourcePredicate = pkg:

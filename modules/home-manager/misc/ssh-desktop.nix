@@ -1,8 +1,8 @@
-{ lib, inputs, config, ... }:
+{ lib, mysecrets, config, ... }:
 with lib;
 let
   cfg = config.custom.misc.ssh-desktop;
-  remoteHosts = inputs.mysecrets.remoteHosts;
+  remoteHosts = mysecrets.remoteHosts;
   configurations = attrValues (mapAttrs
     (name: host: {
       xdg.desktopEntries."ssh-desktop-${name}" = {

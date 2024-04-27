@@ -1,4 +1,4 @@
-{ mylib }: rec {
+{ mylib, ... }: {
   packages = pkgs: mylib.mapItemNames ./. [ "default.nix" "_sources" ] (name: pkgs.${name});
   overlay = final: prev:
     let

@@ -1,8 +1,8 @@
-{ pkgs, inputs, self, mylib, data, ... }: {
+{ mysecrets, self, mylib, ... }: {
   imports =
     [
       self.nixosModules.default
-      inputs.mysecrets.nixosModules.secrets.misaka
+      mysecrets.nixosModules.secrets.misaka
     ]
     ++ (mylib.getItemPaths ./. "default.nix");
 
@@ -33,7 +33,7 @@
   services.openssh.enable = true;
   services.openssh.ports = [ 2222 ];
   services.openssh.settings.PasswordAuthentication = false;
-  users.users.root.openssh.authorizedKeys.keys = data.keys;
+  users.users.root.openssh.authorizedKeys.keys = mysecrets.sshPublicKeys;
 
   services.caddy = {
     enable = true;
