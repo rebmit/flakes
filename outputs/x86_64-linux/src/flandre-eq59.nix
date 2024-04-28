@@ -19,7 +19,7 @@ in
 {
   nixosConfigurations."${name}" = mylib.nixosSystem systemArgs;
 
-  colmena.${name} = mylib.colmenaSystem (systemArgs // { inherit tags; });
+  colmena."${name}" = mylib.colmenaSystem (systemArgs // { inherit tags; });
 
-  packages."${name}" = inputs.self.nixosConfigurations.${name}.config.formats.iso;
+  packages."${name}" = inputs.self.nixosConfigurations."${name}".config.formats.iso;
 }

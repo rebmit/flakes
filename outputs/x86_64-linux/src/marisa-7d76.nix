@@ -21,5 +21,5 @@ in
 {
   nixosConfigurations."${name}" = mylib.nixosSystem systemArgs;
 
-  packages."${name}" = inputs.self.nixosConfigurations.${name}.config.formats.iso;
+  packages."${name}" = inputs.self.nixosConfigurations."${name}".config.formats.iso;
 }
