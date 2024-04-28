@@ -23,6 +23,8 @@ in
     };
   };
 
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
   nix.settings.trusted-users = [ "root" "rebmit" ];
 
   i18n.defaultLocale = "en_SG.UTF-8";

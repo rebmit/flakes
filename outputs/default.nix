@@ -40,9 +40,16 @@ flake-utils.lib.eachSystem allSystemNames
       legacyPackages = pkgs;
       checks = {
         pre-commit-check = git-hooks.lib.${system}.run {
-          src = ../.;
+          src = mylib.relativeToRoot ".";
           hooks = {
             nixpkgs-fmt.enable = true;
+            typos = {
+              enable = true;
+              settings = {
+                write = false;
+                configPath = "./.typos.toml";
+              };
+            };
           };
         };
       };

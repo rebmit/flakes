@@ -20,9 +20,6 @@ with lib; {
         systemd-boot.enable = lib.mkDefault true;
       };
       kernelPackages = pkgs.linuxPackages_latest;
-      kernelParams = [
-        "ia32_emulation=0"
-      ];
       kernel = {
         sysctl = {
           "kernel.panic" = 10;

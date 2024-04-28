@@ -1,5 +1,5 @@
 {
-  default = { mylib, lib, pkgs, impermanence, disko, lanzaboote, mypkgs, ... }: {
+  default = { mylib, lib, nixpkgs, pkgs, impermanence, disko, lanzaboote, mypkgs, ... }: {
     imports = [
       ../common.nix
       impermanence.nixosModules.impermanence
@@ -20,6 +20,10 @@
         experimental-features = [ "nix-command" "flakes" "auto-allocate-uids" "cgroups" ];
         auto-allocate-uids = true;
         use-cgroups = true;
+        nix-path = lib.mkForce "nixpkgs=/etc/nix/inputs/nixpkgs";
+      };
+      registry = {
+        nixpkgs.flake = nixpkgs;
       };
     };
 
@@ -42,9 +46,8 @@
       systemPackages = with pkgs; [
         neovim
       ];
-      variables = {
-        EDITOR = "nvim";
-      };
+      etc."nix/inputs/nixpkgs".source = "${nixpkgs}";
+      variables.EDITOR = "nvim";
       persistence."/persist" = {
         directories = [
           "/var"
