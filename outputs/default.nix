@@ -50,6 +50,12 @@ flake-utils.lib.eachSystem allSystemNames
                 configPath = "./.typos.toml";
               };
             };
+            prettier = {
+              enable = true;
+              settings = {
+                write = true;
+              };
+            };
           };
         };
       };
