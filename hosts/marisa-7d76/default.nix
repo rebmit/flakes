@@ -93,12 +93,12 @@ in
       enable = true;
       settings = {
         default_session = {
-          command = "${lib.getExe pkgs.greetd.tuigreet} --cmd ${pkgs.writeShellScript "hyprland" ''
+          command = "${lib.getExe pkgs.greetd.tuigreet} --cmd ${pkgs.writeShellScript "sway" ''
             while read -r l; do
               eval export $l
             done < <(/run/current-system/systemd/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)
 
-            exec systemd-cat --identifier=hyprland Hyprland
+            exec systemd-cat --identifier=sway sway
           ''}";
         };
       };

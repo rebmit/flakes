@@ -47,39 +47,18 @@
       neovim.enable = true;
     };
 
-    services.desktopEnvironment.hyprland = {
+    services.desktopEnvironment.sway = {
       enable = true;
       browser = {
         startupCommand = "firefox";
-        windowRegex = "class: ^(firefox)$";
+        windowCriteria = { app_id = "firefox"; };
       };
       terminal = {
         startupCommand = "kitty";
-        windowRegex = "class: ^(kitty)$";
+        windowCriteria = { app_id = "kitty"; };
         launchPrefix = "kitty -e";
       };
-      settings = {
-        monitor = [
-          "HDMI-A-1, preferred, auto, 1.67"
-        ];
-      };
-      scratchpads = {
-        nheko = {
-          startupCommand = "nheko";
-          windowRegex = "class: ^(nheko)$";
-          keyBind = "SUPER, 1";
-        };
-        telegram = {
-          startupCommand = "env QT_QPA_PLATFORMTHEME=gtk3 telegram-desktop";
-          windowRegex = "class: ^(org.telegram.desktop|telegramdesktop)$";
-          keyBind = "SUPER, 2";
-        };
-        thunderbird = {
-          startupCommand = "thunderbird";
-          windowRegex = "class: ^(thunderbird)$";
-          keyBind = "SUPER, 3";
-        };
-      };
+      config.output.HDMI-A-1 = { scale = "1.67"; };
     };
   };
 
