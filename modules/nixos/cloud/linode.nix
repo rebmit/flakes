@@ -9,6 +9,12 @@ with lib; {
 
   config = mkIf cfg.enable {
     custom.cloud.common.enable = true;
+    custom.baseline.enable = true;
+
+    custom.system.disko.btrfs-bios-common = {
+      enable = true;
+      device = "/dev/sda";
+    };
 
     networking.usePredictableInterfaceNames = false;
 

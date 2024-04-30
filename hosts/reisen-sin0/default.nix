@@ -5,14 +5,7 @@
     ]
     ++ (mylib.getItemPaths ./. "default.nix");
 
-  custom = {
-    baseline.enable = true;
-    cloud.linode.enable = true;
-    system.disko.btrfs-bios-common = {
-      enable = true;
-      device = "/dev/sda";
-    };
-  };
+  custom.cloud.linode.enable = true;
 
   networking.hostName = "reisen-sin0";
 
