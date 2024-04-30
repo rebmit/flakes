@@ -16,7 +16,10 @@ with lib; {
       device = "/dev/sda";
     };
 
-    networking.usePredictableInterfaceNames = false;
+    networking = {
+      domain = "link.rebmit.moe";
+      usePredictableInterfaceNames = false;
+    };
 
     boot = {
       initrd = {
