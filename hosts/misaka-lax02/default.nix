@@ -9,7 +9,6 @@
   custom = {
     baseline = {
       enable = true;
-      uefi = false;
     };
     system.disko.btrfs-bios-common = {
       enable = true;
