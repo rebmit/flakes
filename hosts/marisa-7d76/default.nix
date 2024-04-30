@@ -23,6 +23,11 @@ in
     };
   };
 
+  boot.loader = {
+    efi.canTouchEfiVariables = true;
+    systemd-boot.enable = lib.mkDefault true;
+  };
+
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
   nix.settings.trusted-users = [ "root" "rebmit" ];

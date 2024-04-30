@@ -5,24 +5,16 @@ in
 with lib; {
   options.custom.baseline = {
     enable = mkEnableOption "baseline configuration";
-    uefi = mkOption {
-      type = types.bool;
-      default = true;
-    };
   };
 
   config = mkIf cfg.enable {
     boot = {
       tmp.useTmpfs = true;
       initrd.systemd.enable = true;
-      loader = mkIf cfg.uefi {
-        efi.canTouchEfiVariables = true;
-        systemd-boot.enable = lib.mkDefault true;
-      };
       kernelPackages = pkgs.linuxPackages_latest;
       kernel = {
         sysctl = {
-          "kernel.panic" = 10;
+          "kernel.panic" = 60;
           "kernel.sysrq" = 1;
           "net.core.default_qdisc" = "fq";
           "net.ipv4.tcp_congestion_control" = "bbr";

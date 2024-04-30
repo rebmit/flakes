@@ -1,4 +1,4 @@
-{ self, mylib, config, mysecrets, myvars, ... }:
+{ self, mylib, config, mysecrets, myvars, lib, ... }:
 let
   hostName = "flandre-eq59";
   homeNetwork = myvars.networks.homeNetwork;
@@ -18,6 +18,11 @@ in
       enable = true;
       device = "/dev/disk/by-path/pci-0000:00:17.0-ata-1";
     };
+  };
+
+  boot.loader = {
+    efi.canTouchEfiVariables = true;
+    systemd-boot.enable = lib.mkDefault true;
   };
 
   i18n.defaultLocale = "en_SG.UTF-8";

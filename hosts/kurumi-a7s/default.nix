@@ -17,6 +17,11 @@
     };
   };
 
+  boot.loader = {
+    efi.canTouchEfiVariables = true;
+    systemd-boot.enable = lib.mkDefault true;
+  };
+
   boot.kernelParams = [
     "nouveau.config=NvGspRm=1"
     "nouveau.debug=info,VBIOS=info,gsp=debug"
