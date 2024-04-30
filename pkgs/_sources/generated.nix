@@ -3,27 +3,27 @@
 {
   chnroutes2 = {
     pname = "chnroutes2";
-    version = "59752fd7f9438a8305ece944e71ba45b9b57775e";
+    version = "0823f40de93dbcf13f707fb9ea6b1b2c6c9897ac";
     src = fetchFromGitHub {
       owner = "misakaio";
       repo = "chnroutes2";
-      rev = "59752fd7f9438a8305ece944e71ba45b9b57775e";
+      rev = "0823f40de93dbcf13f707fb9ea6b1b2c6c9897ac";
       fetchSubmodules = false;
-      sha256 = "sha256-yZN7b7dhYu2qX9WHNWUY8xpSuilYdDJ4sp16aCV+XDY=";
+      sha256 = "sha256-zd+sOzxdrdhjddWxsnKsWVE+6IuAG39Qe8AarotzFWk=";
     };
-    date = "2024-04-25";
+    date = "2024-04-30";
   };
   dnsmasq-china-list = {
     pname = "dnsmasq-china-list";
-    version = "3713f09710000af0a78d0b467f6817365976058c";
+    version = "2476df3067ebf518e35097c44bf6f623e95da59a";
     src = fetchFromGitHub {
       owner = "felixonmars";
       repo = "dnsmasq-china-list";
-      rev = "3713f09710000af0a78d0b467f6817365976058c";
+      rev = "2476df3067ebf518e35097c44bf6f623e95da59a";
       fetchSubmodules = false;
-      sha256 = "sha256-BrvNgnUIHPqHe4HK0SLy/1Ya9tqAc2RcfU9sGUjScbg=";
+      sha256 = "sha256-CUuPjzC/O0XOM0H0CanYzbC95DjpMR7WeeFZ3NLkLls=";
     };
-    date = "2024-04-25";
+    date = "2024-04-30";
   };
   metacubexd = {
     pname = "metacubexd";
@@ -35,11 +35,11 @@
   };
   telegram-desktop-megumifox = {
     pname = "telegram-desktop-megumifox";
-    version = "e5a6a3e1e0d837f86d7ffdd69dbcc00c217950ac";
+    version = "9f037216b0f0fc44515503374b3278219a2c71cf";
     src = fetchurl {
-      url = "https://raw.githubusercontent.com/archlinuxcn/repo/e5a6a3e1e0d837f86d7ffdd69dbcc00c217950ac/archlinuxcn/telegram-desktop-megumifox/0001-Use-font-from-environment-variables.patch";
+      url = "https://raw.githubusercontent.com/archlinuxcn/repo/9f037216b0f0fc44515503374b3278219a2c71cf/archlinuxcn/telegram-desktop-megumifox/0001-Use-font-from-environment-variables.patch";
       sha256 = "sha256-IQiyJPbFZ0XSSZbcMYS0J1dej5G5LRx4qB/frW7QtnA=";
     };
-    date = "2024-04-25";
+    date = "2024-05-01";
   };
 }

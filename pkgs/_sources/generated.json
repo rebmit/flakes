@@ -1,7 +1,7 @@
 {
     "chnroutes2": {
         "cargoLocks": null,
-        "date": "2024-04-25",
+        "date": "2024-04-30",
         "extract": null,
         "name": "chnroutes2",
         "passthru": null,
@@ -13,15 +13,15 @@
             "name": null,
             "owner": "misakaio",
             "repo": "chnroutes2",
-            "rev": "59752fd7f9438a8305ece944e71ba45b9b57775e",
-            "sha256": "sha256-yZN7b7dhYu2qX9WHNWUY8xpSuilYdDJ4sp16aCV+XDY=",
+            "rev": "0823f40de93dbcf13f707fb9ea6b1b2c6c9897ac",
+            "sha256": "sha256-zd+sOzxdrdhjddWxsnKsWVE+6IuAG39Qe8AarotzFWk=",
             "type": "github"
         },
-        "version": "59752fd7f9438a8305ece944e71ba45b9b57775e"
+        "version": "0823f40de93dbcf13f707fb9ea6b1b2c6c9897ac"
     },
     "dnsmasq-china-list": {
         "cargoLocks": null,
-        "date": "2024-04-25",
+        "date": "2024-04-30",
         "extract": null,
         "name": "dnsmasq-china-list",
         "passthru": null,
@@ -33,11 +33,11 @@
             "name": null,
             "owner": "felixonmars",
             "repo": "dnsmasq-china-list",
-            "rev": "3713f09710000af0a78d0b467f6817365976058c",
-            "sha256": "sha256-BrvNgnUIHPqHe4HK0SLy/1Ya9tqAc2RcfU9sGUjScbg=",
+            "rev": "2476df3067ebf518e35097c44bf6f623e95da59a",
+            "sha256": "sha256-CUuPjzC/O0XOM0H0CanYzbC95DjpMR7WeeFZ3NLkLls=",
             "type": "github"
         },
-        "version": "3713f09710000af0a78d0b467f6817365976058c"
+        "version": "2476df3067ebf518e35097c44bf6f623e95da59a"
     },
     "metacubexd": {
         "cargoLocks": null,
@@ -56,7 +56,7 @@
     },
     "telegram-desktop-megumifox": {
         "cargoLocks": null,
-        "date": "2024-04-25",
+        "date": "2024-05-01",
         "extract": null,
         "name": "telegram-desktop-megumifox",
         "passthru": null,
@@ -65,8 +65,8 @@
             "name": null,
             "sha256": "sha256-IQiyJPbFZ0XSSZbcMYS0J1dej5G5LRx4qB/frW7QtnA=",
             "type": "url",
-            "url": "https://raw.githubusercontent.com/archlinuxcn/repo/e5a6a3e1e0d837f86d7ffdd69dbcc00c217950ac/archlinuxcn/telegram-desktop-megumifox/0001-Use-font-from-environment-variables.patch"
+            "url": "https://raw.githubusercontent.com/archlinuxcn/repo/9f037216b0f0fc44515503374b3278219a2c71cf/archlinuxcn/telegram-desktop-megumifox/0001-Use-font-from-environment-variables.patch"
         },
-        "version": "e5a6a3e1e0d837f86d7ffdd69dbcc00c217950ac"
+        "version": "9f037216b0f0fc44515503374b3278219a2c71cf"
     }
 }
