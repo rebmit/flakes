@@ -16,6 +16,8 @@ with lib; {
 
     users.users.root.openssh.authorizedKeys.keys = mysecrets.sshPublicKeys;
 
+    services.caddy.enable = true;
+
     environment.persistence."/persist" = {
       files = [
         "/etc/ssh/ssh_host_rsa_key"

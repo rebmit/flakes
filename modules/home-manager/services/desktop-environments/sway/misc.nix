@@ -3,7 +3,7 @@
     gaps = {
       inner = 5;
       outer = 5;
-      smartGaps = true;
+      smartGaps = false;
       smartBorders = "on";
     };
 
