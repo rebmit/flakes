@@ -24,4 +24,8 @@ in
     "light" = cfg.cursorThemeLight;
     "dark" = cfg.cursorThemeDark;
   }.${cfg.variant};
+
+  wayland.windowManager.sway.config.seat."*" = {
+    xcursor_theme = "${config.home.pointerCursor.name} ${toString config.home.pointerCursor.size}";
+  };
 }
