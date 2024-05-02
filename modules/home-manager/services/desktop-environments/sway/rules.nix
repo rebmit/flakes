@@ -5,7 +5,6 @@ in
 {
   wayland.windowManager.sway.config = {
     assigns = {
-      "1" = [ (cfg.terminal.windowCriteria) ];
       "2" = [ (cfg.browser.windowCriteria) ];
     };
   };

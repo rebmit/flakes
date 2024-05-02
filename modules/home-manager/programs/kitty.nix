@@ -19,7 +19,7 @@ in
         shell = "${cfg.shell}";
         window_padding_width = "0";
         window_border_width = "0";
-        background_opacity = "0.9";
+        background_opacity = "0.95";
         hide_window_decorations = "yes";
         confirm_os_window_close = "0";
         enable_audio_bell = "no";

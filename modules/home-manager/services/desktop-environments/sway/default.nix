@@ -49,7 +49,7 @@ in
             terminal = cfg.terminal.launchPrefix;
           };
           swaylock.enable = true;
-          ags.enable = true;
+          waybar.enable = true;
         };
 
         wayland.windowManager.sway = {
