@@ -6,36 +6,11 @@
     ]
     ++ (mylib.getItemPaths ./. "default.nix");
 
-  custom = {
-    baseline = {
-      enable = true;
-    };
-    system.disko.btrfs-bios-common = {
-      enable = true;
-      device = "/dev/vda";
-    };
-  };
+  custom.cloud.misaka.enable = true;
 
   networking.hostName = "misaka-lax02";
 
-  systemd.network = {
-    enable = true;
-    wait-online.enable = false;
-    networks = {
-      "20-wired" = {
-        matchConfig.Name = [ "en*" "eth*" ];
-        DHCP = "yes";
-      };
-    };
-  };
-
-  services.openssh.enable = true;
-  services.openssh.ports = [ 2222 ];
-  services.openssh.settings.PasswordAuthentication = false;
-  users.users.root.openssh.authorizedKeys.keys = mysecrets.sshPublicKeys;
-
   services.caddy = {
-    enable = true;
     virtualHosts."rebmit.moe".extraConfig = ''
       header /.well-known/matrix/* Content-Type application/json
       header /.well-known/matrix/* Access-Control-Allow-Origin *
