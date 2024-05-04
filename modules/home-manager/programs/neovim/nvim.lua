@@ -64,7 +64,7 @@ vim.api.nvim_set_keymap('', '<tab>', ':bnext<CR>', { noremap = true })
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 local lspconfig = require('lspconfig')
-local servers = { 'nil_ls', 'pyright' }
+local servers = { 'nil_ls', 'pyright', 'rust_analyzer' }
 
 for _, lsp in pairs(servers) do
   lspconfig[lsp].setup {

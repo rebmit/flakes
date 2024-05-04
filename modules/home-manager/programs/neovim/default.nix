@@ -12,6 +12,7 @@ in
       # language server
       nil
       pyright
+      rust-analyzer
 
       # formatter
       nixpkgs-fmt
