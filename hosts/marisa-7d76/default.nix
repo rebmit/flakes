@@ -1,4 +1,4 @@
-{ config, lib, pkgs, self, mylib, myvars, mysecrets, ... }:
+{ config, lib, pkgs, mylib, myvars, mysecrets, ... }:
 let
   hostName = "marisa-7d76";
   homeNetwork = myvars.networks.homeNetwork;
@@ -7,7 +7,6 @@ in
 {
   imports =
     [
-      self.nixosModules.default
       mysecrets.nixosModules.secrets.marisa
     ]
     ++ (mylib.getItemPaths ./. [ "default.nix" "home.nix" ]);

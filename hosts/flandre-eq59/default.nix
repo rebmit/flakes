@@ -1,4 +1,4 @@
-{ self, mylib, config, mysecrets, myvars, lib, ... }:
+{ mylib, config, mysecrets, myvars, lib, ... }:
 let
   hostName = "flandre-eq59";
   homeNetwork = myvars.networks.homeNetwork;
@@ -7,7 +7,6 @@ in
 {
   imports =
     [
-      self.nixosModules.default
       mysecrets.nixosModules.secrets.flandre
     ]
     ++ (mylib.getItemPaths ./. "default.nix");

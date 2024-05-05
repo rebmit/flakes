@@ -10,7 +10,7 @@
 , ...
 }:
 let
-  inherit (inputs) home-manager;
+  inherit (inputs) home-manager self;
 in
 { name, ... }: {
   deployment = {
@@ -20,6 +20,12 @@ in
 
   imports =
     nixosModules
+    ++ [
+      self.nixosModules.default
+      {
+        custom.virtualisation.containersSpecialArgs = specialArgs;
+      }
+    ]
     ++ (
       lib.optionals ((lib.lists.length homeModules) > 0)
         [

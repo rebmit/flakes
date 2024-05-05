@@ -9,7 +9,7 @@
 , ...
 }:
 let
-  inherit (inputs) nixpkgs home-manager nixos-generators;
+  inherit (inputs) nixpkgs home-manager nixos-generators self;
 in
 nixpkgs.lib.nixosSystem {
   inherit system specialArgs;
@@ -17,6 +17,10 @@ nixpkgs.lib.nixosSystem {
     nixosModules
     ++ [
       nixos-generators.nixosModules.all-formats
+      self.nixosModules.default
+      {
+        custom.virtualisation.containersSpecialArgs = specialArgs;
+      }
     ]
     ++ (
       lib.optionals ((lib.lists.length homeModules) > 0)

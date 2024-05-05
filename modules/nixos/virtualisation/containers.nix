@@ -189,6 +189,10 @@ let
 in
 {
   options.custom.virtualisation = {
+    containersSpecialArgs = mkOption {
+      type = types.attrsOf types.unspecified;
+      default = { };
+    };
     containers = mkOption {
       type = types.attrsOf (types.submodule (
         { config, options, name, ... }: {
@@ -239,7 +243,7 @@ in
 
             specialArgs = mkOption {
               type = types.attrsOf types.unspecified;
-              default = { };
+              default = host.config.custom.virtualisation.containersSpecialArgs;
             };
 
             ephemeral = mkOption {

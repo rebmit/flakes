@@ -1,7 +1,6 @@
-{ config, lib, pkgs, mysecrets, self, mylib, ... }: {
+{ config, lib, pkgs, mysecrets, mylib, ... }: {
   imports =
     [
-      self.nixosModules.default
       mysecrets.nixosModules.secrets.kurumi
     ]
     ++ (mylib.getItemPaths ./. [ "default.nix" "home.nix" ]);

@@ -1,7 +1,6 @@
-{ self, mylib, mysecrets, ... }: {
+{ mylib, mysecrets, ... }: {
   imports =
     [
-      self.nixosModules.default
       mysecrets.nixosModules.secrets.reisen-sin0
       mysecrets.nixosModules.networks.reisen-sin0
     ]

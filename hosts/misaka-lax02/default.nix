@@ -1,7 +1,6 @@
-{ mysecrets, self, mylib, ... }: {
+{ mysecrets, mylib, ... }: {
   imports =
     [
-      self.nixosModules.default
       mysecrets.nixosModules.secrets.misaka
       mysecrets.nixosModules.networks.misaka-lax02
     ]
