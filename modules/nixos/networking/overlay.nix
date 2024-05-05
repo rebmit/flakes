@@ -59,6 +59,16 @@ in
         default = { };
         description = "remote peers of the local node";
       };
+      staleGroup = mkOption {
+        type = types.int;
+        default = 1;
+        description = "group id for stale interfaces";
+      };
+      activeGroup = mkOption {
+        type = types.int;
+        default = 2;
+        description = "group id for active interfaces";
+      };
     };
     table = mkOption {
       type = types.int;
@@ -142,6 +152,25 @@ in
           };
         };
       }
+      (mkIf (cfg.wireguard.enable) {
+        environment.etc."ranet/config.json".text = builtins.toJSON {
+          vrf = "overlay";
+          mtu = cfg.wireguard.mtu;
+          prefix = cfg.wireguard.interfacePrefix;
+          fwmark = cfg.wireguard.firewallMark;
+          stale_group = cfg.wireguard.staleGroup;
+          active_group = cfg.wireguard.activeGroup;
+          peers = map
+            (peer: {
+              public_key = peer.publicKey;
+              address_family = peer.addressFamily;
+              endpoint = peer.endpoint;
+              send_port = peer.sendPort;
+              persistent_keepalive = peer.persistentKeepalive;
+            })
+            cfg.wireguard.peers;
+        };
+      })
       (mkIf (cfg.preset) (
         let
           overlayNetwork = myvars.networks.overlayNetwork;
