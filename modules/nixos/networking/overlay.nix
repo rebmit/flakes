@@ -75,15 +75,28 @@ in
       default = 2000;
       description = "routing table number for the vrf interfaces";
     };
-    address = mkOption {
+    address4 = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      description = "list of addresses to be added to the vrf interfaces";
+      description = "list of ipv4 addresses to be added to the vrf interfaces";
+    };
+    address6 = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = "list of ipv6 addresses to be added to the vrf interfaces";
     };
     preset = mkOption {
       type = types.bool;
       default = true;
       description = "whether to use preset configratuion based on myvars";
+    };
+    bird = {
+      enable = mkEnableOption "bird integration";
+      pattern = mkOption {
+        type = types.str;
+        default = "ranet*";
+        description = "pattern for wireguard interfaces";
+      };
     };
   };
 
@@ -147,7 +160,7 @@ in
         systemd.network.networks = {
           overlay = {
             name = config.systemd.network.netdevs.overlay.netdevConfig.Name;
-            address = cfg.address;
+            address = cfg.address4 ++ cfg.address6;
             linkConfig.RequiredForOnline = false;
           };
         };
@@ -191,7 +204,64 @@ in
           reloadTriggers = [ config.environment.etc."ranet/config.json".source ];
         };
       })
-      (mkIf (cfg.preset) (
+      (mkIf cfg.bird.enable {
+        services.bird2 = {
+          enable = true;
+          config = ''
+            ipv4 table tab4;
+            ipv6 sadr table tab6;
+            protocol device {
+              scan time 5;
+            }
+            protocol static {
+              ipv4;
+              ${concatStringsSep "\n" (map (addr4: ''
+                route ${addr4} via "overlay";
+              '') cfg.address4)}
+            }
+            protocol static {
+              ipv6 sadr;
+              ${concatStringsSep "\n" (map (addr6: ''
+                route ${addr6} from ::/0 via "overlay";
+              '') cfg.address6)}
+            }
+            protocol kernel {
+              kernel table ${toString cfg.table};
+              ipv4 {
+                export all;
+                import none;
+              };
+            }
+            protocol kernel {
+              kernel table ${toString cfg.table};
+              ipv6 sadr {
+                export all;
+                import none;
+              };
+            }
+            protocol babel {
+              vrf "overlay";
+              ipv4 {
+                export all;
+                import all;
+              };
+              ipv6 sadr {
+                export all;
+                import all;
+              };
+              randomize router id;
+              interface "${cfg.bird.pattern}" {
+                type tunnel;
+                rxcost 32;
+                hello interval 20 s;
+                rtt cost 1024;
+                rtt max 1024 ms;
+              };
+            }
+          '';
+        };
+      })
+      (mkIf cfg.preset (
         let
           overlayNetwork = myvars.networks.overlayNetwork;
           hostName = config.networking.hostName;
@@ -237,8 +307,10 @@ in
         in
         {
           custom.networking.overlay = {
-            address = [
+            address4 = [
               (overlayNetwork.nodes."${hostName}".ipv4)
+            ];
+            address6 = [
               (overlayNetwork.nodes."${hostName}".ipv6)
             ];
             wireguard = {
@@ -246,6 +318,10 @@ in
               privateKeyPath = config.sops.secrets.overlay-wireguard-privatekey.path;
               inherit (overlayNetwork.meta.wireguard) mtu interfacePrefix firewallMark;
               inherit peers;
+            };
+            bird = {
+              enable = true;
+              pattern = "${cfg.wireguard.interfacePrefix}*";
             };
           };
         }
