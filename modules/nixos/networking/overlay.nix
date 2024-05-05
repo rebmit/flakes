@@ -1,4 +1,4 @@
-{ config, pkgs, lib, myvars, ... }:
+{ config, pkgs, lib, myvars, ranet, ... }:
 with lib;
 let
   cfg = config.custom.networking.overlay;
@@ -153,6 +153,11 @@ in
         };
       }
       (mkIf (cfg.wireguard.enable) {
+        environment.systemPackages = with pkgs; [
+          wireguard-tools
+          ranet.packages.x86_64-linux.default
+        ];
+
         environment.etc."ranet/config.json".text = builtins.toJSON {
           vrf = "overlay";
           mtu = cfg.wireguard.mtu;
@@ -169,6 +174,20 @@ in
               persistent_keepalive = peer.persistentKeepalive;
             })
             cfg.wireguard.peers;
+        };
+
+        systemd.services.overlay = {
+          path = [ ranet.packages.x86_64-linux.default ];
+          script = "ranet -c /etc/ranet/config.json -k ${cfg.wireguard.privateKeyPath} up";
+          reload = "ranet -c /etc/ranet/config.json -k ${cfg.wireguard.privateKeyPath} up";
+          preStop = "ranet -c /etc/ranet/config.json -k ${cfg.wireguard.privateKeyPath} down";
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+          };
+          wants = [ "network-online.target" ];
+          after = [ "network-online.target" ];
+          wantedBy = [ "multi-user.target" ];
         };
       })
       (mkIf (cfg.preset) (

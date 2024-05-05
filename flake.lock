@@ -503,11 +503,11 @@
         "sops-nix": "sops-nix"
       },
       "locked": {
-        "lastModified": 1714920326,
-        "narHash": "sha256-T++/M6ZrGMBmfoEJkzCT0WSIlcJdafD18MWLcYt8vrQ=",
+        "lastModified": 1714936638,
+        "narHash": "sha256-omEhouLod7/K5Myvyqu4NeOhduSbKJsTg60A+m/uyqw=",
         "ref": "refs/heads/master",
-        "rev": "3614fd13b59877c5917ab3297def1ce58d7b2ef0",
-        "revCount": 34,
+        "rev": "1609e68b2bc33c33f11e42f7e80e116ee2c29970",
+        "revCount": 35,
         "type": "git",
         "url": "ssh://git@github.com/rebmit/secrets.git"
       },
@@ -649,6 +649,30 @@
         "type": "github"
       }
     },
+    "ranet": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1714935770,
+        "narHash": "sha256-xb91fM0ab8hU4DKDhNJz+OcjFnpQfFONOkBDFcvWBu4=",
+        "owner": "rebmit",
+        "repo": "ranet",
+        "rev": "e82b391468fe8fdc95538b785222281092a83f6e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rebmit",
+        "ref": "wireguard",
+        "repo": "ranet",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "ags": "ags",
@@ -664,7 +688,8 @@
         "mysecrets": "mysecrets",
         "nix-colors": "nix-colors",
         "nixos-generators": "nixos-generators",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "ranet": "ranet"
       }
     },
     "rust-overlay": {
