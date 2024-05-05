@@ -5,7 +5,10 @@
     ]
     ++ (mylib.getItemPaths ./. "default.nix");
 
-  custom.cloud.linode.enable = true;
+  custom = {
+    cloud.linode.enable = true;
+    networking.overlay.enable = true;
+  };
 
   networking.hostName = "reisen-nrt0";
 

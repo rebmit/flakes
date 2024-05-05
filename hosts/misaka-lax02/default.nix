@@ -6,7 +6,10 @@
     ]
     ++ (mylib.getItemPaths ./. "default.nix");
 
-  custom.cloud.misaka.enable = true;
+  custom = {
+    cloud.misaka.enable = true;
+    networking.overlay.enable = true;
+  };
 
   networking.hostName = "misaka-lax02";
 
