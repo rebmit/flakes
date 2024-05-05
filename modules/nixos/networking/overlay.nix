@@ -194,6 +194,7 @@ in
             ];
             wireguard = {
               enable = true;
+              privateKeyPath = config.sops.secrets.overlay-wireguard-privatekey.path;
               inherit (overlayNetwork.meta.wireguard) mtu interfacePrefix firewallMark;
               inherit peers;
             };

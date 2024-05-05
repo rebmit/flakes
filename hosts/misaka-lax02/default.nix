@@ -3,6 +3,7 @@
     [
       self.nixosModules.default
       mysecrets.nixosModules.secrets.misaka
+      mysecrets.nixosModules.networks.misaka-lax02
     ]
     ++ (mylib.getItemPaths ./. "default.nix");
 

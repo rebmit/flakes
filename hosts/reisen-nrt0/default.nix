@@ -1,7 +1,9 @@
-{ self, mylib, ... }: {
+{ self, mylib, mysecrets, ... }: {
   imports =
     [
       self.nixosModules.default
+      mysecrets.nixosModules.secrets.reisen-nrt0
+      mysecrets.nixosModules.networks.reisen-nrt0
     ]
     ++ (mylib.getItemPaths ./. "default.nix");
 
