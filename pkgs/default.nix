@@ -1,10 +1,23 @@
-{ mylib, ... }: {
-  packages = pkgs: mylib.mapItemNames ./. [ "default.nix" "_sources" ] (name: pkgs.${name});
+{ ... }: {
+  packages = pkgs: {
+    inherit (pkgs) bird-babel-rtt
+      chnroutes2
+      metacubexd
+      smartdns-china-list
+      systemd-run-app
+      telegram-desktop-megumifox;
+
+    bird = pkgs.bird-babel-rtt;
+  };
   overlay = final: prev:
     let
       sources = final.callPackage ./_sources/generated.nix { };
     in
     {
+      bird-babel-rtt = final.callPackage (import ./bird-babel-rtt) {
+        source = sources.bird-babel-rtt;
+      };
+
       chnroutes2 = final.callPackage (import ./chnroutes2) {
         source = sources.chnroutes2;
       };

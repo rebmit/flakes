@@ -1,7 +1,27 @@
 {
+    "bird-babel-rtt": {
+        "cargoLocks": null,
+        "date": "2023-02-26",
+        "extract": null,
+        "name": "bird-babel-rtt",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "tohojo",
+            "repo": "bird",
+            "rev": "901f906ac470b318d6598c8b25156b0919f70b2a",
+            "sha256": "sha256-PhRmXPTD2cidDwWkKkpVrdGWNr5kEuCZz1B74VXX0BQ=",
+            "type": "github"
+        },
+        "version": "901f906ac470b318d6598c8b25156b0919f70b2a"
+    },
     "chnroutes2": {
         "cargoLocks": null,
-        "date": "2024-04-30",
+        "date": "2024-05-05",
         "extract": null,
         "name": "chnroutes2",
         "passthru": null,
@@ -13,15 +33,15 @@
             "name": null,
             "owner": "misakaio",
             "repo": "chnroutes2",
-            "rev": "0823f40de93dbcf13f707fb9ea6b1b2c6c9897ac",
-            "sha256": "sha256-zd+sOzxdrdhjddWxsnKsWVE+6IuAG39Qe8AarotzFWk=",
+            "rev": "f26cafc0bdde1cdb8b845dd3d646650ff3fd607a",
+            "sha256": "sha256-kzajBxuJLUBSeypYIWeZZdSkmYyQ1oInwsw8AVN7RKU=",
             "type": "github"
         },
-        "version": "0823f40de93dbcf13f707fb9ea6b1b2c6c9897ac"
+        "version": "f26cafc0bdde1cdb8b845dd3d646650ff3fd607a"
     },
     "dnsmasq-china-list": {
         "cargoLocks": null,
-        "date": "2024-04-30",
+        "date": "2024-05-05",
         "extract": null,
         "name": "dnsmasq-china-list",
         "passthru": null,
@@ -33,11 +53,11 @@
             "name": null,
             "owner": "felixonmars",
             "repo": "dnsmasq-china-list",
-            "rev": "2476df3067ebf518e35097c44bf6f623e95da59a",
-            "sha256": "sha256-CUuPjzC/O0XOM0H0CanYzbC95DjpMR7WeeFZ3NLkLls=",
+            "rev": "f4968899735b5446e44a383e0d492745abfc59c0",
+            "sha256": "sha256-RC7KkH3WkvQ/fTf/ToJgn/VIjP2YJu+qfO79IqSPkCc=",
             "type": "github"
         },
-        "version": "2476df3067ebf518e35097c44bf6f623e95da59a"
+        "version": "f4968899735b5446e44a383e0d492745abfc59c0"
     },
     "metacubexd": {
         "cargoLocks": null,
@@ -56,7 +76,7 @@
     },
     "telegram-desktop-megumifox": {
         "cargoLocks": null,
-        "date": "2024-05-01",
+        "date": "2024-05-05",
         "extract": null,
         "name": "telegram-desktop-megumifox",
         "passthru": null,
@@ -65,8 +85,8 @@
             "name": null,
             "sha256": "sha256-IQiyJPbFZ0XSSZbcMYS0J1dej5G5LRx4qB/frW7QtnA=",
             "type": "url",
-            "url": "https://raw.githubusercontent.com/archlinuxcn/repo/9f037216b0f0fc44515503374b3278219a2c71cf/archlinuxcn/telegram-desktop-megumifox/0001-Use-font-from-environment-variables.patch"
+            "url": "https://raw.githubusercontent.com/archlinuxcn/repo/8ae4acc5c5332ec4d213aec3f6eff323dfdf4dd0/archlinuxcn/telegram-desktop-megumifox/0001-Use-font-from-environment-variables.patch"
         },
-        "version": "9f037216b0f0fc44515503374b3278219a2c71cf"
+        "version": "8ae4acc5c5332ec4d213aec3f6eff323dfdf4dd0"
     }
 }
