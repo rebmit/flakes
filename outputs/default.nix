@@ -2,12 +2,13 @@
 , nixpkgs
 , git-hooks
 , flake-utils
+, mysecrets
 , ...
 } @ inputs:
 let
   inherit (nixpkgs) lib;
   mylib = import ../lib { inherit lib; };
-  myvars = import ../vars { inherit lib mylib; };
+  myvars = import ../vars { inherit lib mylib mysecrets; };
   mypkgs = import ../pkgs { inherit lib mylib; };
 
   genSpecialArgs = system:
@@ -77,7 +78,7 @@ flake-utils.lib.eachSystem allSystemNames
     }
   )
   // {
-  debugAttrs = { inherit nixosSystems allSystems allSystemNames; };
+  debugAttrs = { inherit mylib myvars mypkgs nixosSystems allSystems allSystemNames; };
 
   homeManagerModules = import ../modules/home-manager;
   nixosModules = import ../modules/nixos;

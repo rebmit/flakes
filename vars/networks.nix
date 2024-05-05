@@ -1,5 +1,49 @@
-{ mylib, lib }: rec {
-  homeNetwork = {
+{ mysecrets, ... }:
+let
+  generateLink = addressFamily: srcName: destName: { inherit addressFamily srcName destName; };
+  overlayNetworkMeta = mysecrets.data.networks.overlayNetwork;
+in
+{
+  overlayNetwork = {
+    advertiseRoutes = {
+      ipv4 = [ "100.64.0.0/16" ];
+      ipv6 = [ "fd82:7565:0f3a:891b::/64" ];
+    };
+
+    nodes = {
+      reisen-nrt0 = {
+        fqdn = "reisen-nrt0.link.rebmit.internal";
+        ipv4 = "100.64.0.1/32";
+        ipv6 = "fd82:7565:0f3a:891b:8d3a:6b73:fcca:49bf/128";
+        inherit (overlayNetworkMeta.nodes.reisen-nrt0) meta;
+      };
+      reisen-sin0 = {
+        fqdn = "reisen-sin0.link.rebmit.internal";
+        ipv4 = "100.64.0.2/32";
+        ipv6 = "fd82:7565:0f3a:891b:d2f0:d353:9cf6:22c8/128";
+        inherit (overlayNetworkMeta.nodes.reisen-sin0) meta;
+      };
+      misaka-lax02 = {
+        fqdn = "misaka-lax02.link.rebmit.internal";
+        ipv4 = "100.64.0.3/32";
+        ipv6 = "fd82:7565:0f3a:891b:16c6:3874:2e4e:d07a/128";
+        inherit (overlayNetworkMeta.nodes.misaka-lax02) meta;
+      };
+    };
+
+    links = [
+      (generateLink "ip4" "reisen-nrt0" "reisen-sin0")
+      (generateLink "ip6" "reisen-nrt0" "reisen-sin0")
+      (generateLink "ip4" "reisen-nrt0" "misaka-lax02")
+      (generateLink "ip6" "reisen-nrt0" "misaka-lax02")
+      (generateLink "ip4" "reisen-sin0" "misaka-lax02")
+      (generateLink "ip6" "reisen-sin0" "misaka-lax02")
+    ];
+
+    inherit (overlayNetworkMeta) meta;
+  };
+
+  homeNetwork = rec {
     advertiseRoutes = {
       ipv4 = [ "10.224.0.0/20" ];
     };
@@ -35,8 +79,8 @@
       };
     };
 
-    nameserver = homeNetwork.nodes.flandre-eq59-smartdns;
-    gateway = homeNetwork.nodes.flandre-eq59-gateway;
+    nameserver = nodes.flandre-eq59-smartdns;
+    gateway = nodes.flandre-eq59-gateway;
 
     dhcp4 = {
       subnet = "10.224.0.0/20";

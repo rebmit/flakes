@@ -1,4 +1,4 @@
-{ mylib, lib }: {
+{ mylib, lib, mysecrets }: {
   username = "rebmit";
-  networks = import ./networks.nix { inherit lib mylib; };
+  networks = import ./networks.nix { inherit lib mylib mysecrets; };
 }
