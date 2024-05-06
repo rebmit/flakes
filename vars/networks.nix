@@ -29,6 +29,12 @@ in
         ipv6 = "fd82:7565:0f3a:891b:16c6:3874:2e4e:d07a/128";
         inherit (overlayNetworkMeta.nodes.misaka-lax02) meta;
       };
+      flandre-eq59 = {
+        fqdn = "flandre-eq59-overlay.link.rebmit.internal";
+        ipv4 = "100.64.1.1/32";
+        ipv6 = "fd82:7565:0f3a:891b:05ce:6285:094d:d50c/128";
+        inherit (overlayNetworkMeta.nodes.flandre-eq59) meta;
+      };
     };
 
     links = [
@@ -38,6 +44,8 @@ in
       (generateLink "ip6" "reisen-nrt0" "misaka-lax02")
       (generateLink "ip4" "reisen-sin0" "misaka-lax02")
       (generateLink "ip6" "reisen-sin0" "misaka-lax02")
+      (generateLink "ip4" "flandre-eq59" "reisen-nrt0")
+      (generateLink "ip4" "flandre-eq59" "reisen-sin0")
     ];
 
     inherit (overlayNetworkMeta) meta;
@@ -68,10 +76,6 @@ in
       flandre-eq59-gateway = {
         fqdn = "flandre-eq59-gateway.link.rebmit.internal";
         ipv4 = "10.224.0.5/20";
-      };
-      flandre-eq59-wireguard = {
-        fqdn = "flandre-eq59-wireguard.link.rebmit.internal";
-        ipv4 = "10.224.0.6/20";
       };
       marisa-7d76 = {
         fqdn = "marisa-7d76.link.rebmit.internal";

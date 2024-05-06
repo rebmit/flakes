@@ -8,6 +8,7 @@ in
   imports =
     [
       mysecrets.nixosModules.secrets.flandre
+      mysecrets.nixosModules.networks.flandre-eq59
     ]
     ++ (mylib.getItemPaths ./. "default.nix");
 
@@ -17,6 +18,7 @@ in
       enable = true;
       device = "/dev/disk/by-path/pci-0000:00:17.0-ata-1";
     };
+    networking.overlay.enable = true;
   };
 
   boot.loader = {
