@@ -26,6 +26,7 @@ let
       };
     };
   };
+  stateful = config.systemd.network.netdevs.stateful.vrfConfig.Table;
 in
 {
   options.custom.networking.overlay = {
@@ -92,6 +93,39 @@ in
     };
     bird = {
       enable = mkEnableOption "bird integration";
+      exit = {
+        enable = mkEnableOption "exit node";
+        overlayNetwork4 = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          description = "ipv4 prefix of the overlay network";
+        };
+        overlayNetwork6 = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          description = "ipv6 prefix of the overlay network";
+        };
+        globalNetwork4 = mkOption {
+          type = types.listOf types.str;
+          default = cfg.bird.exit.overlayNetwork4;
+          description = "ipv4 prefix of the global network";
+        };
+        globalNetwork6 = mkOption {
+          type = types.listOf types.str;
+          default = cfg.bird.exit.overlayNetwork6;
+          description = "ipv6 prefix of the global network";
+        };
+        prefix4 = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          description = "ipv4 prefix to be announced for local node";
+        };
+        prefix6 = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          description = "ipv6 prefix to be announced for local node";
+        };
+      };
       pattern = mkOption {
         type = types.str;
         default = "ranet*";
@@ -117,6 +151,14 @@ in
           "net.ipv4.tcp_l3mdev_accept" = 0;
           "net.ipv4.udp_l3mdev_accept" = 0;
           "net.ipv4.raw_l3mdev_accept" = 0;
+        };
+
+        environment.etc."iproute2/rt_tables.d/overlay.conf" = {
+          mode = "0644";
+          text = ''
+            ${toString cfg.table} overlay
+            ${toString stateful} stateful
+          '';
         };
 
         systemd.services.overlay-rules = {
@@ -155,12 +197,20 @@ in
             netdevConfig = { Kind = "vrf"; Name = "overlay"; };
             vrfConfig = { Table = cfg.table + 0; };
           };
+          stateful = {
+            netdevConfig = { Kind = "vrf"; Name = "stateful"; };
+            vrfConfig = { Table = cfg.table + 1; };
+          };
         };
 
         systemd.network.networks = {
           overlay = {
             name = config.systemd.network.netdevs.overlay.netdevConfig.Name;
             address = cfg.address4 ++ cfg.address6;
+            linkConfig.RequiredForOnline = false;
+          };
+          stateful = {
+            name = config.systemd.network.netdevs.stateful.netdevConfig.Name;
             linkConfig.RequiredForOnline = false;
           };
         };
@@ -208,26 +258,61 @@ in
         services.bird2 = {
           enable = true;
           config = ''
-            ipv4 table tab4;
-            ipv6 sadr table tab6;
+            ipv4 table overlay4;
+            ipv6 sadr table overlay6;
             protocol device {
               scan time 5;
             }
-            protocol static {
-              ipv4;
-              ${concatStringsSep "\n" (map (addr4: ''
-                route ${addr4} via "overlay";
-              '') cfg.address4)}
+            ${optionalString cfg.bird.exit.enable ''
+            ipv4 table stateful4;
+            ipv6 table stateful6;
+            protocol pipe stateful4_pipe {
+              table stateful4;
+              peer table master4;
+              import all;
+              export none;
             }
-            protocol static {
-              ipv6 sadr;
-              ${concatStringsSep "\n" (map (addr6: ''
-                route ${addr6} from ::/0 via "overlay";
-              '') cfg.address6)}
+            protocol pipe stateful6_pipe {
+              table stateful6;
+              peer table master6;
+              import all;
+              export none;
             }
+            protocol kernel stateful4_kern {
+              kernel table ${toString stateful};
+              ipv4 {
+                table stateful4;
+                import none;
+                export all;
+              };
+            }
+            protocol kernel stateful6_kern {
+              kernel table ${toString stateful};
+              ipv6 {
+                table stateful6;
+                import none;
+                export all;
+              };
+            }
+            protocol kernel {
+              ipv4 {
+                export where proto = "announce4";
+                import all;
+              };
+              learn;
+            }
+            protocol kernel {
+              ipv6 {
+                export where proto = "announce6";
+                import all;
+              };
+              learn;
+            }
+            ''}
             protocol kernel {
               kernel table ${toString cfg.table};
               ipv4 {
+                table overlay4;
                 export all;
                 import none;
               };
@@ -235,17 +320,48 @@ in
             protocol kernel {
               kernel table ${toString cfg.table};
               ipv6 sadr {
+                table overlay6;
                 export all;
                 import none;
               };
+            }
+            protocol static {
+              ipv4 { table overlay4; };
+              ${concatStringsSep "\n" (map (addr4: ''
+                route ${addr4} via "overlay";
+              '') cfg.address4)}
+              ${optionalString cfg.bird.exit.enable ''
+                ${concatStringsSep "\n" (map (addr4: ''
+                route ${addr4} via "stateful";
+                '') cfg.bird.exit.prefix4)}
+                ${concatStringsSep "\n" (map (addr4: ''
+                route ${addr4} unreachable;
+                '') cfg.bird.exit.overlayNetwork4)}
+              ''}
+            }
+            protocol static {
+              ipv6 sadr { table overlay6; };
+              ${concatStringsSep "\n" (map (addr6: ''
+                route ${addr6} from ::/0 via "overlay";
+              '') cfg.address6)}
+              ${optionalString cfg.bird.exit.enable ''
+                ${concatStringsSep "\n" (map (addr6: ''
+                route ${addr6} from ::/0 via "stateful";
+                '') cfg.bird.exit.prefix6)}
+                ${concatStringsSep "\n" (map (addr6: ''
+                route ${addr6} from ::/0 unreachable;
+                '') cfg.bird.exit.overlayNetwork6)}
+              ''}
             }
             protocol babel {
               vrf "overlay";
               ipv4 {
+                table overlay4;
                 export all;
                 import all;
               };
               ipv6 sadr {
+                table overlay6;
                 export all;
                 import all;
               };
@@ -258,6 +374,20 @@ in
                 rtt max 1024 ms;
               };
             }
+            ${optionalString cfg.bird.exit.enable ''
+            protocol static announce4 {
+              ipv4;
+              ${concatStringsSep "\n" (map (addr4: ''
+              route ${addr4} via "overlay";
+              '') cfg.bird.exit.globalNetwork4)}
+            }
+            protocol static announce6 {
+              ipv6;
+              ${concatStringsSep "\n" (map (addr6: ''
+              route ${addr6} via "overlay";
+              '') cfg.bird.exit.globalNetwork6)}
+            }
+            ''}
           '';
         };
       })
@@ -304,6 +434,19 @@ in
                 if address == null then null else "${address}:${toString sendPort}";
             })
             links;
+          getGlobalAddresses = addressFamily: (
+            builtins.concatLists (builtins.attrValues (lib.mapAttrs'
+              (name: value: {
+                inherit name;
+                value =
+                  if addressFamily == "ip4" then
+                    value.advertiseRoutes.ipv4
+                  else
+                    value.advertiseRoutes.ipv6;
+              })
+              myvars.networks
+            ))
+          );
         in
         {
           custom.networking.overlay = {
@@ -319,9 +462,16 @@ in
               inherit (overlayNetwork.meta.wireguard) mtu interfacePrefix firewallMark;
               inherit peers;
             };
-            bird = {
+            bird = rec {
               enable = true;
               pattern = "${cfg.wireguard.interfacePrefix}*";
+              exit.enable = true;
+              exit.prefix4 = overlayNetwork.nodes."${hostName}".routes4;
+              exit.prefix6 = overlayNetwork.nodes."${hostName}".routes6;
+              exit.overlayNetwork4 = overlayNetwork.advertiseRoutes.ipv4;
+              exit.overlayNetwork6 = overlayNetwork.advertiseRoutes.ipv6;
+              exit.globalNetwork4 = builtins.filter (x: !(builtins.elem x exit.prefix4)) (getGlobalAddresses "ip4");
+              exit.globalNetwork6 = builtins.filter (x: !(builtins.elem x exit.prefix6)) (getGlobalAddresses "ip6");
             };
           };
         }
