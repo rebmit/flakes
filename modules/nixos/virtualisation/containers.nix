@@ -203,8 +203,11 @@ in
                 merge = loc: defs: (import "${toString config.nixpkgs}/nixos/lib/eval-config.nix" {
                   modules =
                     let
-                      extraConfig = { options, ... }: {
+                      extraConfig = { self, options, ... }: {
                         _file = "module at ${__curPos.file}:${toString __curPos.line}";
+                        imports = [
+                          self.nixosModules.default
+                        ];
                         config = {
                           nixpkgs =
                             if options.nixpkgs?hostPlatform && host.options.nixpkgs.hostPlatform.isDefined

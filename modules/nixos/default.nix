@@ -48,21 +48,11 @@
       ];
       etc."nix/inputs/nixpkgs".source = "${nixpkgs}";
       variables.EDITOR = "nvim";
-      persistence."/persist" = {
-        directories = [
-          "/var"
-        ];
-        files = [
-          "/etc/machine-id"
-        ];
-      };
     };
 
     programs.fuse.userAllowOther = true;
 
     services.dbus.implementation = "broker";
-
-    users.mutableUsers = false;
 
     environment.stub-ld.enable = false;
 

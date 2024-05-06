@@ -30,6 +30,17 @@ with lib; {
       useNetworkd = false;
     };
 
+    environment.persistence."/persist" = {
+      directories = [
+        "/var"
+      ];
+      files = [
+        "/etc/machine-id"
+      ];
+    };
+
+    users.mutableUsers = false;
+
     services = {
       fstrim.enable = true;
       journald = {
