@@ -7,7 +7,7 @@ in
     enable = mkEnableOption "telegram client for linux";
     package = mkOption {
       type = types.package;
-      default = pkgs.telegram-desktop-megumifox;
+      default = pkgs.telegram-desktop;
     };
   };
 

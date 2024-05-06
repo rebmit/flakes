@@ -4,8 +4,7 @@
       chnroutes2
       metacubexd
       smartdns-china-list
-      systemd-run-app
-      telegram-desktop-megumifox;
+      systemd-run-app;
 
     bird = pkgs.bird-babel-rtt;
   };
@@ -31,9 +30,5 @@
       };
 
       systemd-run-app = final.callPackage (import ./systemd-run-app) { };
-
-      telegram-desktop-megumifox = final.callPackage (import ./telegram-desktop-megumifox) {
-        source = sources.telegram-desktop-megumifox;
-      };
     };
 }

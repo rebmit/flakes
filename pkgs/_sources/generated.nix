@@ -15,15 +15,15 @@
   };
   chnroutes2 = {
     pname = "chnroutes2";
-    version = "f26cafc0bdde1cdb8b845dd3d646650ff3fd607a";
+    version = "be792ce8a6f9197ddb1a336bbd7720cd159ea6a4";
     src = fetchFromGitHub {
       owner = "misakaio";
       repo = "chnroutes2";
-      rev = "f26cafc0bdde1cdb8b845dd3d646650ff3fd607a";
+      rev = "be792ce8a6f9197ddb1a336bbd7720cd159ea6a4";
       fetchSubmodules = false;
-      sha256 = "sha256-kzajBxuJLUBSeypYIWeZZdSkmYyQ1oInwsw8AVN7RKU=";
+      sha256 = "sha256-uaXcIuQLInEWrqFvRdfiTvtahkB9i+YYjxbOULZRwlE=";
     };
-    date = "2024-05-05";
+    date = "2024-05-06";
   };
   dnsmasq-china-list = {
     pname = "dnsmasq-china-list";
@@ -44,14 +44,5 @@
       url = "https://github.com/MetaCubeX/metacubexd/releases/download/v1.138.1/compressed-dist.tgz";
       sha256 = "sha256-l2mcb2optvgtfzma/Ix63Y8BxXC6CsGoyIIMoOvD074=";
     };
-  };
-  telegram-desktop-megumifox = {
-    pname = "telegram-desktop-megumifox";
-    version = "8ae4acc5c5332ec4d213aec3f6eff323dfdf4dd0";
-    src = fetchurl {
-      url = "https://raw.githubusercontent.com/archlinuxcn/repo/8ae4acc5c5332ec4d213aec3f6eff323dfdf4dd0/archlinuxcn/telegram-desktop-megumifox/0001-Use-font-from-environment-variables.patch";
-      sha256 = "sha256-IQiyJPbFZ0XSSZbcMYS0J1dej5G5LRx4qB/frW7QtnA=";
-    };
-    date = "2024-05-05";
   };
 }

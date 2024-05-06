@@ -21,7 +21,7 @@
     },
     "chnroutes2": {
         "cargoLocks": null,
-        "date": "2024-05-05",
+        "date": "2024-05-06",
         "extract": null,
         "name": "chnroutes2",
         "passthru": null,
@@ -33,11 +33,11 @@
             "name": null,
             "owner": "misakaio",
             "repo": "chnroutes2",
-            "rev": "f26cafc0bdde1cdb8b845dd3d646650ff3fd607a",
-            "sha256": "sha256-kzajBxuJLUBSeypYIWeZZdSkmYyQ1oInwsw8AVN7RKU=",
+            "rev": "be792ce8a6f9197ddb1a336bbd7720cd159ea6a4",
+            "sha256": "sha256-uaXcIuQLInEWrqFvRdfiTvtahkB9i+YYjxbOULZRwlE=",
             "type": "github"
         },
-        "version": "f26cafc0bdde1cdb8b845dd3d646650ff3fd607a"
+        "version": "be792ce8a6f9197ddb1a336bbd7720cd159ea6a4"
     },
     "dnsmasq-china-list": {
         "cargoLocks": null,
@@ -73,20 +73,5 @@
             "url": "https://github.com/MetaCubeX/metacubexd/releases/download/v1.138.1/compressed-dist.tgz"
         },
         "version": "v1.138.1"
-    },
-    "telegram-desktop-megumifox": {
-        "cargoLocks": null,
-        "date": "2024-05-05",
-        "extract": null,
-        "name": "telegram-desktop-megumifox",
-        "passthru": null,
-        "pinned": false,
-        "src": {
-            "name": null,
-            "sha256": "sha256-IQiyJPbFZ0XSSZbcMYS0J1dej5G5LRx4qB/frW7QtnA=",
-            "type": "url",
-            "url": "https://raw.githubusercontent.com/archlinuxcn/repo/8ae4acc5c5332ec4d213aec3f6eff323dfdf4dd0/archlinuxcn/telegram-desktop-megumifox/0001-Use-font-from-environment-variables.patch"
-        },
-        "version": "8ae4acc5c5332ec4d213aec3f6eff323dfdf4dd0"
     }
 }
