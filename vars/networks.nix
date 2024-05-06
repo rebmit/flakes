@@ -30,7 +30,7 @@ in
         inherit (overlayNetworkMeta.nodes.misaka-lax02) meta;
       };
       flandre-eq59 = {
-        fqdn = "flandre-eq59-overlay.link.rebmit.internal";
+        fqdn = "flandre-eq59.link.rebmit.internal";
         ipv4 = "100.64.1.1/32";
         ipv6 = "fd82:7565:0f3a:891b:05ce:6285:094d:d50c/128";
         inherit (overlayNetworkMeta.nodes.flandre-eq59) meta;
