@@ -1,4 +1,4 @@
-{ config, lib, mysecrets, ... }:
+{ config, lib, mysecrets, myvars, ... }:
 let
   cfg = config.custom.cloud.common;
 in
@@ -25,6 +25,52 @@ with lib; {
         "/etc/ssh/ssh_host_ed25519_key"
         "/etc/ssh/ssh_host_ed25519_key.pub"
       ];
+    };
+
+    systemd.network = {
+      enable = true;
+      wait-online.enable = false;
+      networks = {
+        "20-wired" = {
+          matchConfig.Name = [ "en*" "eth*" ];
+          DHCP = "yes";
+          networkConfig = {
+            KeepConfiguration = "yes";
+            IPv6AcceptRA = "yes";
+            IPv6PrivacyExtensions = "no";
+          };
+        };
+      };
+    };
+
+    networking.nftables = {
+      enable = true;
+      tables = {
+        blockBogon4 = {
+          family = "ip";
+          content = ''
+            define bogon = {${lib.concatStringsSep "," myvars.constants.bogonAddresses.ipv4}}
+
+            chain mangle {
+              type filter hook prerouting priority mangle; policy accept;
+              iifname "en*" ip daddr $bogon counter drop
+              iifname "eth*" ip daddr $bogon counter drop
+            }
+          '';
+        };
+        blockBogon6 = {
+          family = "ip6";
+          content = ''
+            define bogon = {${lib.concatStringsSep "," myvars.constants.bogonAddresses.ipv6}}
+
+            chain mangle {
+              type filter hook prerouting priority mangle; policy accept;
+              iifname "en*" ip6 daddr $bogon counter drop
+              iifname "eth*" ip6 daddr $bogon counter drop
+            }
+          '';
+        };
+      };
     };
 
     boot = {

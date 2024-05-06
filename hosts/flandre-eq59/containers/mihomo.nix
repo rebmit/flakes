@@ -45,7 +45,7 @@ in
             family = "ip";
             content = ''
               define internal_addr = {${lib.concatStringsSep "," homeNetwork.advertiseRoutes.ipv4}}
-              define private_addr = {${lib.concatStringsSep "," myvars.networks.constants.privateAddresses.ipv4}}
+              define private_addr = {${lib.concatStringsSep "," myvars.constants.bogonAddresses.ipv4}}
 
               chain mangle_proxy {
                 ip daddr $private_addr counter accept

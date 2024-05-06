@@ -50,7 +50,7 @@ in
             family = "ip";
             content = ''
               define internal_addr = {${lib.concatStringsSep "," homeNetwork.advertiseRoutes.ipv4}}
-              define private_addr = {${lib.concatStringsSep "," myvars.networks.constants.privateAddresses.ipv4}}
+              define private_addr = {${lib.concatStringsSep "," myvars.constants.bogonAddresses.ipv4}}
               include "${pkgs.chnroutes2}/chnroutes.nft"
 
               chain mangle_filter {

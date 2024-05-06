@@ -3,7 +3,7 @@ let
   generateLink = addressFamily: srcName: destName: { inherit addressFamily srcName destName; };
   overlayNetworkMeta = mysecrets.data.networks.overlayNetwork;
 in
-{
+rec {
   overlayNetwork = {
     advertiseRoutes = {
       ipv4 = [ "100.64.0.0/16" ];
@@ -15,24 +15,32 @@ in
         fqdn = "reisen-nrt0.link.rebmit.internal";
         ipv4 = "100.64.0.1/32";
         ipv6 = "fd82:7565:0f3a:891b:8d3a:6b73:fcca:49bf/128";
+        routes4 = [ ];
+        routes6 = [ ];
         inherit (overlayNetworkMeta.nodes.reisen-nrt0) meta;
       };
       reisen-sin0 = {
         fqdn = "reisen-sin0.link.rebmit.internal";
         ipv4 = "100.64.0.2/32";
         ipv6 = "fd82:7565:0f3a:891b:d2f0:d353:9cf6:22c8/128";
+        routes4 = [ ];
+        routes6 = [ ];
         inherit (overlayNetworkMeta.nodes.reisen-sin0) meta;
       };
       misaka-lax02 = {
         fqdn = "misaka-lax02.link.rebmit.internal";
         ipv4 = "100.64.0.3/32";
         ipv6 = "fd82:7565:0f3a:891b:16c6:3874:2e4e:d07a/128";
+        routes4 = [ ];
+        routes6 = [ ];
         inherit (overlayNetworkMeta.nodes.misaka-lax02) meta;
       };
       flandre-eq59 = {
         fqdn = "flandre-eq59.link.rebmit.internal";
         ipv4 = "100.64.1.1/32";
         ipv6 = "fd82:7565:0f3a:891b:05ce:6285:094d:d50c/128";
+        routes4 = homeNetwork.advertiseRoutes.ipv4;
+        routes6 = homeNetwork.advertiseRoutes.ipv6;
         inherit (overlayNetworkMeta.nodes.flandre-eq59) meta;
       };
     };
@@ -54,6 +62,7 @@ in
   homeNetwork = rec {
     advertiseRoutes = {
       ipv4 = [ "10.224.0.0/20" ];
+      ipv6 = [ ];
     };
 
     nodes = {
@@ -92,22 +101,6 @@ in
         {
           pool = "10.224.15.1 - 10.224.15.254";
         }
-      ];
-    };
-  };
-
-  constants = {
-    privateAddresses = {
-      ipv4 = [
-        "10.0.0.0/8"
-        "100.64.0.0/10"
-        "127.0.0.0/8"
-        "169.254.0.0/16"
-        "172.16.0.0/12"
-        "192.168.0.0/16"
-        "224.0.0.0/4"
-        "240.0.0.0/4"
-        "255.255.255.255/32"
       ];
     };
   };
