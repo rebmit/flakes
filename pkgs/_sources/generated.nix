@@ -3,25 +3,25 @@
 {
   bird-babel-rtt = {
     pname = "bird-babel-rtt";
-    version = "901f906ac470b318d6598c8b25156b0919f70b2a";
+    version = "dac2ce348f5ee321c80d219719118292f027c2d2";
     src = fetchFromGitHub {
-      owner = "tohojo";
+      owner = "NickCao";
       repo = "bird";
-      rev = "901f906ac470b318d6598c8b25156b0919f70b2a";
+      rev = "dac2ce348f5ee321c80d219719118292f027c2d2";
       fetchSubmodules = false;
-      sha256 = "sha256-PhRmXPTD2cidDwWkKkpVrdGWNr5kEuCZz1B74VXX0BQ=";
+      sha256 = "sha256-F1UWNwXuISEhhz7BFolUJa7aSKkNpajYH46YqtcknKg=";
     };
-    date = "2023-02-26";
+    date = "2024-03-24";
   };
   chnroutes2 = {
     pname = "chnroutes2";
-    version = "be792ce8a6f9197ddb1a336bbd7720cd159ea6a4";
+    version = "5cbf48dff66774c7c00f65dfd73fb39f3ca20d37";
     src = fetchFromGitHub {
       owner = "misakaio";
       repo = "chnroutes2";
-      rev = "be792ce8a6f9197ddb1a336bbd7720cd159ea6a4";
+      rev = "5cbf48dff66774c7c00f65dfd73fb39f3ca20d37";
       fetchSubmodules = false;
-      sha256 = "sha256-uaXcIuQLInEWrqFvRdfiTvtahkB9i+YYjxbOULZRwlE=";
+      sha256 = "sha256-+7/WrMyfPU2ILniMMSCsWglbY440QDWJxw45eqgsUEE=";
     };
     date = "2024-05-06";
   };

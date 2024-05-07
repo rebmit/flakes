@@ -1,18 +1,18 @@
 { ... }: {
   packages = pkgs: {
-    inherit (pkgs) bird-babel-rtt
+    inherit (pkgs) bird
+      bird-babel-rtt
       chnroutes2
       metacubexd
       smartdns-china-list
       systemd-run-app;
-
-    bird = pkgs.bird-babel-rtt;
   };
   overlay = final: prev:
     let
       sources = final.callPackage ./_sources/generated.nix { };
     in
-    {
+    rec {
+      # packages
       bird-babel-rtt = final.callPackage (import ./bird-babel-rtt) {
         source = sources.bird-babel-rtt;
       };
@@ -30,5 +30,8 @@
       };
 
       systemd-run-app = final.callPackage (import ./systemd-run-app) { };
+
+      # aliases
+      bird = bird-babel-rtt;
     };
 }
