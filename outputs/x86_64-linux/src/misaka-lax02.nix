@@ -8,7 +8,7 @@
 }:
 let
   name = "misaka-lax02";
-  tags = [ "misaka" "infra" ];
+  tags = [ "misaka" "infra" "overlay" ];
   baseModules = {
     nixosModules = map mylib.relativeToRoot [
       "hosts/${name}"

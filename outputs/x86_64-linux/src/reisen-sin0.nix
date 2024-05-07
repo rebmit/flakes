@@ -8,7 +8,7 @@
 }:
 let
   name = "reisen-sin0";
-  tags = [ "reisen" "infra" ];
+  tags = [ "reisen" "infra" "overlay" ];
   baseModules = {
     nixosModules = map mylib.relativeToRoot [
       "hosts/${name}"

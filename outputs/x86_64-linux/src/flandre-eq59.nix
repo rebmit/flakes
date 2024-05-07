@@ -8,7 +8,7 @@
 }:
 let
   name = "flandre-eq59";
-  tags = [ "flandre" "homelab" ];
+  tags = [ "flandre" "homelab" "overlay" ];
   baseModules = {
     nixosModules = map mylib.relativeToRoot [
       "hosts/${name}"
