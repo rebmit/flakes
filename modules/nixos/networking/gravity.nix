@@ -1,7 +1,7 @@
 { config, pkgs, lib, myvars, ranet, ... }:
 with lib;
 let
-  cfg = config.custom.networking.overlay;
+  cfg = config.custom.networking.gravity;
   peerOpts = { ... }: {
     options = {
       publicKey = mkOption {
@@ -30,7 +30,7 @@ let
   stateles = config.systemd.network.netdevs.stateles.vrfConfig.Table;
 in
 {
-  options.custom.networking.overlay = {
+  options.custom.networking.gravity = {
     enable = mkEnableOption ''
       declarative overlay network based on wireguard, heavily inspired by
       <https://github.com/NickCao/flakes/blob/master/modules/gravity/default.nix>
@@ -154,16 +154,16 @@ in
           "net.ipv4.raw_l3mdev_accept" = 0;
         };
 
-        environment.etc."iproute2/rt_tables.d/overlay.conf" = {
+        environment.etc."iproute2/rt_tables.d/gravity.conf" = {
           mode = "0644";
           text = ''
-            ${toString cfg.table} overlay
+            ${toString cfg.table} gravity
             ${toString stateles} stateles
             ${toString stateful} stateful
           '';
         };
 
-        systemd.services.overlay-rules = {
+        systemd.services.gravity-rules = {
           path = with pkgs; [ iproute2 coreutils ];
           script = ''
             ip -4 ru del pref 0 || true
@@ -195,8 +195,8 @@ in
         systemd.network.config.networkConfig.ManageForeignRoutes = false;
 
         systemd.network.netdevs = {
-          overlay = {
-            netdevConfig = { Kind = "vrf"; Name = "overlay"; };
+          gravity = {
+            netdevConfig = { Kind = "vrf"; Name = "gravity"; };
             vrfConfig = { Table = cfg.table + 0; };
           };
           stateful = {
@@ -210,8 +210,8 @@ in
         };
 
         systemd.network.networks = {
-          overlay = {
-            name = config.systemd.network.netdevs.overlay.netdevConfig.Name;
+          gravity = {
+            name = config.systemd.network.netdevs.gravity.netdevConfig.Name;
             address = cfg.address4 ++ cfg.address6;
             linkConfig.RequiredForOnline = false;
           };
@@ -232,7 +232,7 @@ in
         ];
 
         environment.etc."ranet/config.json".text = builtins.toJSON {
-          vrf = "overlay";
+          vrf = "gravity";
           mtu = cfg.wireguard.mtu;
           prefix = cfg.wireguard.interfacePrefix;
           fwmark = cfg.wireguard.firewallMark;
@@ -249,7 +249,7 @@ in
             cfg.wireguard.peers;
         };
 
-        systemd.services.overlay = {
+        systemd.services.gravity = {
           path = [ ranet.packages.x86_64-linux.default ];
           script = "ranet -c /etc/ranet/config.json -k ${cfg.wireguard.privateKeyPath} up";
           reload = "ranet -c /etc/ranet/config.json -k ${cfg.wireguard.privateKeyPath} up";
@@ -370,7 +370,7 @@ in
             protocol static {
               ipv4 { table overlay4; };
               ${concatStringsSep "\n" (map (addr4: ''
-                route ${addr4} via "overlay";
+                route ${addr4} via "gravity";
               '') cfg.address4)}
               ${optionalString cfg.bird.exit.enable ''
                 ${concatStringsSep "\n" (map (addr4: ''
@@ -384,7 +384,7 @@ in
             protocol static {
               ipv6 sadr { table overlay6; };
               ${concatStringsSep "\n" (map (addr6: ''
-                route ${addr6} from ::/0 via "overlay";
+                route ${addr6} from ::/0 via "gravity";
               '') cfg.address6)}
               ${optionalString cfg.bird.exit.enable ''
                 ${concatStringsSep "\n" (map (addr6: ''
@@ -396,7 +396,7 @@ in
               ''}
             }
             protocol babel {
-              vrf "overlay";
+              vrf "gravity";
               ipv4 {
                 table overlay4;
                 export all;
@@ -422,13 +422,13 @@ in
             protocol static announce4 {
               ipv4 { table master4; };
               ${concatStringsSep "\n" (map (addr4: ''
-              route ${addr4} via "overlay";
+              route ${addr4} via "gravity";
               '') cfg.bird.exit.globalNetwork4)}
             }
             protocol static announce6 {
               ipv6 { table master6; };
               ${concatStringsSep "\n" (map (addr6: ''
-              route ${addr6} via "overlay";
+              route ${addr6} via "gravity";
               '') cfg.bird.exit.globalNetwork6)}
             }
             ''}
@@ -493,7 +493,7 @@ in
           );
         in
         {
-          custom.networking.overlay = {
+          custom.networking.gravity = {
             address4 = overlayNetwork.nodes."${hostName}".ipv4;
             address6 = overlayNetwork.nodes."${hostName}".ipv6;
             wireguard = {

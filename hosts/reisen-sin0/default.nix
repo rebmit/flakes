@@ -8,7 +8,7 @@
 
   custom = {
     cloud.linode.enable = true;
-    networking.overlay.enable = true;
+    networking.gravity.enable = true;
   };
 
   networking.hostName = "reisen-sin0";

@@ -8,7 +8,7 @@
 
   custom = {
     cloud.misaka.enable = true;
-    networking.overlay.enable = true;
+    networking.gravity.enable = true;
   };
 
   networking.hostName = "misaka-lax02";

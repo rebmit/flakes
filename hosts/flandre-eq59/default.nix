@@ -18,7 +18,7 @@ in
       enable = true;
       device = "/dev/disk/by-path/pci-0000:00:17.0-ata-1";
     };
-    networking.overlay.enable = true;
+    networking.gravity.enable = true;
   };
 
   boot.loader = {
