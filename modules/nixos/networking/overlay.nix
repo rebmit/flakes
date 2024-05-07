@@ -27,6 +27,7 @@ let
     };
   };
   stateful = config.systemd.network.netdevs.stateful.vrfConfig.Table;
+  stateles = config.systemd.network.netdevs.stateles.vrfConfig.Table;
 in
 {
   options.custom.networking.overlay = {
@@ -157,6 +158,7 @@ in
           mode = "0644";
           text = ''
             ${toString cfg.table} overlay
+            ${toString stateles} stateles
             ${toString stateful} stateful
           '';
         };
@@ -201,6 +203,10 @@ in
             netdevConfig = { Kind = "vrf"; Name = "stateful"; };
             vrfConfig = { Table = cfg.table + 1; };
           };
+          stateles = {
+            netdevConfig = { Kind = "vrf"; Name = "stateles"; };
+            vrfConfig = { Table = cfg.table + 2; };
+          };
         };
 
         systemd.network.networks = {
@@ -211,6 +217,10 @@ in
           };
           stateful = {
             name = config.systemd.network.netdevs.stateful.netdevConfig.Name;
+            linkConfig.RequiredForOnline = false;
+          };
+          stateles = {
+            name = config.systemd.network.netdevs.stateles.netdevConfig.Name;
             linkConfig.RequiredForOnline = false;
           };
         };
@@ -264,8 +274,22 @@ in
               scan time 5;
             }
             ${optionalString cfg.bird.exit.enable ''
+            ipv4 table stateles4;
+            ipv6 table stateles6;
             ipv4 table stateful4;
             ipv6 table stateful6;
+            protocol pipe stateles4_pipe {
+              table stateles4;
+              peer table master4;
+              import all;
+              export none;
+            }
+            protocol pipe stateles6_pipe {
+              table stateles6;
+              peer table master6;
+              import all;
+              export none;
+            }
             protocol pipe stateful4_pipe {
               table stateful4;
               peer table master4;
@@ -277,6 +301,22 @@ in
               peer table master6;
               import all;
               export none;
+            }
+            protocol kernel stateles4_kern {
+              kernel table ${toString stateles};
+              ipv4 {
+                table stateles4;
+                import none;
+                export all;
+              };
+            }
+            protocol kernel stateles6_kern {
+              kernel table ${toString stateles};
+              ipv6 {
+                table stateles6;
+                import none;
+                export all;
+              };
             }
             protocol kernel stateful4_kern {
               kernel table ${toString stateful};
@@ -296,6 +336,7 @@ in
             }
             protocol kernel {
               ipv4 {
+                table master4;
                 export where proto = "announce4";
                 import all;
               };
@@ -303,6 +344,7 @@ in
             }
             protocol kernel {
               ipv6 {
+                table master6;
                 export where proto = "announce6";
                 import all;
               };
@@ -332,7 +374,7 @@ in
               '') cfg.address4)}
               ${optionalString cfg.bird.exit.enable ''
                 ${concatStringsSep "\n" (map (addr4: ''
-                route ${addr4} via "stateful";
+                route ${addr4} via "stateles";
                 '') cfg.bird.exit.prefix4)}
                 ${concatStringsSep "\n" (map (addr4: ''
                 route ${addr4} unreachable;
@@ -346,7 +388,7 @@ in
               '') cfg.address6)}
               ${optionalString cfg.bird.exit.enable ''
                 ${concatStringsSep "\n" (map (addr6: ''
-                route ${addr6} from ::/0 via "stateful";
+                route ${addr6} from ::/0 via "stateles";
                 '') cfg.bird.exit.prefix6)}
                 ${concatStringsSep "\n" (map (addr6: ''
                 route ${addr6} from ::/0 unreachable;
@@ -368,21 +410,23 @@ in
               randomize router id;
               interface "${cfg.bird.pattern}" {
                 type tunnel;
+                link quality etx;
                 rxcost 32;
                 hello interval 20 s;
                 rtt cost 1024;
                 rtt max 1024 ms;
+                rx buffer 2000;
               };
             }
             ${optionalString cfg.bird.exit.enable ''
             protocol static announce4 {
-              ipv4;
+              ipv4 { table master4; };
               ${concatStringsSep "\n" (map (addr4: ''
               route ${addr4} via "overlay";
               '') cfg.bird.exit.globalNetwork4)}
             }
             protocol static announce6 {
-              ipv6;
+              ipv6 { table master6; };
               ${concatStringsSep "\n" (map (addr6: ''
               route ${addr6} via "overlay";
               '') cfg.bird.exit.globalNetwork6)}
@@ -450,12 +494,8 @@ in
         in
         {
           custom.networking.overlay = {
-            address4 = [
-              (overlayNetwork.nodes."${hostName}".ipv4)
-            ];
-            address6 = [
-              (overlayNetwork.nodes."${hostName}".ipv6)
-            ];
+            address4 = overlayNetwork.nodes."${hostName}".ipv4;
+            address6 = overlayNetwork.nodes."${hostName}".ipv6;
             wireguard = {
               enable = true;
               privateKeyPath = config.sops.secrets.overlay-wireguard-privatekey.path;

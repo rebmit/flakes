@@ -62,7 +62,10 @@ in
       };
       "20-brlan" = {
         name = "brlan";
-        address = [ localNode.ipv4 ];
+        address = [
+          localNode.ipv4
+          localNode.ipv6
+        ];
         gateway = [ (mylib.networking.ipv4.cidrToIpAddress homeNetwork.gateway.ipv4) ];
         dns = [ (mylib.networking.ipv4.cidrToIpAddress homeNetwork.nameserver.ipv4) ];
       };
