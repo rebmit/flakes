@@ -202,7 +202,7 @@ in
           };
           vethGravity = {
             name = config.systemd.network.netdevs.vethGravity.netdevConfig.Name;
-            address = cfg.address4 ++ cfg.address6;
+            address = cfg.address6;
             linkConfig.RequiredForOnline = false;
             vrf = [ "gravity" ];
           };
@@ -258,16 +258,8 @@ in
             protocol device {
               scan time 5;
             }
-            ipv4 table gravity4;
+            ipv6 sadr table global6;
             ipv6 sadr table gravity6;
-            protocol kernel {
-              kernel table ${toString cfg.table};
-              ipv4 {
-                table gravity4;
-                export all;
-                import none;
-              };
-            }
             protocol kernel {
               kernel table ${toString cfg.table};
               ipv6 sadr {
@@ -275,15 +267,6 @@ in
                 export all;
                 import none;
               };
-            }
-            protocol static {
-              ipv4 { table gravity4; };
-              ${concatStringsSep "\n" (map (addr4: ''
-                route ${addr4} via "veth-gravity";
-              '') cfg.address4)}
-              ${concatStringsSep "\n" (map (addr4: ''
-                route ${addr4} unreachable;
-              '') cfg.bird.overlayNetwork4)}
             }
             protocol static {
               ipv6 sadr { table gravity6; };
@@ -296,11 +279,6 @@ in
             }
             protocol babel {
               vrf "gravity";
-              ipv4 {
-                table gravity4;
-                export all;
-                import all;
-              };
               ipv6 sadr {
                 table gravity6;
                 export all;
@@ -324,21 +302,8 @@ in
             }
             protocol kernel {
               learn all;
-              ipv4 {
-                table master4;
-                export all;
-                import filter {
-                  ${concatStringsSep "\n" (map (addr4: ''
-                    if net = ${addr4} then accept;
-                  '') cfg.bird.prefix4)}
-                  reject;
-                };
-              };
-            }
-            protocol kernel {
-              learn all;
-              ipv6 {
-                table master6;
+              ipv6 sadr {
+                table global6;
                 export all;
                 import filter {
                   ${concatStringsSep "\n" (map (addr6: ''
@@ -349,13 +314,8 @@ in
               };
             }
             protocol babel {
-              ipv4 {
-                table master4;
-                export all;
-                import all;
-              };
-              ipv6 {
-                table master6;
+              ipv6 sadr {
+                table global6;
                 export all;
                 import all;
               };
