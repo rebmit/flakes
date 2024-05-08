@@ -92,38 +92,28 @@ in
     };
     bird = {
       enable = mkEnableOption "bird integration";
+      prefix4 = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = "ipv4 prefix to be announced for local node";
+      };
+      prefix6 = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = "ipv6 prefix to be announced for local node";
+      };
+      overlayNetwork4 = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = "ipv4 prefix of the overlay network";
+      };
+      overlayNetwork6 = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = "ipv6 prefix of the overlay network";
+      };
       exit = {
         enable = mkEnableOption "exit node";
-        overlayNetwork4 = mkOption {
-          type = types.listOf types.str;
-          default = [ ];
-          description = "ipv4 prefix of the overlay network";
-        };
-        overlayNetwork6 = mkOption {
-          type = types.listOf types.str;
-          default = [ ];
-          description = "ipv6 prefix of the overlay network";
-        };
-        globalNetwork4 = mkOption {
-          type = types.listOf types.str;
-          default = cfg.bird.exit.overlayNetwork4;
-          description = "ipv4 prefix of the global network";
-        };
-        globalNetwork6 = mkOption {
-          type = types.listOf types.str;
-          default = cfg.bird.exit.overlayNetwork6;
-          description = "ipv6 prefix of the global network";
-        };
-        prefix4 = mkOption {
-          type = types.listOf types.str;
-          default = [ ];
-          description = "ipv4 prefix to be announced for local node";
-        };
-        prefix6 = mkOption {
-          type = types.listOf types.str;
-          default = [ ];
-          description = "ipv6 prefix to be announced for local node";
-        };
       };
       pattern = mkOption {
         type = types.str;
@@ -291,12 +281,18 @@ in
               ${concatStringsSep "\n" (map (addr4: ''
                 route ${addr4} via "veth-gravity";
               '') cfg.address4)}
+              ${concatStringsSep "\n" (map (addr4: ''
+                route ${addr4} unreachable;
+              '') cfg.bird.overlayNetwork4)}
             }
             protocol static {
               ipv6 sadr { table gravity6; };
               ${concatStringsSep "\n" (map (addr6: ''
                 route ${addr6} from ::/0 via "veth-gravity";
               '') cfg.address6)}
+              ${concatStringsSep "\n" (map (addr6: ''
+                route ${addr6} from ::/0 unreachable;
+              '') cfg.bird.overlayNetwork6)}
             }
             protocol babel {
               vrf "gravity";
@@ -334,7 +330,7 @@ in
                 import filter {
                   ${concatStringsSep "\n" (map (addr4: ''
                     if net = ${addr4} then accept;
-                  '') cfg.bird.exit.prefix4)}
+                  '') cfg.bird.prefix4)}
                   reject;
                 };
               };
@@ -347,7 +343,7 @@ in
                 import filter {
                   ${concatStringsSep "\n" (map (addr6: ''
                     if net = ${addr6} then accept;
-                  '') cfg.bird.exit.prefix6)}
+                  '') cfg.bird.prefix6)}
                   reject;
                 };
               };
@@ -416,19 +412,6 @@ in
                 if address == null then null else "${address}:${toString sendPort}";
             })
             links;
-          getGlobalAddresses = addressFamily: (
-            builtins.concatLists (builtins.attrValues (lib.mapAttrs'
-              (name: value: {
-                inherit name;
-                value =
-                  if addressFamily == "ip4" then
-                    value.advertiseRoutes.ipv4
-                  else
-                    value.advertiseRoutes.ipv6;
-              })
-              myvars.networks
-            ))
-          );
         in
         {
           custom.networking.gravity = {
@@ -440,16 +423,16 @@ in
               inherit (overlayNetwork.meta.wireguard) mtu interfacePrefix firewallMark;
               inherit peers;
             };
-            bird = rec {
+            bird = {
               enable = true;
               pattern = "${cfg.wireguard.interfacePrefix}*";
-              exit.enable = true;
-              exit.prefix4 = overlayNetwork.nodes."${hostName}".routes4;
-              exit.prefix6 = overlayNetwork.nodes."${hostName}".routes6;
-              exit.overlayNetwork4 = overlayNetwork.advertiseRoutes.ipv4;
-              exit.overlayNetwork6 = overlayNetwork.advertiseRoutes.ipv6;
-              exit.globalNetwork4 = builtins.filter (x: !(builtins.elem x exit.prefix4)) (getGlobalAddresses "ip4");
-              exit.globalNetwork6 = builtins.filter (x: !(builtins.elem x exit.prefix6)) (getGlobalAddresses "ip6");
+              prefix4 = overlayNetwork.nodes."${hostName}".routes4;
+              prefix6 = overlayNetwork.nodes."${hostName}".routes6;
+              overlayNetwork4 = overlayNetwork.advertiseRoutes.ipv4;
+              overlayNetwork6 = overlayNetwork.advertiseRoutes.ipv6;
+              exit = {
+                enable = false;
+              };
             };
           };
         }
