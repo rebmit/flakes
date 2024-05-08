@@ -26,8 +26,6 @@ let
       };
     };
   };
-  stateful = config.systemd.network.netdevs.stateful.vrfConfig.Table;
-  stateles = config.systemd.network.netdevs.stateles.vrfConfig.Table;
 in
 {
   options.custom.networking.gravity = {
@@ -158,8 +156,6 @@ in
           mode = "0644";
           text = ''
             ${toString cfg.table} gravity
-            ${toString stateles} stateles
-            ${toString stateful} stateful
           '';
         };
 
@@ -199,28 +195,29 @@ in
             netdevConfig = { Kind = "vrf"; Name = "gravity"; };
             vrfConfig = { Table = cfg.table + 0; };
           };
-          stateful = {
-            netdevConfig = { Kind = "vrf"; Name = "stateful"; };
-            vrfConfig = { Table = cfg.table + 1; };
+          vethGravity = {
+            netdevConfig = { Kind = "veth"; Name = "veth-gravity"; };
+            peerConfig = { Name = "veth-global"; };
           };
-          stateles = {
-            netdevConfig = { Kind = "vrf"; Name = "stateles"; };
-            vrfConfig = { Table = cfg.table + 2; };
+          vethGlobal = {
+            netdevConfig = { Kind = "veth"; Name = "veth-global"; };
+            peerConfig = { Name = "veth-gravity"; };
           };
         };
 
         systemd.network.networks = {
           gravity = {
             name = config.systemd.network.netdevs.gravity.netdevConfig.Name;
+            linkConfig.RequiredForOnline = false;
+          };
+          vethGravity = {
+            name = config.systemd.network.netdevs.vethGravity.netdevConfig.Name;
             address = cfg.address4 ++ cfg.address6;
             linkConfig.RequiredForOnline = false;
+            vrf = [ "gravity" ];
           };
-          stateful = {
-            name = config.systemd.network.netdevs.stateful.netdevConfig.Name;
-            linkConfig.RequiredForOnline = false;
-          };
-          stateles = {
-            name = config.systemd.network.netdevs.stateles.netdevConfig.Name;
+          vethGlobal = {
+            name = config.systemd.network.netdevs.vethGlobal.netdevConfig.Name;
             linkConfig.RequiredForOnline = false;
           };
         };
@@ -268,93 +265,15 @@ in
         services.bird2 = {
           enable = true;
           config = ''
-            ipv4 table overlay4;
-            ipv6 sadr table overlay6;
             protocol device {
               scan time 5;
             }
-            ${optionalString cfg.bird.exit.enable ''
-            ipv4 table stateles4;
-            ipv6 table stateles6;
-            ipv4 table stateful4;
-            ipv6 table stateful6;
-            protocol pipe stateles4_pipe {
-              table stateles4;
-              peer table master4;
-              import all;
-              export none;
-            }
-            protocol pipe stateles6_pipe {
-              table stateles6;
-              peer table master6;
-              import all;
-              export none;
-            }
-            protocol pipe stateful4_pipe {
-              table stateful4;
-              peer table master4;
-              import all;
-              export none;
-            }
-            protocol pipe stateful6_pipe {
-              table stateful6;
-              peer table master6;
-              import all;
-              export none;
-            }
-            protocol kernel stateles4_kern {
-              kernel table ${toString stateles};
-              ipv4 {
-                table stateles4;
-                import none;
-                export all;
-              };
-            }
-            protocol kernel stateles6_kern {
-              kernel table ${toString stateles};
-              ipv6 {
-                table stateles6;
-                import none;
-                export all;
-              };
-            }
-            protocol kernel stateful4_kern {
-              kernel table ${toString stateful};
-              ipv4 {
-                table stateful4;
-                import none;
-                export all;
-              };
-            }
-            protocol kernel stateful6_kern {
-              kernel table ${toString stateful};
-              ipv6 {
-                table stateful6;
-                import none;
-                export all;
-              };
-            }
-            protocol kernel {
-              ipv4 {
-                table master4;
-                export where proto = "announce4";
-                import all;
-              };
-              learn;
-            }
-            protocol kernel {
-              ipv6 {
-                table master6;
-                export where proto = "announce6";
-                import all;
-              };
-              learn;
-            }
-            ''}
+            ipv4 table gravity4;
+            ipv6 sadr table gravity6;
             protocol kernel {
               kernel table ${toString cfg.table};
               ipv4 {
-                table overlay4;
+                table gravity4;
                 export all;
                 import none;
               };
@@ -362,48 +281,32 @@ in
             protocol kernel {
               kernel table ${toString cfg.table};
               ipv6 sadr {
-                table overlay6;
+                table gravity6;
                 export all;
                 import none;
               };
             }
             protocol static {
-              ipv4 { table overlay4; };
+              ipv4 { table gravity4; };
               ${concatStringsSep "\n" (map (addr4: ''
-                route ${addr4} via "gravity";
+                route ${addr4} via "veth-gravity";
               '') cfg.address4)}
-              ${optionalString cfg.bird.exit.enable ''
-                ${concatStringsSep "\n" (map (addr4: ''
-                route ${addr4} via "stateles";
-                '') cfg.bird.exit.prefix4)}
-                ${concatStringsSep "\n" (map (addr4: ''
-                route ${addr4} unreachable;
-                '') cfg.bird.exit.overlayNetwork4)}
-              ''}
             }
             protocol static {
-              ipv6 sadr { table overlay6; };
+              ipv6 sadr { table gravity6; };
               ${concatStringsSep "\n" (map (addr6: ''
-                route ${addr6} from ::/0 via "gravity";
+                route ${addr6} from ::/0 via "veth-gravity";
               '') cfg.address6)}
-              ${optionalString cfg.bird.exit.enable ''
-                ${concatStringsSep "\n" (map (addr6: ''
-                route ${addr6} from ::/0 via "stateles";
-                '') cfg.bird.exit.prefix6)}
-                ${concatStringsSep "\n" (map (addr6: ''
-                route ${addr6} from ::/0 unreachable;
-                '') cfg.bird.exit.overlayNetwork6)}
-              ''}
             }
             protocol babel {
               vrf "gravity";
               ipv4 {
-                table overlay4;
+                table gravity4;
                 export all;
                 import all;
               };
               ipv6 sadr {
-                table overlay6;
+                table gravity6;
                 export all;
                 import all;
               };
@@ -417,21 +320,56 @@ in
                 rtt max 1024 ms;
                 rx buffer 2000;
               };
+              interface "veth-gravity" {
+                type wired;
+                rxcost 32;
+                hello interval 20 s;
+              };
             }
-            ${optionalString cfg.bird.exit.enable ''
-            protocol static announce4 {
-              ipv4 { table master4; };
-              ${concatStringsSep "\n" (map (addr4: ''
-              route ${addr4} via "gravity";
-              '') cfg.bird.exit.globalNetwork4)}
+            protocol kernel {
+              learn all;
+              ipv4 {
+                table master4;
+                export all;
+                import filter {
+                  ${concatStringsSep "\n" (map (addr4: ''
+                    if net = ${addr4} then accept;
+                  '') cfg.bird.exit.prefix4)}
+                  reject;
+                };
+              };
             }
-            protocol static announce6 {
-              ipv6 { table master6; };
-              ${concatStringsSep "\n" (map (addr6: ''
-              route ${addr6} via "gravity";
-              '') cfg.bird.exit.globalNetwork6)}
+            protocol kernel {
+              learn all;
+              ipv6 {
+                table master6;
+                export all;
+                import filter {
+                  ${concatStringsSep "\n" (map (addr6: ''
+                    if net = ${addr6} then accept;
+                  '') cfg.bird.exit.prefix6)}
+                  reject;
+                };
+              };
             }
-            ''}
+            protocol babel {
+              ipv4 {
+                table master4;
+                export all;
+                import all;
+              };
+              ipv6 {
+                table master6;
+                export all;
+                import all;
+              };
+              randomize router id;
+              interface "veth-global" {
+                type wired;
+                rxcost 32;
+                hello interval 20 s;
+              };
+            }
           '';
         };
       })
