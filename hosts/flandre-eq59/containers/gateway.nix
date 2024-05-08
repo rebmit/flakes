@@ -1,9 +1,11 @@
 { lib, pkgs, myvars, mylib, ... }:
 let
   homeNetwork = myvars.networks.homeNetwork;
+  overlayNetwork = myvars.networks.overlayNetwork;
   localNode = homeNetwork.nodes."flandre-eq59-gateway";
   routerNode = homeNetwork.nodes."flandre-eq59-router";
   mihomoNode = homeNetwork.nodes."flandre-eq59-mihomo";
+  overlayNode = homeNetwork.nodes."flandre-eq59";
   routerRoute = {
     Table = 101;
     FirewallMark = 114;
@@ -17,6 +19,13 @@ let
     Priority = 10200;
     Destination = "0.0.0.0/0";
     Gateway = (mylib.networking.ipv4.cidrToIpAddress mihomoNode.ipv4);
+  };
+  overlayRoute = {
+    Table = 103;
+    FirewallMark = 1919;
+    Priority = 10300;
+    Destination = "0.0.0.0/0";
+    Gateway = (mylib.networking.ipv4.cidrToIpAddress overlayNode.ipv4);
   };
 in
 {
@@ -51,9 +60,11 @@ in
             content = ''
               define internal_addr = {${lib.concatStringsSep "," homeNetwork.advertiseRoutes.ipv4}}
               define private_addr = {${lib.concatStringsSep "," myvars.constants.bogonAddresses.ipv4}}
+              define overlay_addr = {${lib.concatStringsSep "," overlayNetwork.advertiseRoutes.ipv4}}
               include "${pkgs.chnroutes2}/chnroutes.nft"
 
               chain mangle_filter {
+                ip daddr { $overlay_addr } meta mark set ${toString overlayRoute.FirewallMark} counter accept
                 ip daddr { $private_addr, $chnroutes2 } meta mark set ${toString routerRoute.FirewallMark} counter accept
                 ip protocol { tcp, udp, icmp } meta mark set ${toString mihomoRoute.FirewallMark} counter accept
               }
@@ -80,13 +91,13 @@ in
               (route: {
                 routeConfig = { inherit (route) Table Destination Gateway; };
               })
-              [ routerRoute mihomoRoute ]
+              [ routerRoute mihomoRoute overlayRoute ]
             );
             routingPolicyRules = (map
               (route: {
                 routingPolicyRuleConfig = { inherit (route) Table FirewallMark Priority; };
               })
-              [ routerRoute mihomoRoute ]
+              [ routerRoute mihomoRoute overlayRoute ]
             );
           };
         };
