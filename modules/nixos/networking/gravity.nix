@@ -39,35 +39,10 @@ in
         type = types.str;
         description = "private key path for the local node";
       };
-      mtu = mkOption {
-        type = types.int;
-        default = 1400;
-        description = "interface mtu";
-      };
-      firewallMark = mkOption {
-        type = types.int;
-        default = 447;
-        description = "wireguard fwmark for all interfaces";
-      };
-      interfacePrefix = mkOption {
-        type = types.str;
-        default = "ranet";
-        description = "prefix of interface name";
-      };
       peers = mkOption {
         type = with types; listOf (submodule peerOpts);
         default = { };
         description = "remote peers of the local node";
-      };
-      staleGroup = mkOption {
-        type = types.int;
-        default = 1;
-        description = "group id for stale interfaces";
-      };
-      activeGroup = mkOption {
-        type = types.int;
-        default = 2;
-        description = "group id for active interfaces";
       };
     };
     table = mkOption {
@@ -99,11 +74,6 @@ in
       };
       exit = {
         enable = mkEnableOption "exit node";
-      };
-      pattern = mkOption {
-        type = types.str;
-        default = "ranet*";
-        description = "pattern for wireguard interfaces";
       };
     };
   };
@@ -222,11 +192,11 @@ in
 
         environment.etc."ranet/config.json".text = builtins.toJSON {
           vrf = "gravity";
-          mtu = cfg.wireguard.mtu;
-          prefix = cfg.wireguard.interfacePrefix;
-          fwmark = cfg.wireguard.firewallMark;
-          stale_group = cfg.wireguard.staleGroup;
-          active_group = cfg.wireguard.activeGroup;
+          mtu = 1400;
+          prefix = "ranet";
+          fwmark = 447;
+          stale_group = 1;
+          active_group = 2;
           peers = map
             (peer: {
               public_key = peer.publicKey;
@@ -290,7 +260,7 @@ in
                 import all;
               };
               randomize router id;
-              interface "${cfg.bird.pattern}" {
+              interface "ranet*" {
                 type tunnel;
                 link quality etx;
                 rxcost 32;
@@ -312,7 +282,7 @@ in
               '') cfg.bird.prefix)}
             }
             protocol kernel {
-              learn all;
+              metric 512;
               ipv6 {
                 table global6;
                 export all;
@@ -385,12 +355,10 @@ in
             wireguard = {
               enable = true;
               privateKeyPath = config.sops.secrets.overlay-wireguard-privatekey.path;
-              inherit (overlayNetwork.meta.wireguard) mtu interfacePrefix firewallMark;
               inherit peers;
             };
             bird = {
               enable = true;
-              pattern = "${cfg.wireguard.interfacePrefix}*";
               prefix = overlayNetwork.nodes."${hostName}".routes6;
               network = overlayNetwork.advertiseRoutes.ipv6;
               exit = {
