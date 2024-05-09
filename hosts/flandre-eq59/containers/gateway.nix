@@ -60,11 +60,9 @@ in
             content = ''
               define internal_addr = {${lib.concatStringsSep "," homeNetwork.advertiseRoutes.ipv4}}
               define private_addr = {${lib.concatStringsSep "," myvars.constants.bogonAddresses.ipv4}}
-              define overlay_addr = {${lib.concatStringsSep "," overlayNetwork.advertiseRoutes.ipv4}}
               include "${pkgs.chnroutes2}/chnroutes.nft"
 
               chain mangle_filter {
-                ip daddr { $overlay_addr } meta mark set ${toString overlayRoute.FirewallMark} counter accept
                 ip daddr { $private_addr, $chnroutes2 } meta mark set ${toString routerRoute.FirewallMark} counter accept
                 ip protocol { tcp, udp, icmp } meta mark set ${toString mihomoRoute.FirewallMark} counter accept
               }

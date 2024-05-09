@@ -75,12 +75,7 @@ in
       default = 2000;
       description = "routing table number for the vrf interfaces";
     };
-    address4 = mkOption {
-      type = types.listOf types.str;
-      default = [ ];
-      description = "list of ipv4 addresses to be added to the vrf interfaces";
-    };
-    address6 = mkOption {
+    address = mkOption {
       type = types.listOf types.str;
       default = [ ];
       description = "list of ipv6 addresses to be added to the vrf interfaces";
@@ -92,22 +87,12 @@ in
     };
     bird = {
       enable = mkEnableOption "bird integration";
-      prefix4 = mkOption {
-        type = types.listOf types.str;
-        default = [ ];
-        description = "ipv4 prefix to be announced for local node";
-      };
-      prefix6 = mkOption {
+      prefix = mkOption {
         type = types.listOf types.str;
         default = [ ];
         description = "ipv6 prefix to be announced for local node";
       };
-      overlayNetwork4 = mkOption {
-        type = types.listOf types.str;
-        default = [ ];
-        description = "ipv4 prefix of the overlay network";
-      };
-      overlayNetwork6 = mkOption {
+      network = mkOption {
         type = types.listOf types.str;
         default = [ ];
         description = "ipv6 prefix of the overlay network";
@@ -211,7 +196,7 @@ in
                   AddPrefixRoute = false;
                 };
               })
-              cfg.address6;
+              cfg.address;
             routes = map
               (addr6: {
                 # fallback route
@@ -221,7 +206,7 @@ in
                   Metric = 8;
                 };
               })
-              cfg.address6;
+              cfg.address;
           };
           vethGlobal = {
             name = config.systemd.network.netdevs.vethGlobal.netdevConfig.Name;
@@ -275,7 +260,7 @@ in
             protocol device {
               scan time 5;
             }
-            ipv6 sadr table global6;
+            ipv6 table global6;
             ipv6 sadr table gravity6;
             protocol kernel {
               kernel table ${toString cfg.table};
@@ -289,10 +274,10 @@ in
               ipv6 sadr { table gravity6; };
               ${concatStringsSep "\n" (map (addr6: ''
                 route ${addr6} from ::/0 via "veth-gravity";
-              '') cfg.address6)}
+              '') cfg.address)}
               ${concatStringsSep "\n" (map (addr6: ''
                 route ${addr6} from ::/0 unreachable;
-              '') cfg.bird.overlayNetwork6)}
+              '') cfg.bird.network)}
             }
             protocol babel {
               vrf "gravity";
@@ -319,19 +304,19 @@ in
             }
             protocol kernel {
               learn all;
-              ipv6 sadr {
+              ipv6 {
                 table global6;
                 export all;
                 import filter {
                   ${concatStringsSep "\n" (map (addr6: ''
                     if net = ${addr6} then accept;
-                  '') cfg.bird.prefix6)}
+                  '') cfg.bird.prefix)}
                   reject;
                 };
               };
             }
             protocol babel {
-              ipv6 sadr {
+              ipv6 {
                 table global6;
                 export all;
                 import all;
@@ -392,8 +377,7 @@ in
         in
         {
           custom.networking.gravity = {
-            address4 = overlayNetwork.nodes."${hostName}".ipv4;
-            address6 = overlayNetwork.nodes."${hostName}".ipv6;
+            address = overlayNetwork.nodes."${hostName}".ipv6;
             wireguard = {
               enable = true;
               privateKeyPath = config.sops.secrets.overlay-wireguard-privatekey.path;
@@ -403,10 +387,8 @@ in
             bird = {
               enable = true;
               pattern = "${cfg.wireguard.interfacePrefix}*";
-              prefix4 = overlayNetwork.nodes."${hostName}".routes4;
-              prefix6 = overlayNetwork.nodes."${hostName}".routes6;
-              overlayNetwork4 = overlayNetwork.advertiseRoutes.ipv4;
-              overlayNetwork6 = overlayNetwork.advertiseRoutes.ipv6;
+              prefix = overlayNetwork.nodes."${hostName}".routes6;
+              network = overlayNetwork.advertiseRoutes.ipv6;
               exit = {
                 enable = false;
               };
