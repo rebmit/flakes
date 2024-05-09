@@ -202,9 +202,26 @@ in
           };
           vethGravity = {
             name = config.systemd.network.netdevs.vethGravity.netdevConfig.Name;
-            address = cfg.address6;
             linkConfig.RequiredForOnline = false;
             vrf = [ "gravity" ];
+            addresses = map
+              (addr6: {
+                addressConfig = {
+                  Address = addr6;
+                  AddPrefixRoute = false;
+                };
+              })
+              cfg.address6;
+            routes = map
+              (addr6: {
+                # fallback route
+                routeConfig = {
+                  Destination = addr6;
+                  Type = "local";
+                  Metric = 8;
+                };
+              })
+              cfg.address6;
           };
           vethGlobal = {
             name = config.systemd.network.netdevs.vethGlobal.netdevConfig.Name;
