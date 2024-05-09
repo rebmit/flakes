@@ -276,6 +276,9 @@ in
                 route ${addr6} from ::/0 via "veth-gravity";
               '') cfg.address)}
               ${concatStringsSep "\n" (map (addr6: ''
+                route ${addr6} from ::/0 via fe80:: dev "veth-gravity";
+              '') cfg.bird.prefix)}
+              ${concatStringsSep "\n" (map (addr6: ''
                 route ${addr6} from ::/0 unreachable;
               '') cfg.bird.network)}
             }
@@ -302,17 +305,18 @@ in
                 hello interval 20 s;
               };
             }
+            protocol static {
+              ipv6 { table global6; };
+              ${concatStringsSep "\n" (map (addr6: ''
+                route ${addr6} unreachable;
+              '') cfg.bird.prefix)}
+            }
             protocol kernel {
               learn all;
               ipv6 {
                 table global6;
                 export all;
-                import filter {
-                  ${concatStringsSep "\n" (map (addr6: ''
-                    if net = ${addr6} then accept;
-                  '') cfg.bird.prefix)}
-                  reject;
-                };
+                import none;
               };
             }
             protocol babel {
