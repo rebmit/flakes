@@ -66,18 +66,23 @@ in
     };
     bird = {
       enable = mkEnableOption "bird integration";
-      prefix = mkOption {
+      routes = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = "ipv6 prefix to be announced for local node";
+        description = "ipv6 routes inside the vrf to be announced for local node";
+      };
+    };
+    exit = {
+      enable = mkEnableOption "exit node";
+      routes = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = "ipv6 routes outside the vrf to be announced for local node";
       };
       network = mkOption {
         type = types.listOf types.str;
         default = [ ];
         description = "ipv6 prefix of the overlay network";
-      };
-      exit = {
-        enable = mkEnableOption "exit node";
       };
     };
   };
@@ -144,6 +149,7 @@ in
             netdevConfig = { Kind = "vrf"; Name = "gravity"; };
             vrfConfig = { Table = cfg.table + 0; };
           };
+        } // (if cfg.exit.enable then {
           vethGravity = {
             netdevConfig = { Kind = "veth"; Name = "veth-gravity"; };
             peerConfig = { Name = "veth-global"; };
@@ -152,17 +158,12 @@ in
             netdevConfig = { Kind = "veth"; Name = "veth-global"; };
             peerConfig = { Name = "veth-gravity"; };
           };
-        };
+        } else { });
 
         systemd.network.networks = {
           gravity = {
             name = config.systemd.network.netdevs.gravity.netdevConfig.Name;
             linkConfig.RequiredForOnline = false;
-          };
-          vethGravity = {
-            name = config.systemd.network.netdevs.vethGravity.netdevConfig.Name;
-            linkConfig.RequiredForOnline = false;
-            vrf = [ "gravity" ];
             addresses = map
               (addr6: {
                 addressConfig = {
@@ -182,11 +183,17 @@ in
               })
               cfg.address;
           };
+        } // (if cfg.exit.enable then {
+          vethGravity = {
+            name = config.systemd.network.netdevs.vethGravity.netdevConfig.Name;
+            linkConfig.RequiredForOnline = false;
+            vrf = [ "gravity" ];
+          };
           vethGlobal = {
             name = config.systemd.network.netdevs.vethGlobal.netdevConfig.Name;
             linkConfig.RequiredForOnline = false;
           };
-        };
+        } else { });
       }
       (mkIf (cfg.wireguard.enable) {
         environment.systemPackages = with pkgs; [
@@ -235,7 +242,9 @@ in
             protocol device {
               scan time 5;
             }
+            ${optionalString cfg.exit.enable ''
             ipv6 table global6;
+            ''}
             ipv6 sadr table gravity6;
             protocol kernel {
               kernel table ${toString cfg.table};
@@ -248,14 +257,19 @@ in
             protocol static {
               ipv6 sadr { table gravity6; };
               ${concatStringsSep "\n" (map (addr6: ''
-                route ${addr6} from ::/0 via "veth-gravity";
+                route ${addr6} from ::/0 via "gravity";
               '') cfg.address)}
               ${concatStringsSep "\n" (map (addr6: ''
-                route ${addr6} from ::/0 via fe80:: dev "veth-gravity";
-              '') cfg.bird.prefix)}
-              ${concatStringsSep "\n" (map (addr6: ''
                 route ${addr6} from ::/0 unreachable;
-              '') cfg.bird.network)}
+              '') cfg.bird.routes)}
+              ${optionalString cfg.exit.enable ''
+                ${concatStringsSep "\n" (map (addr6: ''
+                  route ${addr6} from ::/0 via fe80:: dev "veth-gravity";
+                '') cfg.exit.routes)}
+                ${concatStringsSep "\n" (map (addr6: ''
+                  route ${addr6} from ::/0 unreachable;
+                '') cfg.exit.network)}
+              ''}
             }
             protocol babel {
               vrf "gravity";
@@ -269,22 +283,23 @@ in
                 type tunnel;
                 link quality etx;
                 rxcost 32;
-                hello interval 20 s;
                 rtt cost 1024;
                 rtt max 1024 ms;
                 rx buffer 2000;
               };
+              ${optionalString cfg.exit.enable ''
               interface "veth-gravity" {
                 type wired;
                 rxcost 32;
-                hello interval 20 s;
               };
+              ''}
             }
+            ${optionalString cfg.exit.enable ''
             protocol static {
               ipv6 { table global6; };
               ${concatStringsSep "\n" (map (addr6: ''
                 route ${addr6} unreachable;
-              '') cfg.bird.prefix)}
+              '') cfg.exit.routes)}
             }
             protocol kernel {
               metric 512;
@@ -304,9 +319,9 @@ in
               interface "veth-global" {
                 type wired;
                 rxcost 32;
-                hello interval 20 s;
               };
             }
+            ''}
           '';
         };
       })
@@ -365,11 +380,12 @@ in
             };
             bird = {
               enable = true;
-              prefix = overlayNetwork.nodes."${hostName}".routes6;
+              routes = [ "${overlayNetwork.nodes."${hostName}".prefix}::/80" ];
+            };
+            exit = {
+              enable = true;
+              routes = overlayNetwork.nodes."${hostName}".routes6;
               network = overlayNetwork.advertiseRoutes.ipv6;
-              exit = {
-                enable = false;
-              };
             };
           };
         }
