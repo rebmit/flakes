@@ -26,6 +26,18 @@ let
       };
     };
   };
+  mapOpts = { ... }: {
+    options = {
+      source = mkOption {
+        type = types.str;
+        description = "source ipv6 cidr block";
+      };
+      target = mkOption {
+        type = types.str;
+        description = "target ipv6 cidr block";
+      };
+    };
+  };
 in
 {
   options.custom.networking.gravity = {
@@ -83,6 +95,27 @@ in
         type = types.listOf types.str;
         default = [ ];
         description = "ipv6 prefix of the overlay network";
+      };
+      routeAll = {
+        enable = mkEnableOption "whether to advertise routes ::/0";
+        allow = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          description = "list of addresses allowed to use the gateway";
+        };
+      };
+    };
+    nptv6 = {
+      enable = mkEnableOption "stateless ipv6 prefix translation";
+      oif = mkOption {
+        type = types.str;
+        default = "eth0";
+        description = "name of ipv6 outbound interface";
+      };
+      maps = mkOption {
+        type = with types; listOf (submodule mapOpts);
+        default = [ ];
+        description = "prefix translation mappings";
       };
     };
   };
@@ -243,7 +276,7 @@ in
               scan time 5;
             }
             ${optionalString cfg.exit.enable ''
-            ipv6 table global6;
+            ipv6 sadr table global6;
             ''}
             ipv6 sadr table gravity6;
             protocol kernel {
@@ -296,21 +329,21 @@ in
             }
             ${optionalString cfg.exit.enable ''
             protocol static {
-              ipv6 { table global6; };
+              ipv6 sadr { table global6; };
               ${concatStringsSep "\n" (map (addr6: ''
-                route ${addr6} unreachable;
+                route ${addr6} from ::/0 unreachable;
               '') cfg.exit.routes)}
             }
             protocol kernel {
-              metric 512;
-              ipv6 {
+              metric 4096;
+              ipv6 sadr {
                 table global6;
                 export all;
                 import none;
               };
             }
             protocol babel {
-              ipv6 {
+              ipv6 sadr {
                 table global6;
                 export all;
                 import all;
@@ -323,6 +356,39 @@ in
             }
             ''}
           '';
+        };
+      })
+      (mkIf cfg.nptv6.enable {
+        networking.nftables = {
+          enable = true;
+          tables = {
+            nptv6 = {
+              family = "ip6";
+              content = ''
+                chain raw {
+                  type filter hook prerouting priority raw; policy accept;
+                  ${concatStringsSep "\n" (map (data: ''
+                    ip6 saddr ${data.source} notrack return
+                    ip6 daddr ${data.target} notrack return
+                  '') cfg.nptv6.maps)}
+                }
+
+                chain prerouting {
+                  type filter hook prerouting priority dstnat + 1; policy accept;
+                  ${concatStringsSep "\n" (map (data: ''
+                    iifname ${cfg.nptv6.oif} ip6 daddr ${data.target} counter ip6 daddr set ${data.source}
+                  '') cfg.nptv6.maps)}
+                }
+
+                chain postrouting {
+                  type filter hook postrouting priority srcnat + 1; policy accept;
+                  ${concatStringsSep "\n" (map (data: ''
+                    oifname ${cfg.nptv6.oif} ip6 saddr ${data.source} counter ip6 saddr set ${data.target}
+                  '') cfg.nptv6.maps)}
+                }
+              '';
+            };
+          };
         };
       })
       (mkIf cfg.preset (
