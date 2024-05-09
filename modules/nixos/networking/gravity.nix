@@ -44,6 +44,10 @@ in
         default = { };
         description = "remote peers of the local node";
       };
+      prefix = mkOption {
+        type = types.str;
+        description = "address prefix for ranet interfaces";
+      };
     };
     table = mkOption {
       type = types.int;
@@ -197,6 +201,7 @@ in
           fwmark = 447;
           stale_group = 1;
           active_group = 2;
+          address = cfg.wireguard.prefix;
           peers = map
             (peer: {
               public_key = peer.publicKey;
@@ -356,6 +361,7 @@ in
               enable = true;
               privateKeyPath = config.sops.secrets.overlay-wireguard-privatekey.path;
               inherit peers;
+              prefix = "${overlayNetwork.nodes."${hostName}".prefix}:ffff::/96";
             };
             bird = {
               enable = true;

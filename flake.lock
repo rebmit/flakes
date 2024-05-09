@@ -659,11 +659,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1714935770,
-        "narHash": "sha256-xb91fM0ab8hU4DKDhNJz+OcjFnpQfFONOkBDFcvWBu4=",
+        "lastModified": 1715243851,
+        "narHash": "sha256-suq9XrkvSyr+oeKIPjMHAgDf22n8tMkUVcKK086LLIU=",
         "owner": "rebmit",
         "repo": "ranet",
-        "rev": "e82b391468fe8fdc95538b785222281092a83f6e",
+        "rev": "401c014ff77eea9c7347c1c710e70621026036fb",
         "type": "github"
       },
       "original": {

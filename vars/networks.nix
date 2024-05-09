@@ -5,7 +5,7 @@ rec {
       prefix6 = "fd82:7565:0f3a:891b";
       overlayNetworkSecrets = mysecrets.data.networks.overlayNetwork;
       generateNode = hostName: data: {
-        inherit (data) ipv6;
+        inherit (data) ipv6 prefix;
         inherit (overlayNetworkSecrets.nodes.${hostName}) meta;
         fqdn = "${hostName}.link.rebmit.internal";
         ipv4 = [ ];
@@ -22,15 +22,19 @@ rec {
 
       nodes = {
         reisen-nrt0 = generateNode "reisen-nrt0" {
+          prefix = "${prefix6}:031d";
           ipv6 = [ "${prefix6}:031d::1/128" ];
         };
         reisen-sin0 = generateNode "reisen-sin0" {
+          prefix = "${prefix6}:6eda";
           ipv6 = [ "${prefix6}:6eda::1/128" ];
         };
         misaka-lax02 = generateNode "misaka-lax02" {
+          prefix = "${prefix6}:9920";
           ipv6 = [ "${prefix6}:9920::1/128" ];
         };
         flandre-eq59 = generateNode "flandre-eq59" {
+          prefix = "${prefix6}:73aa";
           ipv6 = [ "${prefix6}:73aa::1/128" ];
           routes4 = homeNetwork.advertiseRoutes.ipv4;
           routes6 = homeNetwork.advertiseRoutes.ipv6;
