@@ -20,7 +20,7 @@ in
     exit = {
       enable = true;
       type = "transit";
-      routes = overlayNetwork.nodes.${hostName}.routes6;
+      routes = [ "${overlayNetwork.nodes.${hostName}.meta.wireguard.publicIpv6}/128" ];
       routeAll = {
         enable = true;
         allow = myvars.networks.overlayNetwork.advertiseRoutes.ipv6
