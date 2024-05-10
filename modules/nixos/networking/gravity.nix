@@ -377,6 +377,8 @@ in
             nptv6 = {
               family = "ip6";
               content = ''
+                define bogon = {${lib.concatStringsSep "," myvars.constants.bogonAddresses.ipv6}}
+
                 chain raw {
                   type filter hook prerouting priority raw; policy accept;
                   ${concatStringsSep "\n" (map (data: ''
@@ -397,6 +399,7 @@ in
                   ${concatStringsSep "\n" (map (data: ''
                     oifname ${cfg.nptv6.oif} ip6 saddr ${data.source} counter ip6 saddr set ${data.target}
                   '') cfg.nptv6.maps)}
+                  oifname ${cfg.nptv6.oif} ip6 saddr $bogon counter drop
                 }
               '';
             };
