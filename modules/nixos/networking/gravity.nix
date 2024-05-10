@@ -71,11 +71,6 @@ in
       default = [ ];
       description = "list of ipv6 addresses to be added to the vrf interfaces";
     };
-    preset = mkOption {
-      type = types.bool;
-      default = true;
-      description = "whether to use preset configratuion based on myvars";
-    };
     bird = {
       enable = mkEnableOption "bird integration";
       routes = mkOption {
@@ -408,66 +403,6 @@ in
           };
         };
       })
-      (mkIf cfg.preset (
-        let
-          overlayNetwork = myvars.networks.overlayNetwork;
-          hostName = config.networking.hostName;
-          getAddrByFamily = nodeName: addressFamily:
-            if addressFamily == "ip4" then
-              overlayNetwork.nodes."${nodeName}".meta.wireguard.publicIpv4
-            else
-              overlayNetwork.nodes."${nodeName}".meta.wireguard.publicIpv6;
-          links = builtins.filter
-            (value: value.srcName == hostName)
-            (
-              lists.imap0
-                (index: value:
-                  rec {
-                    inherit (value) addressFamily;
-                    sendPort = overlayNetwork.meta.wireguard.basePort + index;
-                    persistentKeepalive =
-                      let
-                        srcAddr = getAddrByFamily value.srcName addressFamily;
-                        destAddr = getAddrByFamily value.destName addressFamily;
-                      in
-                      if srcAddr == null || destAddr == null then 25 else null;
-                  } // (if (value.destName == hostName) then {
-                    srcName = value.destName;
-                    destName = value.srcName;
-                  } else {
-                    inherit (value) srcName destName;
-                  })
-                )
-                myvars.networks.overlayNetwork.links
-            );
-          peers = builtins.map
-            (link: rec {
-              inherit (link) sendPort addressFamily persistentKeepalive;
-              publicKey = overlayNetwork.nodes."${link.destName}".meta.wireguard.publicKey;
-              endpoint =
-                let
-                  address = getAddrByFamily link.destName addressFamily;
-                in
-                if address == null then null else "${address}:${toString sendPort}";
-            })
-            links;
-        in
-        {
-          custom.networking.gravity = {
-            address = overlayNetwork.nodes."${hostName}".ipv6;
-            wireguard = {
-              enable = true;
-              privateKeyPath = config.sops.secrets.overlay-wireguard-privatekey.path;
-              inherit peers;
-              prefix = "${overlayNetwork.nodes."${hostName}".prefix}:ffff::/96";
-            };
-            bird = {
-              enable = true;
-              routes = [ "${overlayNetwork.nodes."${hostName}".prefix}::/80" ];
-            };
-          };
-        }
-      ))
     ]
   );
 }
