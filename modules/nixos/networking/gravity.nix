@@ -86,15 +86,14 @@ in
     };
     exit = {
       enable = mkEnableOption "exit node";
+      type = mkOption {
+        type = types.enum [ "transit" "peer" "customer" ];
+        description = "type of the network outside the vrf";
+      };
       routes = mkOption {
         type = types.listOf types.str;
         default = [ ];
         description = "ipv6 routes outside the vrf to be announced for local node";
-      };
-      network = mkOption {
-        type = types.listOf types.str;
-        default = [ ];
-        description = "ipv6 prefix of the overlay network";
       };
       routeAll = {
         enable = mkEnableOption "whether to advertise routes ::/0";
@@ -275,9 +274,6 @@ in
             protocol device {
               scan time 5;
             }
-            ${optionalString cfg.exit.enable ''
-            ipv6 sadr table global6;
-            ''}
             ipv6 sadr table gravity6;
             protocol kernel {
               kernel table ${toString cfg.table};
@@ -295,13 +291,18 @@ in
               ${concatStringsSep "\n" (map (addr6: ''
                 route ${addr6} from ::/0 unreachable;
               '') cfg.bird.routes)}
-              ${optionalString cfg.exit.enable ''
+              ${optionalString (cfg.exit.enable && cfg.exit.type != "customer") ''
+                route fd82:7565:0f3a::/48 from ::/0 unreachable;
+                ${optionalString (cfg.exit.routeAll.enable) ''
+                  ${concatStringsSep "\n" (map (addr6: ''
+                    route ::/0 from ${addr6} via fe80:: dev "veth-gravity";
+                  '') cfg.exit.routeAll.allow)}
+                ''}
+              ''}
+              ${optionalString (cfg.exit.enable) ''
                 ${concatStringsSep "\n" (map (addr6: ''
                   route ${addr6} from ::/0 via fe80:: dev "veth-gravity";
                 '') cfg.exit.routes)}
-                ${concatStringsSep "\n" (map (addr6: ''
-                  route ${addr6} from ::/0 unreachable;
-                '') cfg.exit.network)}
               ''}
             }
             protocol babel {
@@ -320,14 +321,30 @@ in
                 rtt max 1024 ms;
                 rx buffer 2000;
               };
-              ${optionalString cfg.exit.enable ''
+              ${optionalString (cfg.exit.enable && cfg.exit.type == "customer") ''
               interface "veth-gravity" {
                 type wired;
                 rxcost 32;
               };
               ''}
             }
-            ${optionalString cfg.exit.enable ''
+            ${optionalString (cfg.exit.enable && cfg.exit.type != "customer") ''
+            ipv6 table global6;
+            protocol static {
+              ipv6 { table global6; };
+              route fd82:7565:0f3a::/48 via fe80:: dev "veth-global";
+            }
+            protocol kernel {
+              metric 4096;
+              ipv6 {
+                table global6;
+                export all;
+                import none;
+              };
+            }
+            ''}
+            ${optionalString (cfg.exit.enable && cfg.exit.type == "customer") ''
+            ipv6 sadr table global6;
             protocol static {
               ipv6 sadr { table global6; };
               ${concatStringsSep "\n" (map (addr6: ''
@@ -447,11 +464,6 @@ in
             bird = {
               enable = true;
               routes = [ "${overlayNetwork.nodes."${hostName}".prefix}::/80" ];
-            };
-            exit = {
-              enable = true;
-              routes = overlayNetwork.nodes."${hostName}".routes6;
-              network = overlayNetwork.advertiseRoutes.ipv6;
             };
           };
         }
