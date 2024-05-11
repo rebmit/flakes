@@ -32,6 +32,13 @@
           ipv6 = [ "${prefix6}:9920::1/128" ];
           inherit (overlayNetworkSecrets.nodes.misaka-lax02) meta;
         };
+        konpaku-fra0 = {
+          prefix = "${prefix6}:346a";
+          fqdn = "konpaku-fra0.link.rebmit.internal";
+          ipv4 = [ ];
+          ipv6 = [ "${prefix6}:346a::1/128" ];
+          inherit (overlayNetworkSecrets.nodes.konpaku-fra0) meta;
+        };
         flandre-eq59 = {
           prefix = "${prefix6}:73aa";
           fqdn = "flandre-eq59.link.rebmit.internal";
@@ -50,6 +57,12 @@
         { addressFamily = "ip6"; srcName = "reisen-sin0"; destName = "misaka-lax02"; }
         { addressFamily = "ip4"; srcName = "flandre-eq59"; destName = "reisen-nrt0"; }
         { addressFamily = "ip4"; srcName = "flandre-eq59"; destName = "reisen-sin0"; }
+        { addressFamily = "ip4"; srcName = "reisen-nrt0"; destName = "konpaku-fra0"; }
+        { addressFamily = "ip6"; srcName = "reisen-nrt0"; destName = "konpaku-fra0"; }
+        { addressFamily = "ip4"; srcName = "reisen-sin0"; destName = "konpaku-fra0"; }
+        { addressFamily = "ip6"; srcName = "reisen-sin0"; destName = "konpaku-fra0"; }
+        { addressFamily = "ip4"; srcName = "misaka-lax02"; destName = "konpaku-fra0"; }
+        { addressFamily = "ip6"; srcName = "misaka-lax02"; destName = "konpaku-fra0"; }
       ];
 
       inherit (overlayNetworkSecrets) meta;

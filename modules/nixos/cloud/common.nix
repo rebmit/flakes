@@ -27,22 +27,6 @@ with lib; {
       ];
     };
 
-    systemd.network = {
-      enable = true;
-      wait-online.enable = false;
-      networks = {
-        "20-wired" = {
-          matchConfig.Name = [ "en*" "eth*" ];
-          DHCP = "yes";
-          networkConfig = {
-            KeepConfiguration = "yes";
-            IPv6AcceptRA = "yes";
-            IPv6PrivacyExtensions = "no";
-          };
-        };
-      };
-    };
-
     networking.nftables = {
       enable = true;
       tables = {
@@ -55,6 +39,7 @@ with lib; {
               type filter hook prerouting priority mangle; policy accept;
               iifname "en*" ip daddr $bogon counter drop
               iifname "eth*" ip daddr $bogon counter drop
+              iifname "ens*" ip daddr $bogon counter drop
             }
           '';
         };
@@ -67,6 +52,7 @@ with lib; {
               type filter hook prerouting priority mangle; policy accept;
               iifname "en*" ip6 daddr $bogon counter drop
               iifname "eth*" ip6 daddr $bogon counter drop
+              iifname "ens*" ip6 daddr $bogon counter drop
             }
           '';
         };

@@ -16,6 +16,22 @@ with lib; {
       device = "/dev/sda";
     };
 
+    systemd.network = {
+      enable = true;
+      wait-online.enable = false;
+      networks = {
+        "20-wired" = {
+          matchConfig.Name = [ "en*" "eth*" "ens*" ];
+          DHCP = "yes";
+          networkConfig = {
+            KeepConfiguration = "yes";
+            IPv6AcceptRA = "yes";
+            IPv6PrivacyExtensions = "no";
+          };
+        };
+      };
+    };
+
     networking = {
       domain = "link.rebmit.moe";
       usePredictableInterfaceNames = false;
