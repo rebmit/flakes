@@ -27,5 +27,12 @@ in
           ++ myvars.networks.homeNetwork.advertiseRoutes.ipv6;
       };
     };
+    nptv6 = {
+      enable = true;
+      maps = [
+        { source = "fd82:7565:0f3a:89ac::/64"; target = "${overlayNetwork.nodes.${hostName}.meta.prefix}ac::/64"; }
+        { source = "fd82:7565:0f3a:891b::/64"; target = "${overlayNetwork.nodes.${hostName}.meta.prefix}1b::/64"; }
+      ];
+    };
   };
 }
