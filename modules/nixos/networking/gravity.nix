@@ -1,4 +1,4 @@
-{ config, pkgs, lib, myvars, ranet, ... }:
+{ config, pkgs, lib, myvars, mylib, ranet, ... }:
 with lib;
 let
   cfg = config.custom.networking.gravity;
@@ -374,35 +374,39 @@ in
         networking.nftables = {
           enable = true;
           tables = {
-            nptv6 = {
-              family = "ip6";
-              content = ''
-                define bogon = {${lib.concatStringsSep "," myvars.constants.bogonAddresses.ipv6}}
+            nptv6 =
+              let
+                inherit (mylib.networking.ipv6) prefixLengthToMask cidrToPrefixLength cidrToIpAddress;
+              in
+              {
+                family = "ip6";
+                content = ''
+                  define bogon = {${concatStringsSep "," myvars.constants.bogonAddresses.ipv6}}
 
-                chain raw {
-                  type filter hook prerouting priority raw; policy accept;
-                  ${concatStringsSep "\n" (map (data: ''
-                    ip6 saddr ${data.source} notrack return
-                    ip6 daddr ${data.target} notrack return
-                  '') cfg.nptv6.maps)}
-                }
+                  chain prerouting_raw {
+                    type filter hook prerouting priority raw; policy accept;
+                    ${concatStringsSep "\n" (map (data: ''
+                      ip6 saddr ${data.source} notrack return
+                      ip6 daddr ${data.target} notrack return
+                    '') cfg.nptv6.maps)}
+                  }
 
-                chain prerouting {
-                  type filter hook prerouting priority dstnat + 1; policy accept;
-                  ${concatStringsSep "\n" (map (data: ''
-                    iifname ${cfg.nptv6.oif} ip6 daddr ${data.target} counter ip6 daddr set ${data.source}
-                  '') cfg.nptv6.maps)}
-                }
+                  chain prerouting {
+                    type filter hook prerouting priority dstnat + 1; policy accept;
+                    ${concatStringsSep "\n" (map (data: ''
+                      iifname ${cfg.nptv6.oif} ip6 daddr ${data.target} counter ip6 daddr set ip6 daddr & ${prefixLengthToMask (cidrToPrefixLength data.source)} | ${cidrToIpAddress data.source}
+                    '') cfg.nptv6.maps)}
+                  }
 
-                chain postrouting {
-                  type filter hook postrouting priority srcnat + 1; policy accept;
-                  ${concatStringsSep "\n" (map (data: ''
-                    oifname ${cfg.nptv6.oif} ip6 saddr ${data.source} counter ip6 saddr set ${data.target}
-                  '') cfg.nptv6.maps)}
-                  oifname ${cfg.nptv6.oif} ip6 saddr $bogon counter drop
-                }
-              '';
-            };
+                  chain postrouting {
+                    type filter hook postrouting priority srcnat + 1; policy accept;
+                    ${concatStringsSep "\n" (map (data: ''
+                      oifname ${cfg.nptv6.oif} ip6 saddr ${data.source} counter ip6 saddr set ip6 saddr & ${prefixLengthToMask (cidrToPrefixLength data.target)} | ${cidrToIpAddress data.target}
+                    '') cfg.nptv6.maps)}
+                    oifname ${cfg.nptv6.oif} ip6 saddr $bogon counter drop
+                  }
+                '';
+              };
           };
         };
       })
