@@ -33,7 +33,6 @@ with lib; {
     };
 
     networking = {
-      domain = "link.rebmit.moe";
       usePredictableInterfaceNames = false;
     };
 

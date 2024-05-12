@@ -16,10 +16,6 @@ with lib; {
       device = "/dev/vda";
     };
 
-    networking = {
-      domain = "link.rebmit.moe";
-    };
-
     boot = {
       initrd = {
         availableKernelModules = [

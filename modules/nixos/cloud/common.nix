@@ -27,6 +27,10 @@ with lib; {
       ];
     };
 
+    networking = {
+      domain = "link.rebmit.moe";
+    };
+
     networking.nftables = {
       enable = true;
       tables = {

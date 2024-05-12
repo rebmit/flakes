@@ -32,10 +32,6 @@ with lib; {
       };
     };
 
-    networking = {
-      domain = "link.rebmit.moe";
-    };
-
     boot = {
       initrd = {
         availableKernelModules = [
