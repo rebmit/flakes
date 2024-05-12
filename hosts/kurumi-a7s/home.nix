@@ -51,36 +51,18 @@
       neovim.enable = true;
     };
 
-    services.desktopEnvironment.hyprland = {
+    services.desktopEnvironment.sway = {
       enable = true;
       browser = {
         startupCommand = "firefox";
-        windowRegex = "class: ^(firefox)$";
+        windowCriteria = { app_id = "firefox"; };
       };
       terminal = {
         startupCommand = "kitty";
-        windowRegex = "class: ^(kitty)$";
+        windowCriteria = { app_id = "kitty"; };
         launchPrefix = "kitty -e";
       };
-      settings = {
-        monitor = [
-          "eDP-1, preferred, auto, 1.2"
-          #"HDMI-A-1, preferred, auto, 1, mirror, eDP-1"
-          "HDMI-A-1, 1920x1080, auto, 1"
-        ];
-      };
-      scratchpads = {
-        nheko = {
-          startupCommand = "nheko";
-          windowRegex = "class: ^(nheko)$";
-          keyBind = "SUPER, 1";
-        };
-        thunderbird = {
-          startupCommand = "thunderbird";
-          windowRegex = "class: ^(thunderbird)$";
-          keyBind = "SUPER, 3";
-        };
-      };
+      config.output.eDP-1 = { scale = "1.2"; };
     };
   };
 
