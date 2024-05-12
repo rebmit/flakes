@@ -103,7 +103,7 @@ in
               eval export $l
             done < <(/run/current-system/systemd/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)
 
-            exec systemd-cat --identifier=sway sway
+            exec systemd-cat --identifier=sway sway -D legacy-wl-drm
           ''}";
         };
       };
