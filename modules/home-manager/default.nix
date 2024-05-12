@@ -1,8 +1,7 @@
 {
-  default = { mylib, lib, impermanence, ags, nix-colors, config, ... }: {
+  default = { mylib, lib, impermanence, nix-colors, config, ... }: {
     imports = [
       impermanence.nixosModules.home-manager.impermanence
-      ags.homeManagerModules.default
       nix-colors.homeManagerModules.default
     ] ++ (mylib.getItemPaths ./. "default.nix");
 
