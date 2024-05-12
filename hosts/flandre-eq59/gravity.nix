@@ -23,4 +23,26 @@ in
       routes = homeNetwork.advertiseRoutes.ipv6;
     };
   };
+
+  networking.nftables = {
+    enable = true;
+    tables = {
+      spdlimit = {
+        family = "ip6";
+        content = ''
+          limit download { rate over 6400 kbytes/second }
+          limit upload   { rate over 3200 kbytes/second burst 512 kbytes }
+
+          chain postrouting {
+            type filter hook postrouting priority filter; policy accept;
+            oifname "ranet*" limit name "upload" counter drop
+          }
+          chain prerouting {
+            type filter hook prerouting priority filter; policy accept;
+            iifname "ranet*" limit name "download" counter drop
+          }
+        '';
+      };
+    };
+  };
 }
