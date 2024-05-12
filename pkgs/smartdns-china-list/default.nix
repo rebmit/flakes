@@ -1,4 +1,5 @@
-{ source, stdenv, lib }:
+{ source, stdenv, lib, ipv6 ? false }:
+with lib;
 stdenv.mkDerivation {
   pname = "smartdns-china-list";
 
@@ -6,6 +7,11 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     make SERVER=domestic SMARTDNS_SPEEDTEST_MODE=tcp:80 smartdns-domain-rules
+    ${optionalString (!ipv6) ''
+      sed -i "s/\$/ -address #6/g" accelerated-domains.china.domain.smartdns.conf
+      sed -i "s/\$/ -address #6/g" apple.china.domain.smartdns.conf
+      sed -i "s/\$/ -address #6/g" google.china.domain.smartdns.conf
+    ''}
   '';
 
   installPhase = ''

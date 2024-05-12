@@ -41,7 +41,6 @@ in
 
           prefetch-domain = "yes";
           speed-check-mode = "none";
-          force-AAAA-SOA = "yes";
           force-qtype-SOA = "65";
 
           server-https = [
