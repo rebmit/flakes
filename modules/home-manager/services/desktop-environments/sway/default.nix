@@ -54,6 +54,7 @@ in
 
         wayland.windowManager.sway = {
           enable = true;
+          xwayland = false;
           systemd = {
             enable = true;
             xdgAutostart = true;
