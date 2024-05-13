@@ -8,7 +8,10 @@ with lib; {
   };
 
   config = mkIf cfg.enable {
-    custom.cloud.common.enable = true;
+    custom.cloud.common = {
+      enable = true;
+      dhcp = false;
+    };
     custom.baseline.enable = true;
 
     custom.system.disko.btrfs-bios-common = {
