@@ -63,6 +63,7 @@
         { addressFamily = "ip6"; srcName = "reisen-sin0"; destName = "konpaku-fra0"; }
         { addressFamily = "ip4"; srcName = "misaka-lax02"; destName = "konpaku-fra0"; }
         { addressFamily = "ip6"; srcName = "misaka-lax02"; destName = "konpaku-fra0"; }
+        { addressFamily = "ip4"; srcName = "flandre-eq59"; destName = "konpaku-fra0"; }
       ];
 
       inherit (overlayNetworkSecrets) meta;
