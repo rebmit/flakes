@@ -14,7 +14,6 @@
   custom = {
     i18n.fcitx5 = {
       enable = true;
-      kittySupport = true;
       waylandFrontend = false;
       plasma6Support = true;
       withConfigtool = false;
@@ -25,14 +24,14 @@
 
     misc.ssh-desktop = {
       enable = true;
-      terminal = "kitty";
+      terminal = "foot";
     };
 
     programs = {
       firefox.enable = true;
       telegram.enable = true;
       fish.enable = true;
-      kitty = {
+      foot = {
         enable = true;
         shell = "${pkgs.tmux}/bin/tmux new-session -t main";
       };
@@ -54,9 +53,9 @@
         windowCriteria = { app_id = "firefox"; };
       };
       terminal = {
-        startupCommand = "kitty";
-        windowCriteria = { app_id = "kitty"; };
-        launchPrefix = "kitty -e";
+        startupCommand = "foot";
+        windowCriteria = { app_id = "foot"; };
+        launchPrefix = "foot";
       };
       config.output.HDMI-A-1 = { scale = "1.67"; };
     };
