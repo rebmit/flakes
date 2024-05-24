@@ -15,27 +15,27 @@
   };
   chnroutes2 = {
     pname = "chnroutes2";
-    version = "5cbf48dff66774c7c00f65dfd73fb39f3ca20d37";
+    version = "90dae8a000b2ec01fd7491b057b9147ab1f8808f";
     src = fetchFromGitHub {
       owner = "misakaio";
       repo = "chnroutes2";
-      rev = "5cbf48dff66774c7c00f65dfd73fb39f3ca20d37";
+      rev = "90dae8a000b2ec01fd7491b057b9147ab1f8808f";
       fetchSubmodules = false;
-      sha256 = "sha256-+7/WrMyfPU2ILniMMSCsWglbY440QDWJxw45eqgsUEE=";
+      sha256 = "sha256-8bWvjRCri4POZGMN8VDlHoYTRw5dfWohYNdgHJR3bbk=";
     };
-    date = "2024-05-06";
+    date = "2024-05-24";
   };
   dnsmasq-china-list = {
     pname = "dnsmasq-china-list";
-    version = "f4968899735b5446e44a383e0d492745abfc59c0";
+    version = "e54aa75ca9c6567ac5b67093e5471eb1c8041e86";
     src = fetchFromGitHub {
       owner = "felixonmars";
       repo = "dnsmasq-china-list";
-      rev = "f4968899735b5446e44a383e0d492745abfc59c0";
+      rev = "e54aa75ca9c6567ac5b67093e5471eb1c8041e86";
       fetchSubmodules = false;
-      sha256 = "sha256-RC7KkH3WkvQ/fTf/ToJgn/VIjP2YJu+qfO79IqSPkCc=";
+      sha256 = "sha256-9hiya347cBq/WyDvVsGq69cOiQnNkR1KAd/qi25zb8k=";
     };
-    date = "2024-05-05";
+    date = "2024-05-24";
   };
   metacubexd = {
     pname = "metacubexd";
