@@ -52,11 +52,6 @@ in
           localNode.ipv4
           localNode.ipv6
         ];
-        gateway = [
-          (mylib.networking.ipv4.cidrToIpAddress homeNetwork.gateway.ipv4)
-          (mylib.networking.ipv4.cidrToIpAddress homeNetwork.nodes.flandre-eq59.ipv6)
-        ];
-        dns = [ (mylib.networking.ipv4.cidrToIpAddress homeNetwork.nameserver.ipv4) ];
       };
       "20-wireless" = {
         name = "wlan0";
